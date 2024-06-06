@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/paddings.dart';
-import 'package:learn_europe/screens/home_screen.dart';
-import 'package:learn_europe/screens/profile_screen.dart';
 import 'package:learn_europe/stores/navigation_store.dart';
+import 'package:learn_europe/ui/components/app_scaffold.dart';
+import 'package:learn_europe/ui/screens/home_screen.dart';
+import 'package:learn_europe/ui/screens/profile_screen.dart';
 import 'constants/colors.dart';
 import 'constants/strings.dart';
 
@@ -25,7 +26,7 @@ class TabSelectorState extends State<TabSelector> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
-      return Scaffold(
+      return AppScaffold(
         body: IndexedStack(
           index: navigationStore.currentIndex,
           children: screens,
