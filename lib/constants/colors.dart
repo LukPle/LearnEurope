@@ -8,10 +8,10 @@ class AppColors {
   static const Color darkBackground = Color(0xff141414); // Hex: #141414
 
   // Primary and Secondary Color for Widgets and Components
-  static const Color primaryColorLight = Color(0xff00457F); // Hex: #00457F
-  static const Color secondaryColorLight = Color(0xff2589BD); // Hex: #2589BD
-  static const Color primaryColorDark = Color(0xffFFD900); // Hex: #FFD900
-  static const Color secondaryColorDark = Color(0xffFFF1D6); // Hex: #FFF1D6
+  static const Color primaryColorLight = Color(0xff001489); // Hex: #001489
+  static const Color accentColorLight = Color(0xffB2BBEE); // Hex: #B2BBEE
+  static const Color primaryColorDark = Color(0xffFFDD00); // Hex: #635A1A
+  static const Color accentColorDark = Color(0xffFFF1D6); // Hex: #635A1A
 
   // Background Colors for the Bottom Navigation
   static const Color lightNavigation = Colors.white;

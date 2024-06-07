@@ -17,7 +17,7 @@ class AppThemes {
     ),
     colorScheme: const ColorScheme.light().copyWith(
       primary: AppColors.primaryColorLight,
-      secondary: AppColors.secondaryColorLight,
+      secondary: AppColors.accentColorLight,
     ),
   );
 
@@ -32,7 +32,7 @@ class AppThemes {
     ),
     colorScheme: const ColorScheme.dark().copyWith(
       primary: AppColors.primaryColorDark,
-      secondary: AppColors.secondaryColorDark,
+      secondary: AppColors.accentColorDark,
     ),
   );
 

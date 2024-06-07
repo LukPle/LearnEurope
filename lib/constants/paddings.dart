@@ -16,6 +16,9 @@ class AppPaddings {
   /// 16px
   static const double padding_16 = 16;
 
+  /// 20px
+  static const double padding_20 = 20;
+
   /// 24px
   static const double padding_24 = 24;
 
