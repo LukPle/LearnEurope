@@ -12,7 +12,7 @@ class AppScaffold extends StatelessWidget {
   });
 
   final Widget body;
-  final AppBar? appBar;
+  final PreferredSizeWidget? appBar;
   final Widget? bottomNavigationBar;
   final bool hasVerticalPadding;
   final bool hasHorizontalPadding;

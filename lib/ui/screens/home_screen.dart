@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,13 +8,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Home sweet home'),
-        SizedBox(height: AppPaddings.padding_8),
-        CtaButton.primary(onPressed: () => {}, label: "Click for good luck",),
-        SizedBox(height: AppPaddings.padding_8),
-        CtaButton.secondary(onPressed: () => {}, label: "Click for bad luck"),
+        CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Quiz'),
       ],
     );
+  }
+
+  void _navigateToMultipleChoice(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.multipleChoice);
   }
 }

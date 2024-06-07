@@ -56,12 +56,8 @@ class CtaButton extends StatelessWidget {
           ),
           backgroundColor: _primary
               ? MaterialStateProperty.all(
-                  color == Colors.transparent
-                      ? Colors.transparent
-                      : (color ??
-                              (brightness == Brightness.light
-                                  ? AppColors.primaryColorLight
-                                  : AppColors.primaryColorDark))
+                  color ??
+                      (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
                           .withOpacity(opacity),
                 )
               : null,
