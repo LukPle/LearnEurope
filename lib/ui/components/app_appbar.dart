@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_europe/constants/textstyles.dart';
 
 class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AppAppBar({
@@ -23,7 +24,8 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: title != null ? Text(title!) : null,
       centerTitle: centerTitle,
-      //titleTextStyle: TextStyle(fontSize: 20, color: Colors.black),
+      titleSpacing: 0,
+      titleTextStyle: AppTextStyles.appBarTextStyle(brightness: MediaQuery.of(context).platformBrightness),
       leading: leadingIcon != null
           ? GestureDetector(
               onTap: leadingIconAction,
