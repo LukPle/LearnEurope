@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_europe/models/category_enum.dart';
 
 class AppColors {
   AppColors._();
@@ -21,10 +22,19 @@ class AppColors {
   static const Color success = Colors.green;
   static const Color error = Colors.red;
 
-  // Reflection Chart Colors
-  static Color commuteColor = Colors.greenAccent;
-  static Color wasteColor = Colors.amber;
-  static Color nutritionColor = Colors.teal;
+  // Category Colors
+  static Color categoryColor(Category category) {
+    switch (category) {
+      case Category.europe101:
+        return Colors.red;
+      case Category.languages:
+        return Colors.green;
+      case Category.countryBorders:
+        return Colors.cyan;
+      case Category.geoPosition:
+        return Colors.purpleAccent;
+    }
+  }
 
   // Activity Flame Colors
   static const List activityFlameColors = [

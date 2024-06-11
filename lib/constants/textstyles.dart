@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
+import 'package:learn_europe/models/category_enum.dart';
 
 class AppTextStyles {
   AppTextStyles._();
@@ -8,7 +9,7 @@ class AppTextStyles {
 
   static TextStyle bottomNavigationPassive = const TextStyle(fontSize: 12, fontWeight: FontWeight.normal);
 
-  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 26, fontWeight: FontWeight.w700);
+  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static TextStyle appBarTextStyle({required Brightness brightness}) {
     return TextStyle(
@@ -28,5 +29,9 @@ class AppTextStyles {
               ? AppColors.primaryColorLight
               : AppColors.primaryColorDark,
     );
+  }
+
+  static TextStyle categoryTextStyle(Category category) {
+    return TextStyle(color: AppColors.categoryColor(category), fontSize: 18, fontWeight: FontWeight.w500);
   }
 }

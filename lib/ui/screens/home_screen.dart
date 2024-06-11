@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const PageHeadline(title: "Hello Amiin, let's start learning!"),
         const SizedBox(height: AppPaddings.padding_12),

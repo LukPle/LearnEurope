@@ -9,7 +9,7 @@ class PageHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(title, style: AppTextStyles.pageHeadlineTextStyle),
+      child: Text(title, style: AppTextStyles.pageHeadlineTextStyle, textAlign: TextAlign.center),
     );
   }
 }
