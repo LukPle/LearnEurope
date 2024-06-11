@@ -28,6 +28,13 @@ class CategoryCard extends StatelessWidget {
                   : AppColors.darkCard,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.black12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 1,
+                  offset: const Offset(0.5, 1.5),
+                ),
+              ],
             ),
             padding: const EdgeInsets.all(AppPaddings.padding_16),
             child: Align(

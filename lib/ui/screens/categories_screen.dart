@@ -9,24 +9,27 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const PageHeadline(title: "Explore Europe in various categories!"),
-        const Spacer(),
-        GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: AppPaddings.padding_48,
-          crossAxisSpacing: AppPaddings.padding_16,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          children: [
-            CategoryCard(category: Category.europe101, onTap: () => {}),
-            CategoryCard(category: Category.languages, onTap: () => {}),
-            CategoryCard(category: Category.countryBorders, onTap: () => {}),
-            CategoryCard(category: Category.geoPosition, onTap: () => {}),
-          ],
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(AppPaddings.padding_16),
+      child: Column(
+        children: [
+          const PageHeadline(title: "Explore Europe in various categories"),
+          const Spacer(),
+          GridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: AppPaddings.padding_48,
+            crossAxisSpacing: AppPaddings.padding_16,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: [
+              CategoryCard(category: Category.europe101, onTap: () => {}),
+              CategoryCard(category: Category.languages, onTap: () => {}),
+              CategoryCard(category: Category.countryBorders, onTap: () => {}),
+              CategoryCard(category: Category.geoPosition, onTap: () => {}),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

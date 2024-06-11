@@ -103,17 +103,17 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: MediaQuery.of(context).platformBrightness == Brightness.light
-                ? AppColors.lightCard
-                : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1,
-                offset: const Offset(0.5, 1.5),
-              ),
-            ]),
+          color:
+              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1,
+              offset: const Offset(0.5, 1.5),
+            ),
+          ],
+        ),
         padding: const EdgeInsets.all(AppPaddings.padding_8),
         child: Center(
           child: child,

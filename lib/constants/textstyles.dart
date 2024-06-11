@@ -34,4 +34,8 @@ class AppTextStyles {
   static TextStyle categoryTextStyle(Category category) {
     return TextStyle(color: AppColors.categoryColor(category), fontSize: 18, fontWeight: FontWeight.w500);
   }
+
+  static TextStyle leaderbordCardTextStyle({required Brightness brightness}) {
+    return TextStyle(color: brightness == Brightness.light ? Colors.white : Colors.black);
+  }
 }

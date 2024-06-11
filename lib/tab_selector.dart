@@ -24,7 +24,7 @@ class TabSelectorState extends State<TabSelector> {
   final screens = [
     const HomeScreen(),
     const CategoriesScreen(),
-    const LeaderboardScreen(),
+    LeaderboardScreen(),
     const ProfileScreen(),
   ];
 
@@ -32,6 +32,8 @@ class TabSelectorState extends State<TabSelector> {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return AppScaffold(
+        hasVerticalPadding: false,
+        hasHorizontalPadding: false,
         body: IndexedStack(
           index: navigationStore.currentIndex,
           children: screens,

@@ -9,13 +9,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const PageHeadline(title: "Hello Amiin, let's start learning!"),
-        const SizedBox(height: AppPaddings.padding_12),
-        CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Quiz'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(AppPaddings.padding_16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const PageHeadline(title: "Hello Amiin, let's\n start learning"),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Quiz'),
+        ],
+      ),
     );
   }
 
