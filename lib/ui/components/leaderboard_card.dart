@@ -37,7 +37,7 @@ class LeaderboardCard extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
             child: Text(
-              'Points: ${points.toString()}',
+              '${points.toString()} Points',
               style: AppTextStyles.leaderbordCardTextStyle(brightness: MediaQuery.of(context).platformBrightness),
             ),
           ),

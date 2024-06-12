@@ -80,7 +80,6 @@ class LeaderboardScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
-                        const SizedBox(height: AppPaddings.padding_8),
                         Expanded(
                           child: ListFadingShaderWidget(
                             color: MediaQuery.of(context).platformBrightness == Brightness.light
@@ -88,23 +87,28 @@ class LeaderboardScreen extends StatelessWidget {
                                 : AppColors.darkCard,
                             child: SingleChildScrollView(
                               controller: scrollController,
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: 30,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: AppPaddings.padding_12,
-                                        left: AppPaddings.padding_12,
-                                        right: AppPaddings.padding_12),
-                                    child: LeaderboardCard(
-                                      rank: index + 4,
-                                      name: 'Amiin der Ficker',
-                                      points: 69,
-                                    ),
-                                  );
-                                },
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: 30,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: AppPaddings.padding_12,
+                                            left: AppPaddings.padding_12,
+                                            right: AppPaddings.padding_12),
+                                        child: LeaderboardCard(
+                                          rank: index + 4,
+                                          name: 'Amiin der Ficker',
+                                          points: 69,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: AppPaddings.padding_12),
+                                ],
                               ),
                             ),
                           ),
@@ -126,13 +130,18 @@ class LeaderboardScreen extends StatelessWidget {
       width: 100,
       height: (MediaQuery.of(context).size.height * 0.275) - (rank - 1) * 25,
       decoration: BoxDecoration(
-        color: rank == 1 ? Colors.yellow : (rank == 2 ? Colors.grey : Colors.brown),
+        color: (MediaQuery.of(context).platformBrightness == Brightness.light
+                ? AppColors.primaryColorLight
+                : AppColors.primaryColorDark)
+            .withOpacity(
+          rank == 1 ? 1 : (rank == 2 ? 0.8 : 0.6),
+        ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
       ),
       child: Center(
         child: Text(
           'Rank $rank',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 18,
