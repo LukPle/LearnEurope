@@ -8,6 +8,7 @@ import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/dashed_border_container.dart';
+import 'package:learn_europe/ui/components/list_fading_shader.dart';
 
 class DragAndDropScreen extends StatefulWidget {
   const DragAndDropScreen({super.key});
@@ -48,78 +49,100 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildQuestionCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Which of these countries is part of the EU?'),
-                const SizedBox(height: AppPaddings.padding_32),
-                DashedBorderContainer(
-                  height: MediaQuery.of(context).size.height * 0.225,
-                  backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? AppColors.lightBackground
-                      : AppColors.darkBackground,
-                  borderColor:
-                      MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.black38 : Colors.white60,
-                  borderRadius: 10,
-                  child: DragTarget<Widget>(
-                    builder: (context, candidateData, acceptedData) {
-                      return Observer(
-                        builder: (context) {
-                          return dragAndDropStore.selectedItems.isEmpty
-                              ? const Center(
-                                  child: Text('Drop your answer(s) here'),
-                                )
-                              : ListView.builder(
-                                  itemCount: dragAndDropStore.selectedItems.length,
-                                  itemBuilder: (context, index) {
-                                    return dragAndDropStore.selectedItems[index];
-                                  },
-                                );
+      body: Observer(
+        builder: (context) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildQuestionCard(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Which of these countries is part of the EU?'),
+                    const SizedBox(height: AppPaddings.padding_8),
+                    Text('${dragAndDropStore.selectedItems.length} items selected'),
+                    const SizedBox(height: AppPaddings.padding_32),
+                    DashedBorderContainer(
+                      height: MediaQuery.of(context).size.height * 0.255,
+                      backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
+                          ? AppColors.lightBackground
+                          : AppColors.darkBackground,
+                      borderColor: MediaQuery.of(context).platformBrightness == Brightness.light
+                          ? Colors.black38
+                          : Colors.white60,
+                      borderRadius: 10,
+                      child: DragTarget<Widget>(
+                        builder: (context, candidateData, acceptedData) {
+                          return Observer(
+                            builder: (context) {
+                              return dragAndDropStore.selectedItems.isEmpty
+                                  ? const Center(
+                                      child: Text('Drop your answer(s) here'),
+                                    )
+                                  : ListView.builder(
+                                      padding: const EdgeInsets.all(AppPaddings.padding_12),
+                                      itemCount: dragAndDropStore.selectedItems.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(bottom: AppPaddings.padding_8),
+                                          child: dragAndDropStore.selectedItems[index],
+                                        );
+                                      },
+                                    );
+                            },
+                          );
                         },
-                      );
-                    },
-                    onWillAcceptWithDetails: (details) => true,
-                    onAcceptWithDetails: (details) => {
-                      dragAndDropStore.addSelectedItem(details.data),
-                      dragAndDropStore.removeAvailableItem(details.data),
-                    },
-                  ),
+                        onWillAcceptWithDetails: (details) => !dragAndDropStore.selectedItems.contains(details.data),
+                        onAcceptWithDetails: (details) => {
+                          dragAndDropStore.addSelectedItem(details.data),
+                          dragAndDropStore.removeAvailableItem(details.data),
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                /**const SizedBox(height: AppPaddings.padding_24),
-                    Text('0 items selected'),**/
-              ],
-            ),
-          ),
-          const Spacer(),
-          Flexible(
-            child: DragTarget<Widget>(
-              builder: (context, candidateData, acceptedData) {
-                return Observer(
-                  builder: (context) {
-                    return ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: dragAndDropStore.availableItems.length,
-                      itemBuilder: (context, index) {
-                        return dragAndDropStore.availableItems[index];
+              ),
+              const Spacer(),
+              Flexible(
+                flex: 5,
+                child: DragTarget<Widget>(
+                  builder: (context, candidateData, acceptedData) {
+                    return Observer(
+                      builder: (context) {
+                        return ListFadingShaderWidget(
+                          color: MediaQuery.of(context).platformBrightness == Brightness.light
+                              ? AppColors.lightBackground
+                              : AppColors.darkBackground,
+                          child: GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            padding: const EdgeInsets.symmetric(vertical: AppPaddings.padding_8),
+                            itemCount: dragAndDropStore.availableItems.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 1.55,
+                              crossAxisSpacing: AppPaddings.padding_8,
+                              mainAxisSpacing: AppPaddings.padding_8,
+                            ),
+                            itemBuilder: (context, index) {
+                              return dragAndDropStore.availableItems[index];
+                            },
+                          ),
+                        );
                       },
                     );
                   },
-                );
-              },
-              onWillAcceptWithDetails: (details) => true,
-              onAcceptWithDetails: (details) => {
-                dragAndDropStore.addAvailableItem(details.data),
-                dragAndDropStore.removeSelectedItem(details.data),
-              },
-            ),
-          ),
-          const Spacer(),
-          CtaButton.primary(onPressed: () => {}, label: 'Antwort bestätigen'),
-        ],
+                  onWillAcceptWithDetails: (details) => !dragAndDropStore.availableItems.contains(details.data),
+                  onAcceptWithDetails: (details) => {
+                    dragAndDropStore.addAvailableItem(details.data),
+                    dragAndDropStore.removeSelectedItem(details.data),
+                  },
+                ),
+              ),
+              const Spacer(),
+              CtaButton.primary(onPressed: () => {}, label: 'Antwort bestätigen'),
+            ],
+          );
+        },
       ),
     );
   }
@@ -150,21 +173,23 @@ class DraggableItem extends StatelessWidget {
       key: Key(text),
       data: this,
       feedback: Material(
-        child: _buildContentContainer(),
+        child: _buildContentContainer(context),
       ),
       childWhenDragging: const SizedBox.shrink(),
-      child: _buildContentContainer(),
+      child: _buildContentContainer(context),
     );
   }
 
-  Widget _buildContentContainer() {
+  Widget _buildContentContainer(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppPaddings.padding_8),
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: MediaQuery.of(context).platformBrightness == Brightness.light
+            ? AppColors.accentColorLight
+            : AppColors.accentColorDark,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(text),
+      child: Text(text, style: const TextStyle(color: Colors.black), overflow: TextOverflow.fade),
     );
   }
 }
