@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/stores/drag_and_drop_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/dashed_border_container.dart';
+import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
 
 class DragAndDropScreen extends StatefulWidget {
@@ -24,7 +26,7 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppAppBar(
-        title: 'Quiz abbrechen',
+        title: AppStrings.exitQuiz,
         centerTitle: false,
         leadingIcon: Icons.close,
         leadingIconAction: () => {
@@ -37,12 +39,7 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const Dialog(
-                      child: Padding(
-                        padding: EdgeInsets.all(AppPaddings.padding_16),
-                        child: Text('Hint'),
-                      ),
-                    );
+                    return const HintDialog(scoreReduction: -25);
                   }),
               child: const Icon(Icons.question_mark),
             ),
@@ -139,7 +136,8 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
                 ),
               ),
               const Spacer(),
-              CtaButton.primary(onPressed: () => {}, label: 'Antwort bestätigen'),
+              CtaButton.primary(
+                  onPressed: dragAndDropStore.selectedItems.isEmpty ? null : () => {}, label: 'Antwort bestätigen'),
             ],
           );
         },

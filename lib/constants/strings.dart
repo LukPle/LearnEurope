@@ -9,7 +9,7 @@ class AppStrings {
   static const String navLeaderboard = 'Leaderboard';
   static const String navProfile = 'Profile';
 
-  /// Learning Categories String
+  /// Learning Categories Strings
   static String getCategoryText(Category category) {
     switch (category) {
       case Category.europe101:
@@ -22,4 +22,10 @@ class AppStrings {
         return 'Geo Position';
     }
   }
+
+  /// Quiz Strings
+  static const exitQuiz = 'Exit Quiz';
+
+  /// Hint Dialog Strings
+  static const hintDialogTitle = 'Do you need a hint?';
 }
