@@ -38,4 +38,20 @@ class AppTextStyles {
   static TextStyle leaderbordCardTextStyle({required Brightness brightness}) {
     return TextStyle(color: brightness == Brightness.light ? Colors.white : Colors.black);
   }
+
+  static TextStyle resultScreenHeadline({required Brightness brightness}) {
+    return TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark);
+  }
+
+  static TextStyle resultScreenPointsIntro({required Brightness brightness}) {
+    return TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: brightness == Brightness.light ? Colors.white : Colors.black);
+  }
+
+  static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
 }

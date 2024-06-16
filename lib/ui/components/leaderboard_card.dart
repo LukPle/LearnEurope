@@ -34,7 +34,7 @@ class LeaderboardCard extends StatelessWidget {
               color: MediaQuery.of(context).platformBrightness == Brightness.light
                   ? AppColors.primaryColorLight
                   : AppColors.primaryColorDark,
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: Text(
               '${points.toString()} Points',

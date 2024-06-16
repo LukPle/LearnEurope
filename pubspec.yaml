@@ -18,6 +18,12 @@ dependencies:
   # Svg Support
   flutter_svg: ^2.0.10+1
 
+  # Animated Digits
+  animated_digit: ^3.2.3
+
+  # Confetti
+  confetti: ^0.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

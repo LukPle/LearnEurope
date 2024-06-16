@@ -46,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CtaButton.secondary(onPressed: () => print('Log Out'), label: 'Logout')
+          CtaButton.secondary(onPressed: () => print('Log Out'), label: 'Logout'),
         ],
       ),
     );

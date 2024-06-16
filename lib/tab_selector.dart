@@ -49,15 +49,13 @@ class TabSelectorState extends State<TabSelector> {
   BottomNavigationBar _buildBottomNavigationBar(context) {
     return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-            ? AppColors.darkCard
-            : AppColors.lightCard,
+        backgroundColor:
+            MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.darkCard : AppColors.lightCard,
         selectedItemColor: MediaQuery.of(context).platformBrightness == Brightness.dark
             ? AppColors.primaryColorDark
             : AppColors.primaryColorLight,
-        unselectedItemColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-            ? AppColors.lightCard
-            : AppColors.darkCard,
+        unselectedItemColor:
+            MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.lightCard : AppColors.darkCard,
         selectedLabelStyle: AppTextStyles.bottomNavigationActive,
         unselectedLabelStyle: AppTextStyles.bottomNavigationPassive,
         iconSize: AppPaddings.padding_24,
