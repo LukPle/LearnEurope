@@ -5,11 +5,13 @@ import 'package:learn_europe/models/category_enum.dart';
 class AppTextStyles {
   AppTextStyles._();
 
+  static const TextStyle standardTitleTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+
+  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+
   static TextStyle bottomNavigationActive = const TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
 
   static TextStyle bottomNavigationPassive = const TextStyle(fontSize: 12, fontWeight: FontWeight.normal);
-
-  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static TextStyle appBarTextStyle({required Brightness brightness}) {
     return TextStyle(
@@ -54,6 +56,4 @@ class AppTextStyles {
   }
 
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
-
-  static const TextStyle hintDialogTitleTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 }

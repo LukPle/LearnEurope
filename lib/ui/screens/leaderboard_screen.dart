@@ -97,7 +97,7 @@ class LeaderboardScreen extends StatelessWidget {
                                         right: AppPaddings.padding_12),
                                     child: LeaderboardCard(
                                       rank: index + 4,
-                                      name: 'Amiin der Ficker',
+                                      name: 'Amiin the brain',
                                       points: 69,
                                     ),
                                   );

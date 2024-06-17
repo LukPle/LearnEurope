@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                   backgroundImage: NetworkImage('https://mighty.tools/mockmind-api/content/human/2.jpg'),
                 ),
                 const SizedBox(height: AppPaddings.padding_12),
-                Text('Amiin der Ficker', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                Text('Amiin the brain', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
                 const SizedBox(height: AppPaddings.padding_12),
                 Divider(height: 0, thickness: 0.5, color: Colors.grey),
                 const SizedBox(height: AppPaddings.padding_12),

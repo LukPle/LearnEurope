@@ -16,6 +16,8 @@ class HomeScreen extends StatelessWidget {
         children: [
           const PageHeadline(title: "Hello Amiin, let's\n start learning"),
           const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToStart(context), label: 'Go to Start'),
+          const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Multiple Choice'),
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToDragAnDrop(context), label: 'Go to Drag and Drop'),
@@ -24,6 +26,10 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _navigateToStart(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.start);
   }
 
   void _navigateToMultipleChoice(BuildContext context) {

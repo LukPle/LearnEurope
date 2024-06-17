@@ -36,7 +36,7 @@ class HintDialog extends Dialog {
                       maxWidth: MediaQuery.of(context).size.width * 0.7,
                       child: const Text(
                         AppStrings.hintDialogTitle,
-                        style: AppTextStyles.hintDialogTitleTextStyle,
+                        style: AppTextStyles.standardTitleTextStyle,
                         overflow: TextOverflow.fade,
                       ),
                     ),
