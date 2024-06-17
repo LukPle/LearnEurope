@@ -66,4 +66,5 @@ class DefaultFirebaseOptions {
     iosClientId: '255814995837-ill9oee27emgethm5eferobtn6mp4lq7.apps.googleusercontent.com',
     iosBundleId: 'com.example.learnEurope',
   );
+
 }

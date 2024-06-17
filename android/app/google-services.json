@@ -29,6 +29,13 @@
             {
               "client_id": "255814995837-ildkdqga3t7irgi3vuflogj1a8edebbb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "255814995837-ill9oee27emgethm5eferobtn6mp4lq7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.learnEurope"
+              }
             }
           ]
         }
