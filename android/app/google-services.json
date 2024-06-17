@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "255814995837",
+    "project_id": "learneurope-db06b",
+    "storage_bucket": "learneurope-db06b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:255814995837:android:c3378b8b5e50cc46bc8614",
+        "android_client_info": {
+          "package_name": "com.example.learn_europe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "255814995837-ildkdqga3t7irgi3vuflogj1a8edebbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv17mcfGQii_E487rOlt7p6dybE6sn8CQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "255814995837-ildkdqga3t7irgi3vuflogj1a8edebbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
