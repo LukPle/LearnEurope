@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 import 'dart:math' as math;
+
+import 'package:learn_europe/ui/components/hint_dialog.dart';
 
 class MultipleChoiceScreen extends StatefulWidget {
   const MultipleChoiceScreen({super.key});
@@ -18,7 +21,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppAppBar(
-        title: 'Quiz abbrechen',
+        title: AppStrings.exitQuiz,
         centerTitle: false,
         leadingIcon: Icons.close,
         leadingIconAction: () => {
@@ -31,12 +34,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const Dialog(
-                      child: Padding(
-                        padding: EdgeInsets.all(AppPaddings.padding_16),
-                        child: Text('Hint'),
-                      ),
-                    );
+                    return const HintDialog(scoreReduction: -25, hint: 'THE HINT');
                   }),
               child: const Icon(Icons.question_mark),
             ),
@@ -103,17 +101,17 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
       },
       child: Container(
         decoration: BoxDecoration(
-            color: MediaQuery.of(context).platformBrightness == Brightness.light
-                ? AppColors.lightCard
-                : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1,
-                offset: const Offset(0.5, 1.5),
-              ),
-            ]),
+          color:
+              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 1,
+              offset: const Offset(0.5, 1.5),
+            ),
+          ],
+        ),
         padding: const EdgeInsets.all(AppPaddings.padding_8),
         child: Center(
           child: child,

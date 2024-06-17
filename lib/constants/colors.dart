@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_europe/models/category_enum.dart';
 
 class AppColors {
   AppColors._();
@@ -14,17 +15,26 @@ class AppColors {
   // Primary and Secondary Color for Widgets and Components
   static const Color primaryColorLight = Color(0xff001489); // Hex: #001489
   static const Color accentColorLight = Color(0xffB2BBEE); // Hex: #B2BBEE
-  static const Color primaryColorDark = Color(0xffFFDD00); // Hex: #635A1A
-  static const Color accentColorDark = Color(0xffFFF1D6); // Hex: #635A1A
+  static const Color primaryColorDark = Color(0xffFFDD00); // Hex: #FFDD00
+  static const Color accentColorDark = Color(0xffFFE4B0); // Hex: #FFE4B0
 
   // Success and Error Color
   static const Color success = Colors.green;
   static const Color error = Colors.red;
 
-  // Reflection Chart Colors
-  static Color commuteColor = Colors.greenAccent;
-  static Color wasteColor = Colors.amber;
-  static Color nutritionColor = Colors.teal;
+  // Category Colors
+  static Color categoryColor(Category category) {
+    switch (category) {
+      case Category.europe101:
+        return Colors.red;
+      case Category.languages:
+        return Colors.green;
+      case Category.countryBorders:
+        return Colors.cyan;
+      case Category.geoPosition:
+        return Colors.purpleAccent;
+    }
+  }
 
   // Activity Flame Colors
   static const List activityFlameColors = [

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
+import 'package:learn_europe/models/category_enum.dart';
 
 class AppTextStyles {
   AppTextStyles._();
 
+  static const TextStyle standardTitleTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+
+  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+
   static TextStyle bottomNavigationActive = const TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
 
   static TextStyle bottomNavigationPassive = const TextStyle(fontSize: 12, fontWeight: FontWeight.normal);
-
-  static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 26, fontWeight: FontWeight.w700);
 
   static TextStyle appBarTextStyle({required Brightness brightness}) {
     return TextStyle(
@@ -29,4 +32,28 @@ class AppTextStyles {
               : AppColors.primaryColorDark,
     );
   }
+
+  static TextStyle categoryTextStyle(Category category) {
+    return TextStyle(color: AppColors.categoryColor(category), fontSize: 18, fontWeight: FontWeight.w500);
+  }
+
+  static TextStyle leaderbordCardTextStyle({required Brightness brightness}) {
+    return TextStyle(color: brightness == Brightness.light ? Colors.white : Colors.black);
+  }
+
+  static TextStyle resultScreenHeadline({required Brightness brightness}) {
+    return TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark);
+  }
+
+  static TextStyle resultScreenPointsIntro({required Brightness brightness}) {
+    return TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: brightness == Brightness.light ? Colors.white : Colors.black);
+  }
+
+  static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
 }

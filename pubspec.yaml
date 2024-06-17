@@ -15,16 +15,25 @@ dependencies:
   mobx: ^2.0.7+2
   flutter_mobx: ^2.0.6+1
 
-  # Apple SF Symbols
-  cupertino_icons: ^1.0.6
+  # Svg Support
+  flutter_svg: ^2.0.10+1
+
+  # Animated Digits
+  animated_digit: ^3.2.3
+
+  # Confetti
+  confetti: ^0.7.0
+
+  # Firebase Integration
   firebase_core: ^3.1.0
+  cloud_firestore: ^5.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # Code Analyzer
-  flutter_lints: ^4.0.0
+  flutter_lints: ^3.0.0
 
   # State Management
   build_runner: ^2.3.3
@@ -33,3 +42,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  assets:
+    - assets/

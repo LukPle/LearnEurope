@@ -9,17 +9,38 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const PageHeadline(title: "Hello Amiin, let's start learning!"),
-        const SizedBox(height: AppPaddings.padding_12),
-        CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Quiz'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(AppPaddings.padding_16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const PageHeadline(title: "Hello Amiin, let's\n start learning"),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToStart(context), label: 'Go to Start'),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Multiple Choice'),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToDragAnDrop(context), label: 'Go to Drag and Drop'),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToResult(context), label: 'Go to Result Screen'),
+        ],
+      ),
     );
+  }
+
+  void _navigateToStart(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.start);
   }
 
   void _navigateToMultipleChoice(BuildContext context) {
     Navigator.of(context).pushNamed(routes.multipleChoice);
+  }
+
+  void _navigateToDragAnDrop(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.dragAndDrop);
+  }
+
+  void _navigateToResult(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.result);
   }
 }
