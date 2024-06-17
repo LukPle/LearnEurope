@@ -34,7 +34,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const HintDialog(scoreReduction: -25);
+                    return const HintDialog(scoreReduction: -25, hint: 'THE HINT');
                   }),
               child: const Icon(Icons.question_mark),
             ),

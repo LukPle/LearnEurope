@@ -54,4 +54,6 @@ class AppTextStyles {
   }
 
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
+
+  static const TextStyle hintDialogTitleTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 }

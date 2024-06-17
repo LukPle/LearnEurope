@@ -39,7 +39,7 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const HintDialog(scoreReduction: -25);
+                    return const HintDialog(scoreReduction: -25, hint: 'THE HINT');
                   }),
               child: const Icon(Icons.question_mark),
             ),
@@ -171,6 +171,7 @@ class DraggableItem extends StatelessWidget {
       key: Key(text),
       data: this,
       feedback: Material(
+        borderRadius: BorderRadius.circular(15),
         child: _buildContentContainer(context),
       ),
       childWhenDragging: const SizedBox.shrink(),
