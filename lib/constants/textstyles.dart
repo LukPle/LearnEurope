@@ -41,18 +41,30 @@ class AppTextStyles {
     return TextStyle(color: brightness == Brightness.light ? Colors.white : Colors.black);
   }
 
+  static const TextStyle quizCardTitleTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle quizCardDetailsTextStyle(Brightness brightness) {
+    return TextStyle(
+      fontSize: 14,
+      color: brightness == Brightness.light ? Colors.black54 : Colors.white54,
+      fontWeight: FontWeight.w300,
+    );
+  }
+
   static TextStyle resultScreenHeadline({required Brightness brightness}) {
     return TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark);
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
+    );
   }
 
   static TextStyle resultScreenPointsIntro({required Brightness brightness}) {
     return TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: brightness == Brightness.light ? Colors.white : Colors.black);
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: brightness == Brightness.light ? Colors.white : Colors.black,
+    );
   }
 
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);

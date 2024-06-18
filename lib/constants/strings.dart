@@ -37,6 +37,15 @@ class AppStrings {
     }
   }
 
+  /// Quiz Selection Screen String
+  static const String allQuizzesFilter = 'All';
+  static const String openQuizzesFilter = 'Open';
+  static const String completedQuizzesFilter = 'Completed';
+
+  static String getDateTimeText(DateTime? dateTime) {
+    return dateTime != null ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}' : 'Open • No playthrough yet';
+  }
+
   /// Quiz Strings
   static const exitQuiz = 'Exit Quiz';
 
