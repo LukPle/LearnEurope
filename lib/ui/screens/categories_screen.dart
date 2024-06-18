@@ -3,6 +3,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/models/category_enum.dart';
 import 'package:learn_europe/ui/components/category_card.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});
@@ -22,10 +23,34 @@ class CategoriesScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
-              CategoryCard(category: Category.europe101, onTap: () => {}),
-              CategoryCard(category: Category.languages, onTap: () => {}),
-              CategoryCard(category: Category.countryBorders, onTap: () => {}),
-              CategoryCard(category: Category.geoPosition, onTap: () => {}),
+              CategoryCard(
+                category: Category.europe101,
+                onTap: () => Navigator.of(context).pushNamed(
+                  routes.quizSelection,
+                  arguments: Category.europe101,
+                ),
+              ),
+              CategoryCard(
+                category: Category.languages,
+                onTap: () => Navigator.of(context).pushNamed(
+                  routes.quizSelection,
+                  arguments: Category.languages,
+                ),
+              ),
+              CategoryCard(
+                category: Category.countryBorders,
+                onTap: () => Navigator.of(context).pushNamed(
+                  routes.quizSelection,
+                  arguments: Category.countryBorders,
+                ),
+              ),
+              CategoryCard(
+                category: Category.geoPosition,
+                onTap: () => Navigator.of(context).pushNamed(
+                  routes.quizSelection,
+                  arguments: Category.geoPosition,
+                ),
+              ),
             ],
           ),
         ],

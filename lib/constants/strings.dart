@@ -6,7 +6,7 @@ class AppStrings {
   /// Start, Login and Signup Strings
   static const String loginButton = 'Login';
   static const String signupButton = 'Signup';
-  static const String signupButtonStart = 'New learner? Create a profile';
+  static const String signupButtonStart = 'New learner? Create an account';
   static const String loginTitle = 'Enter your login credentials here';
   static const String signupTitle = 'Create a new account';
   static const String forgotPassword = 'Forgot Password?';
