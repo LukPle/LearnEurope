@@ -5,8 +5,6 @@ import 'package:learn_europe/firebase/db_services.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 
-final _dbServices=DatabaseServices();
-
 
 class ProfileScreen extends StatelessWidget {
 
@@ -51,8 +49,6 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CtaButton.secondary(onPressed: () => _dbServices.createUser(), label: 'Add Lukas'),
-          const SizedBox(height: AppPaddings.padding_16),
           CtaButton.secondary(onPressed: () => print('Log Out'), label: 'Logout'),
         ],
       ),

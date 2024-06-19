@@ -9,6 +9,8 @@ import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/input_field.dart';
 
+import '../../firebase/db_services.dart';
+
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -21,6 +23,7 @@ class SignupScreenState extends State<SignupScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late PasswordFieldStore passwordFieldStore;
+  final DatabaseServices _dbServices = DatabaseServices();
 
   @override
   void initState() {
@@ -75,7 +78,23 @@ class SignupScreenState extends State<SignupScreen> {
                 maxLength: 12,
               ),
               const Spacer(),
-              CtaButton.primary(onPressed: () => {}, label: AppStrings.signupButton),
+              CtaButton.primary(
+                onPressed: () {
+                  if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty) {
+                    _dbServices.createUser(emailController.text, passwordController.text, nameController.text)
+                        .then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('User successfully created'))
+                      );
+                    }).catchError((e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Failed to create user: $e'))
+                      );
+                    });
+                  }
+                },
+                label: AppStrings.signupButton,
+              ),
             ],
           );
         },
