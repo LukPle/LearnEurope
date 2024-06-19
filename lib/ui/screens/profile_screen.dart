@@ -12,6 +12,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DatabaseServices _dbServices = DatabaseServices();
+
     return Padding(
       padding: const EdgeInsets.all(AppPaddings.padding_16),
       child: Column(
@@ -49,7 +51,20 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          CtaButton.secondary(onPressed: () => print('Log Out'), label: 'Logout'),
+          CtaButton.secondary(
+            onPressed: () async {
+              try {
+                await _dbServices.logout();
+                Navigator.pushReplacementNamed(context, 'start');
+
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString()))
+                );
+              }
+            },
+            label: 'Logout',
+          ),
         ],
       ),
     );

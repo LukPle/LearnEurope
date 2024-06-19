@@ -11,7 +11,7 @@ class DatabaseServices{
 
   Future<void> createUser(String email, String password, String name) async {
     try {
-      // Create a new user account with e-mail and password
+      // Create new User Methode
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -28,7 +28,7 @@ class DatabaseServices{
     }
   }
 
-// Method for the user login
+  //Login Methode
   Future<void> loginUser(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -39,4 +39,19 @@ class DatabaseServices{
       throw e;
     }
   }
+
+  //Logout Methode
+  Future<void> logout()async{
+    try {
+      if (_auth.currentUser != null) {
+        await _auth.signOut();
+      } else {
+        throw Exception("No user is currently logged in.");
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+
 }
