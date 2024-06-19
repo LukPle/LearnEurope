@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -10,6 +11,8 @@ import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/input_field.dart';
 
+import '../../firebase/db_services.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -21,6 +24,7 @@ class LoginScreenState extends State<LoginScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late PasswordFieldStore passwordFieldStore;
+  final DatabaseServices _dbServices = DatabaseServices();
 
   @override
   void initState() {
@@ -36,6 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +85,28 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const Spacer(),
-              CtaButton.primary(onPressed: () => {}, label: AppStrings.loginButton),
+              CtaButton.primary(
+                  onPressed: () async {
+                    try {
+                      await _dbServices.loginUser(emailController.text, passwordController.text);
+                      //Navigator.pushNamed(context, 'lib/ui/screens/home_screen.dart');
+                      //Navigator.pushReplacementNamed(context, '/home_screen');
+                      Navigator.pushReplacementNamed(context, 'home_screen');
+
+                    } catch (e) {
+                      String errorMessage = 'Login failed';
+                      if (e is FirebaseAuthException) {
+                        errorMessage = e.message ?? "An unknown error occurred";
+                      } else {
+                        errorMessage = e.toString();
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(errorMessage))
+                      );
+                    }
+                  },
+                  label: AppStrings.loginButton
+              ),
             ],
           );
         },
