@@ -6,7 +6,7 @@ class AppStrings {
   /// Start, Login and Signup Strings
   static const String loginButton = 'Login';
   static const String signupButton = 'Signup';
-  static const String signupButtonStart = 'New learner? Create a profile';
+  static const String signupButtonStart = 'New learner? Create an account';
   static const String loginTitle = 'Enter your login credentials here';
   static const String signupTitle = 'Create a new account';
   static const String forgotPassword = 'Forgot Password?';
@@ -35,6 +35,15 @@ class AppStrings {
       case Category.geoPosition:
         return 'Geo Position';
     }
+  }
+
+  /// Quiz Selection Screen String
+  static const String allQuizzesFilter = 'All';
+  static const String openQuizzesFilter = 'Open';
+  static const String completedQuizzesFilter = 'Completed';
+
+  static String getDateTimeText(DateTime? dateTime) {
+    return dateTime != null ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}' : 'Open • No playthrough yet';
   }
 
   /// Quiz Strings
