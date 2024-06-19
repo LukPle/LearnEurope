@@ -49,7 +49,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Welches Land ist hier zu sehen?"),
+                  const Text("Welches Land ist hier zu sehen?"),
                   const SizedBox(height: AppPaddings.padding_24),
                   SizedBox(
                     height: 225,
@@ -72,7 +72,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: List.generate(4, (index) {
-              return _buildMultipleChoiceAnswerCard(child: Text("Antwort"), index: index);
+              return _buildMultipleChoiceAnswerCard(child: const Text("Antwort"), index: index);
             }),
           ),
         ],

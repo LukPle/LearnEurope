@@ -37,7 +37,7 @@ class CtaButton extends StatelessWidget {
       width: double.infinity,
       child: TextButton(
         style: ButtonStyle(
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: _primary
@@ -48,14 +48,14 @@ class CtaButton extends StatelessWidget {
                     ),
             ),
           ),
-          padding: MaterialStateProperty.all(
+          padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(
               vertical: AppPaddings.padding_16,
               horizontal: AppPaddings.padding_16,
             ),
           ),
           backgroundColor: _primary
-              ? MaterialStateProperty.all(
+              ? WidgetStateProperty.all(
                   color ??
                       (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
                           .withOpacity(opacity),
