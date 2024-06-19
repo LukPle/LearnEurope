@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/paddings.dart';
@@ -87,8 +88,14 @@ class SignupScreenState extends State<SignupScreen> {
                           const SnackBar(content: Text('User successfully created'))
                       );
                     }).catchError((e) {
+                      String errorMessage;
+                      if (e is FirebaseAuthException) {
+                        errorMessage = e.message ?? "An unknown error occurred";
+                      } else {
+                        errorMessage = e.toString();
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Failed to create user: $e'))
+                          SnackBar(content: Text('Failed to create user: $errorMessage'))
                       );
                     });
                   }
