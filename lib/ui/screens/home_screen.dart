@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/country_border_question_card.dart';
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/languages_question_card.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
@@ -17,9 +19,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const PageHeadline(title: "Hello Amiin, let's\n start learning"),
-          const SizedBox(height: AppPaddings.padding_16),
-          CtaButton.primary(onPressed: () => _navigateToStart(context), label: 'Go to Start'),
+          PageHeadline(title: "Hello ${getIt<UserStore>().username}, let's\n start learning"),
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(
             onPressed: () => _navigateToCountryBordersMultipleChoice(context),
@@ -37,10 +37,6 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _navigateToStart(BuildContext context) {
-    Navigator.of(context).pushNamed(routes.start);
   }
 
   void _navigateToCountryBordersMultipleChoice(BuildContext context) {

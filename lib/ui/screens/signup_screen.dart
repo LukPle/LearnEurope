@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
-import 'package:learn_europe/firebase/db_services.dart';
+import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
 import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';

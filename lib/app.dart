@@ -17,7 +17,7 @@ class LearnEuropeApp extends StatelessWidget {
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       onGenerateRoute: routes.generateRoute,
-      initialRoute: routes.tabSelector,
+      initialRoute: routes.loading,
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
-import 'package:learn_europe/firebase/db_services.dart';
+import 'package:learn_europe/network/db_services.dart';
+import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -32,22 +34,25 @@ class ProfileScreen extends StatelessWidget {
               border: Border.all(color: Colors.black12),
             ),
             padding: const EdgeInsets.all(AppPaddings.padding_16),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
                   radius: 45,
                   backgroundImage: NetworkImage('https://mighty.tools/mockmind-api/content/human/2.jpg'),
                 ),
-                SizedBox(height: AppPaddings.padding_12),
-                Text('Amiin the brain', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-                SizedBox(height: AppPaddings.padding_12),
-                Divider(height: 0, thickness: 0.5, color: Colors.grey),
-                SizedBox(height: AppPaddings.padding_12),
+                const SizedBox(height: AppPaddings.padding_12),
+                Text(
+                  getIt<UserStore>().username.toString(),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: AppPaddings.padding_12),
+                const Divider(height: 0, thickness: 0.5, color: Colors.grey),
+                const SizedBox(height: AppPaddings.padding_12),
                 Text('Stats'),
-                SizedBox(height: AppPaddings.padding_12),
-                Divider(height: 0, thickness: 0.5, color: Colors.grey),
-                SizedBox(height: AppPaddings.padding_12),
+                const SizedBox(height: AppPaddings.padding_12),
+                const Divider(height: 0, thickness: 0.5, color: Colors.grey),
+                const SizedBox(height: AppPaddings.padding_12),
                 Text('Settings'),
               ],
             ),
