@@ -93,7 +93,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
       child: Container(
         decoration: BoxDecoration(
           color:
-              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(

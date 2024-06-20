@@ -3,11 +3,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/firebase/db_services.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
+import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/input_field.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,6 +20,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class SignupScreenState extends State<SignupScreen> {
+  final DatabaseServices _dbServices = DatabaseServices();
+
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController passwordController;
@@ -41,6 +46,8 @@ class SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLoading = false;
+
     return AppScaffold(
       appBar: const AppAppBar(),
       body: Observer(
@@ -77,11 +84,35 @@ class SignupScreenState extends State<SignupScreen> {
                 maxLength: 12,
               ),
               const Spacer(),
-              CtaButton.primary(onPressed: () => {}, label: AppStrings.signupButton),
+              CtaButton.primary(
+                onPressed: () => _signup(),
+                label: AppStrings.signupButton,
+                loading: isLoading,
+              ),
             ],
           );
         },
       ),
     );
+  }
+
+  Future<void> _signup() async {
+    if (emailController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        nameController.text.isNotEmpty) {
+      _dbServices
+          .createUser(
+          emailController.text.trim(), passwordController.text.trim(), nameController.text.trim())
+          .then((_) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          routes.tabSelector,
+              (Route<dynamic> route) => false,
+        );
+      }).catchError((e) {
+        showAlertSnackBar(context, AppStrings.signupFail, isError: true);
+      });
+    } else {
+      showAlertSnackBar(context, AppStrings.emptyFields);
+    }
   }
 }

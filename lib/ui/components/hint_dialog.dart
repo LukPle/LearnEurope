@@ -53,12 +53,12 @@ class HintDialog extends Dialog {
                           color: brightness == Brightness.light ? Colors.black : Colors.white,
                         ),
                     children: [
-                      TextSpan(text: 'If you look up the hint for this question, this will result in a reduction of '),
+                      const TextSpan(text: 'If you look up the hint for this question, this will result in a reduction of '),
                       TextSpan(
                         text: '$scoreReduction points',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      TextSpan(text: ' that you can earn by correctly answering this question.'),
+                      const TextSpan(text: ' that you can earn by correctly answering this question.'),
                     ],
                   ),
                 ),

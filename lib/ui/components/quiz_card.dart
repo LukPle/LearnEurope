@@ -100,11 +100,11 @@ class QuizCard extends StatelessWidget {
   }
 
   Widget _buildStatsArea(Brightness brightness) {
-    return Column(
+    return const Column(
       children: [
-        const SizedBox(height: AppPaddings.padding_16),
-        const Divider(height: 0, thickness: 0.5, color: Colors.grey),
-        const SizedBox(height: AppPaddings.padding_16),
+        SizedBox(height: AppPaddings.padding_16),
+        Divider(height: 0, thickness: 0.5, color: Colors.grey),
+        SizedBox(height: AppPaddings.padding_16),
         Text('Crazy Stats'),
       ],
     );

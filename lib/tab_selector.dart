@@ -29,6 +29,17 @@ class TabSelectorState extends State<TabSelector> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final arguments = ModalRoute.of(context)?.settings.arguments;
+      if (arguments != null) {
+        navigationStore.switchScreen(arguments as int);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return AppScaffold(
