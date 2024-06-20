@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/tab_selector.dart';
 import 'package:learn_europe/ui/screens/drag_and_drop_screen.dart';

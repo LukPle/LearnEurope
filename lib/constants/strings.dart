@@ -1,4 +1,4 @@
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 
 class AppStrings {
   AppStrings._();

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'dart:math' as math;
 
+import 'package:learn_europe/constants/textstyles.dart';
+
 class CountryBorderQuestionCard extends StatelessWidget {
   const CountryBorderQuestionCard({super.key});
 
@@ -10,7 +12,7 @@ class CountryBorderQuestionCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Welches Land ist hier zu sehen?"),
+        Text('Which country can be seen here?', style: AppTextStyles.questionTextStyle),
         const SizedBox(height: AppPaddings.padding_24),
         SizedBox(
           height: 225,

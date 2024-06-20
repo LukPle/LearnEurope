@@ -3,7 +3,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({super.key, required this.category, required this.onTap});

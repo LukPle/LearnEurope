@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/textstyles.dart';
 
 class LanguagesQuestionCard extends StatefulWidget {
   const LanguagesQuestionCard({super.key});
@@ -40,9 +41,12 @@ class LanguagesQuestionCardState extends State<LanguagesQuestionCard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: AppPaddings.padding_32),
-        Text("Welche Sprache ist das?"),
+        Text('What language is this?', style: AppTextStyles.questionTextStyle),
         const Spacer(),
-        Text('"Estar en las nubes"', style: TextStyle(fontStyle: FontStyle.italic)),
+        Text(
+          '"Estar en las nubes"',
+          style: AppTextStyles.questionTextStyle.copyWith(fontStyle: FontStyle.italic, fontWeight: FontWeight.normal),
+        ),
         const SizedBox(height: AppPaddings.padding_12),
         IconButton(
           onPressed: _speak,

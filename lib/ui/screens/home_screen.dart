@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
-import 'package:learn_europe/ui/components/country_border_question_card.dart';
+import 'package:learn_europe/ui/components/multiple_choice_question_cards/country_border_question_card.dart';
+import 'package:learn_europe/ui/components/multiple_choice_question_cards/languages_question_card.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
-import 'package:learn_europe/ui/components/languages_question_card.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
   void _navigateToLanguagesMultipleChoice(BuildContext context) {
     MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
         questionCardContent: const LanguagesQuestionCard(),
-        answerOptions: ['German', 'Russian', 'Greece', 'Danish']);
+        answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish']);
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
   }
 

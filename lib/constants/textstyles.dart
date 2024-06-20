@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 
 class AppTextStyles {
   AppTextStyles._();
@@ -49,6 +49,8 @@ class AppTextStyles {
       color: brightness == Brightness.light ? Colors.black54 : Colors.white54,
     );
   }
+
+  static const TextStyle questionTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
 
   static TextStyle resultScreenHeadline({required Brightness brightness}) {
     return TextStyle(

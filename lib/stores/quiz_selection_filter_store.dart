@@ -1,4 +1,4 @@
-import 'package:learn_europe/models/quiz_list_filter_enum.dart';
+import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
 import 'package:mobx/mobx.dart';
 
 part 'quiz_selection_filter_store.g.dart';
