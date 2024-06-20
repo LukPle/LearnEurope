@@ -1,17 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/firebase/db_services.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
+import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/input_field.dart';
-
-import '../../firebase/db_services.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -41,9 +41,10 @@ class LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    bool isLoading = false;
+
     return AppScaffold(
       appBar: const AppAppBar(),
       body: Observer(
@@ -87,31 +88,32 @@ class LoginScreenState extends State<LoginScreen> {
               ),
               const Spacer(),
               CtaButton.primary(
-                  onPressed: () async {
-                    try {
-                      await _dbServices.loginUser(emailController.text, passwordController.text);
-                      //Navigator.pushNamed(context, 'lib/ui/screens/home_screen.dart');
-                      //Navigator.pushReplacementNamed(context, '/home_screen');
-                      Navigator.pushReplacementNamed(context, 'home_screen');
-
-                    } catch (e) {
-                      String errorMessage = 'Login failed';
-                      if (e is FirebaseAuthException) {
-                        errorMessage = e.message ?? "An unknown error occurred";
-                      } else {
-                        errorMessage = e.toString();
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(errorMessage))
-                      );
-                    }
-                  },
-                  label: AppStrings.loginButton
+                onPressed: () async => _login(),
+                label: AppStrings.loginButton,
+                loading: isLoading,
               ),
             ],
           );
         },
       ),
     );
+  }
+
+  Future<void> _login() async {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      try {
+        await _dbServices.loginUser(emailController.text.trim(), passwordController.text.trim());
+        if (mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            routes.tabSelector,
+            (Route<dynamic> route) => false,
+          );
+        }
+      } catch (e) {
+        showAlertSnackBar(context, AppStrings.loginFail, isError: true);
+      }
+    } else {
+      showAlertSnackBar(context, AppStrings.emptyFields);
+    }
   }
 }

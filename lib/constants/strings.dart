@@ -16,6 +16,9 @@ class AppStrings {
   static const String passwordHint = '********';
   static const String nameTitle = 'Name';
   static const String nameHint = 'Nickname';
+  static const String emptyFields = 'Please fill out all fields';
+  static const String signupFail = 'Failed to create a user, please try again';
+  static const String loginFail = 'Login failed, please try again';
 
   /// Bottom Navigation Strings
   static const String navHome = 'Home';
@@ -51,4 +54,8 @@ class AppStrings {
 
   /// Hint Dialog Strings
   static const hintDialogTitle = 'Do you need a hint?';
+
+  /// Profile Strings
+  static const logoutButton = 'Logout';
+  static const logoutFail = 'Logout failed, please try again';
 }

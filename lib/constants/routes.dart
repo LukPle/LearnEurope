@@ -18,15 +18,9 @@ const String quizSelection = 'quiz_selection';
 const String multipleChoice = 'multiple_choice';
 const String dragAndDrop = 'drag_and_drop';
 const String result = 'result';
-const String homeScreen='home_screen';
 
 Route<dynamic> generateRoute(RouteSettings destination) {
   switch (destination.name) {
-    case homeScreen:
-      return MaterialPageRoute(
-        settings: destination,
-        builder: (context) => const TabSelector(),
-      );
     case start:
       return MaterialPageRoute(
         settings: destination,

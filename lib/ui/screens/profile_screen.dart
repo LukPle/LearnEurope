@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/firebase/db_services.dart';
+import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
-
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class ProfileScreen extends StatelessWidget {
-
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseServices _dbServices = DatabaseServices();
+    final DatabaseServices dbServices = DatabaseServices();
+    bool isLoading = false;
 
     return Padding(
       padding: const EdgeInsets.all(AppPaddings.padding_16),
@@ -52,21 +54,24 @@ class ProfileScreen extends StatelessWidget {
           ),
           const Spacer(),
           CtaButton.secondary(
-            onPressed: () async {
-              try {
-                await _dbServices.logout();
-                Navigator.pushReplacementNamed(context, 'start');
-
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(e.toString()))
-                );
-              }
-            },
-            label: 'Logout',
+            onPressed: () async => _logout(context, dbServices),
+            label: AppStrings.logoutButton,
+            loading: isLoading,
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _logout(BuildContext context, DatabaseServices dbServices) async {
+    try {
+      await dbServices.logout();
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        routes.start,
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      showAlertSnackBar(context, AppStrings.logoutFail, isError: true);
+    }
   }
 }

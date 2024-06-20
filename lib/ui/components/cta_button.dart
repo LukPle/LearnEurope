@@ -43,9 +43,9 @@ class CtaButton extends StatelessWidget {
               side: _primary
                   ? BorderSide.none
                   : BorderSide(
-                width: 1,
-                color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
-              ),
+                      width: 1,
+                      color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
+                    ),
             ),
           ),
           padding: MaterialStateProperty.all(
@@ -56,10 +56,10 @@ class CtaButton extends StatelessWidget {
           ),
           backgroundColor: _primary
               ? MaterialStateProperty.all(
-            color ??
-                (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
-                    .withOpacity(opacity),
-          )
+                  color ??
+                      (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
+                          .withOpacity(opacity),
+                )
               : null,
         ),
         onPressed: loading ? null : onPressed,
@@ -68,20 +68,20 @@ class CtaButton extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           child: loading
               ? const SizedBox(
-            width: AppPaddings.padding_20,
-            height: AppPaddings.padding_20,
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              strokeWidth: 2,
-            ),
-          )
+                  width: AppPaddings.padding_20,
+                  height: AppPaddings.padding_20,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    strokeWidth: 2,
+                  ),
+                )
               : Text(
-            label,
-            style: AppTextStyles.buttonTextStyle(
-              isPrimary: _primary,
-              brightness: brightness,
-            ),
-          ),
+                  label,
+                  style: AppTextStyles.buttonTextStyle(
+                    isPrimary: _primary,
+                    brightness: brightness,
+                  ),
+                ),
         ),
       ),
     );
