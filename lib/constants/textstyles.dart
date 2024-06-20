@@ -47,7 +47,6 @@ class AppTextStyles {
     return TextStyle(
       fontSize: 14,
       color: brightness == Brightness.light ? Colors.black54 : Colors.white54,
-      fontWeight: FontWeight.w300,
     );
   }
 

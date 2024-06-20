@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/tab_selector.dart';
 import 'package:learn_europe/ui/screens/drag_and_drop_screen.dart';
 import 'package:learn_europe/ui/screens/login_screen.dart';
@@ -47,9 +48,13 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         builder: (context) => QuizSelectionScreen(category: category),
       );
     case multipleChoice:
+      final multipleChoiceContent = destination.arguments as MultipleChoiceContentModel;
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => const MultipleChoiceScreen(),
+        builder: (context) => MultipleChoiceScreen(
+          questionCardContent: multipleChoiceContent.questionCardContent,
+          answerOptions: multipleChoiceContent.answerOptions,
+        ),
       );
     case dragAndDrop:
       return MaterialPageRoute(

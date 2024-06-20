@@ -24,6 +24,9 @@ dependencies:
   # Confetti
   confetti: ^0.7.0
 
+  # TextToSpeech
+  flutter_tts: ^4.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

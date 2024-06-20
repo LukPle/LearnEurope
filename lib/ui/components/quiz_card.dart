@@ -27,6 +27,13 @@ class QuizCard extends StatelessWidget {
         color: brightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(color: Colors.black12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 0.5,
+            offset: const Offset(0.5, 0.5),
+          ),
+        ],
       ),
       padding: const EdgeInsets.all(AppPaddings.padding_16),
       child: Column(
@@ -44,6 +51,21 @@ class QuizCard extends StatelessWidget {
   Widget _buildDetailsArea(Brightness brightness) {
     return Column(
       children: [
+        Row(
+          children: [
+            Icon(
+              Icons.numbers,
+              color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
+              size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
+            ),
+            const SizedBox(width: AppPaddings.padding_4),
+            Text(
+              '${numberOfTotalQuestions.toString()} Questions',
+              style: AppTextStyles.quizCardDetailsTextStyle(brightness),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppPaddings.padding_4),
         Row(
           children: [
             Icon(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/ui/components/country_border_question_card.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
+import 'package:learn_europe/ui/components/languages_question_card.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
@@ -18,7 +21,15 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToStart(context), label: 'Go to Start'),
           const SizedBox(height: AppPaddings.padding_16),
-          CtaButton.primary(onPressed: () => _navigateToMultipleChoice(context), label: 'Go to Multiple Choice'),
+          CtaButton.primary(
+            onPressed: () => _navigateToCountryBordersMultipleChoice(context),
+            label: 'Go to Country Border Multiple Choice',
+          ),
+          const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(
+            onPressed: () => _navigateToLanguagesMultipleChoice(context),
+            label: 'Go to Languages Multiple Choice',
+          ),
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToDragAnDrop(context), label: 'Go to Drag and Drop'),
           const SizedBox(height: AppPaddings.padding_16),
@@ -32,8 +43,18 @@ class HomeScreen extends StatelessWidget {
     Navigator.of(context).pushNamed(routes.start);
   }
 
-  void _navigateToMultipleChoice(BuildContext context) {
-    Navigator.of(context).pushNamed(routes.multipleChoice);
+  void _navigateToCountryBordersMultipleChoice(BuildContext context) {
+    MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
+        questionCardContent: const CountryBorderQuestionCard(),
+        answerOptions: ['Germany', 'Serbia', 'Croatia', 'Spain']);
+    Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
+  }
+
+  void _navigateToLanguagesMultipleChoice(BuildContext context) {
+    MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
+        questionCardContent: const LanguagesQuestionCard(),
+        answerOptions: ['German', 'Russian', 'Greece', 'Danish']);
+    Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
   }
 
   void _navigateToDragAnDrop(BuildContext context) {
