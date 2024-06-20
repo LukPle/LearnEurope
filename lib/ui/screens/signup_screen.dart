@@ -55,6 +55,7 @@ class SignupScreenState extends State<SignupScreen> {
                 title: AppStrings.emailTitle,
                 hint: AppStrings.emailHint,
                 prefixIcon: Icons.alternate_email,
+                textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(height: AppPaddings.padding_16),
               InputField(
@@ -72,6 +73,7 @@ class SignupScreenState extends State<SignupScreen> {
                 title: AppStrings.nameTitle,
                 hint: AppStrings.nameHint,
                 prefixIcon: Icons.person,
+                textInputType: TextInputType.name,
                 maxLength: 12,
               ),
               const Spacer(),
