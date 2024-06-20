@@ -37,29 +37,29 @@ class CtaButton extends StatelessWidget {
       width: double.infinity,
       child: TextButton(
         style: ButtonStyle(
-          shape: WidgetStateProperty.all(
+          shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: _primary
                   ? BorderSide.none
                   : BorderSide(
-                      width: 1,
-                      color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
-                    ),
+                width: 1,
+                color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
+              ),
             ),
           ),
-          padding: WidgetStateProperty.all(
+          padding: MaterialStateProperty.all(
             const EdgeInsets.symmetric(
               vertical: AppPaddings.padding_16,
               horizontal: AppPaddings.padding_16,
             ),
           ),
           backgroundColor: _primary
-              ? WidgetStateProperty.all(
-                  color ??
-                      (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
-                          .withOpacity(opacity),
-                )
+              ? MaterialStateProperty.all(
+            color ??
+                (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark)
+                    .withOpacity(opacity),
+          )
               : null,
         ),
         onPressed: loading ? null : onPressed,
@@ -68,20 +68,20 @@ class CtaButton extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           child: loading
               ? const SizedBox(
-                  width: AppPaddings.padding_20,
-                  height: AppPaddings.padding_20,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 2,
-                  ),
-                )
+            width: AppPaddings.padding_20,
+            height: AppPaddings.padding_20,
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              strokeWidth: 2,
+            ),
+          )
               : Text(
-                  label,
-                  style: AppTextStyles.buttonTextStyle(
-                    isPrimary: _primary,
-                    brightness: brightness,
-                  ),
-                ),
+            label,
+            style: AppTextStyles.buttonTextStyle(
+              isPrimary: _primary,
+              brightness: brightness,
+            ),
+          ),
         ),
       ),
     );

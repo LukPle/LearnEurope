@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/ui/components/category_card.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;

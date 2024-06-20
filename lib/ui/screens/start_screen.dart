@@ -16,6 +16,8 @@ class StartScreen extends StatelessWidget {
         children: [
           const PageHeadline(title: 'Welcome to Learn Europe'),
           const Spacer(),
+          Image.asset('assets/image.webp'),
+          const Spacer(),
           CtaButton.primary(onPressed: () => _navigateToLogin(context), label: AppStrings.loginButton),
           const SizedBox(height: AppPaddings.padding_12),
           CtaButton.secondary(onPressed: () => _navigateToSignup(context), label: AppStrings.signupButtonStart),

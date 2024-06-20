@@ -58,6 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
                 title: AppStrings.emailTitle,
                 hint: AppStrings.emailHint,
                 prefixIcon: Icons.alternate_email,
+                textInputType: TextInputType.emailAddress,
               ),
               const SizedBox(height: AppPaddings.padding_16),
               InputField(

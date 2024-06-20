@@ -4,13 +4,18 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
-import 'package:learn_europe/constants/routes.dart' as routes;
-import 'dart:math' as math;
-
 import 'package:learn_europe/ui/components/hint_dialog.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class MultipleChoiceScreen extends StatefulWidget {
-  const MultipleChoiceScreen({super.key});
+  const MultipleChoiceScreen({
+    super.key,
+    required this.questionCardContent,
+    required this.answerOptions,
+  });
+
+  final Widget questionCardContent;
+  final List<String> answerOptions;
 
   @override
   MultipleChoiceScreenState createState() => MultipleChoiceScreenState();
@@ -46,21 +51,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
         children: [
           Expanded(
             child: _buildMultipleChoiceQuestionCard(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Welches Land ist hier zu sehen?"),
-                  const SizedBox(height: AppPaddings.padding_24),
-                  SizedBox(
-                    height: 225,
-                    child: Transform.rotate(
-                      angle: 0 * (math.pi / 180),
-                      child:
-                          Image.network('https://i.pinimg.com/originals/de/cd/15/decd15e39360f7ba7acd4077b79912de.gif'),
-                    ),
-                  ),
-                ],
-              ),
+              child: widget.questionCardContent,
             ),
           ),
           const SizedBox(height: AppPaddings.padding_32),
@@ -72,7 +63,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: List.generate(4, (index) {
-              return _buildMultipleChoiceAnswerCard(child: const Text("Antwort"), index: index);
+              return _buildMultipleChoiceAnswerCard(child: Text(widget.answerOptions[index]), index: index);
             }),
           ),
         ],
@@ -102,7 +93,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
       child: Container(
         decoration: BoxDecoration(
           color:
-              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(

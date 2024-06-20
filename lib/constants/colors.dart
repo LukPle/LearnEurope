@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn_europe/models/category_enum.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 
 class AppColors {
   AppColors._();

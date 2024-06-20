@@ -13,6 +13,7 @@ class InputField extends StatefulWidget {
     this.maxLength,
     this.hideInput = false,
     this.editable = true,
+    this.textInputType,
   });
 
   final TextEditingController controller;
@@ -24,6 +25,7 @@ class InputField extends StatefulWidget {
   final int? maxLength;
   final bool hideInput;
   final bool editable;
+  final TextInputType? textInputType;
 
   @override
   InputFieldState createState() => InputFieldState();
@@ -71,6 +73,7 @@ class InputFieldState extends State<InputField> {
               : const SizedBox.shrink(),
         ),
         autocorrect: false,
+        keyboardType: widget.textInputType,
         maxLines: 1,
         maxLength: widget.maxLength,
         obscureText: widget.hideInput,
