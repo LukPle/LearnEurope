@@ -13,13 +13,13 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height * 0.175,
             decoration: BoxDecoration(
@@ -46,16 +46,16 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: 90,
-          child: Image.network(
-            'https://cdn.pixabay.com/photo/2014/04/03/11/58/rocket-312767_640.png', // Replace with your image URL
-            width: 100,
-            height: 100,
+          Positioned(
+            bottom: 90,
+            child: Image.network(
+              'https://cdn.pixabay.com/photo/2014/04/03/11/58/rocket-312767_640.png', // Replace with your image URL
+              width: 100,
+              height: 100,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
