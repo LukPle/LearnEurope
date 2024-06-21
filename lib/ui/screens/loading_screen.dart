@@ -24,10 +24,12 @@ class LoadingScreen extends StatelessWidget {
 
         getIt<UserStore>().saveUserProfile(userId, userName);
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          routes.tabSelector,
-          (Route<dynamic> route) => false,
-        );
+        if (context.mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            routes.tabSelector,
+            (Route<dynamic> route) => false,
+          );
+        }
       } else {
         Navigator.of(context).pushNamedAndRemoveUntil(
           routes.start,

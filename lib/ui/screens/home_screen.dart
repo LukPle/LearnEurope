@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/network/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PageHeadline(title: "Hello ${getIt<UserStore>().username}, let's\n start learning"),
+          PageHeadline(title: AppStrings.homeTitle(getIt<UserStore>().username)),
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(
             onPressed: () => _navigateToCountryBordersMultipleChoice(context),

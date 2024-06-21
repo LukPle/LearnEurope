@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/ui/components/category_card.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -14,7 +15,7 @@ class CategoriesScreen extends StatelessWidget {
       padding: const EdgeInsets.all(AppPaddings.padding_16),
       child: Column(
         children: [
-          const PageHeadline(title: "Explore Europe in various categories"),
+          const PageHeadline(title: AppStrings.categoriesTitle),
           const Spacer(),
           GridView.count(
             crossAxisCount: 2,

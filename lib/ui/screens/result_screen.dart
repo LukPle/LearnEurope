@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
@@ -55,9 +56,14 @@ class ResultScreenState extends State<ResultScreen> {
           buildScoreCard(points),
           const Spacer(),
           CtaButton.primary(
-              onPressed: () => Navigator.of(context).pushNamed(routes.tabSelector), label: 'Return to home'),
+            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+              routes.tabSelector,
+              (Route<dynamic> route) => false,
+            ),
+            label: AppStrings.returnToHomeButton,
+          ),
           const SizedBox(height: AppPaddings.padding_12),
-          CtaButton.secondary(onPressed: () => {}, label: 'Play again'),
+          CtaButton.secondary(onPressed: () => {}, label: AppStrings.playAgainButton),
         ],
       ),
     );

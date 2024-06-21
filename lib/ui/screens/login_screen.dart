@@ -110,7 +110,9 @@ class LoginScreenState extends State<LoginScreen> {
           );
         }
       } catch (e) {
-        showAlertSnackBar(context, AppStrings.loginFail, isError: true);
+        if (mounted) {
+          showAlertSnackBar(context, AppStrings.loginFail, isError: true);
+        }
       }
     } else {
       showAlertSnackBar(context, AppStrings.emptyFields);

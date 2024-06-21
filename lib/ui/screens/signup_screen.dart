@@ -97,16 +97,13 @@ class SignupScreenState extends State<SignupScreen> {
   }
 
   Future<void> _signup() async {
-    if (emailController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
-        nameController.text.isNotEmpty) {
-      _dbServices
-          .createUser(
-          emailController.text.trim(), passwordController.text.trim(), nameController.text.trim())
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty) {
+      await _dbServices
+          .createUser(emailController.text.trim(), passwordController.text.trim(), nameController.text.trim())
           .then((_) {
         Navigator.of(context).pushNamedAndRemoveUntil(
           routes.tabSelector,
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
       }).catchError((e) {
         showAlertSnackBar(context, AppStrings.signupFail, isError: true);

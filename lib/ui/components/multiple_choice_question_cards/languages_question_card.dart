@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/ui/components/altert_snackbar.dart';
 
 class LanguagesQuestionCard extends StatefulWidget {
   const LanguagesQuestionCard({super.key});
@@ -17,22 +19,33 @@ class LanguagesQuestionCardState extends State<LanguagesQuestionCard> {
   @override
   void initState() {
     super.initState();
-    flutterTts.setSharedInstance(true);
-    flutterTts.setIosAudioCategory(
-        IosTextToSpeechAudioCategory.playback,
-        [
-          IosTextToSpeechAudioCategoryOptions.allowBluetooth,
-          IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
-          IosTextToSpeechAudioCategoryOptions.mixWithOthers,
-          IosTextToSpeechAudioCategoryOptions.defaultToSpeaker
-        ],
-        IosTextToSpeechAudioMode.defaultMode);
+    _initializeTts();
   }
 
-  Future<void> _speak() async {
-    await flutterTts.setLanguage("es-ES");
-    await flutterTts.setPitch(1.0);
-    await flutterTts.speak("Estar en las nubes");
+  Future<void> _initializeTts() async {
+    await flutterTts.setSharedInstance(true);
+    await flutterTts.setIosAudioCategory(
+      IosTextToSpeechAudioCategory.playback,
+      [
+        IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+        IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+        IosTextToSpeechAudioCategoryOptions.mixWithOthers,
+        IosTextToSpeechAudioCategoryOptions.defaultToSpeaker
+      ],
+      IosTextToSpeechAudioMode.defaultMode,
+    );
+  }
+
+  Future<void> _speak(String languageCode, String quote) async {
+    if (await flutterTts.isLanguageAvailable(languageCode)) {
+      await flutterTts.setLanguage(languageCode);
+      await flutterTts.setPitch(1.0);
+      await flutterTts.speak(quote);
+    } else {
+      if (mounted) {
+        showAlertSnackBar(context, AppStrings.textToSpeechFail, isError: true);
+      }
+    }
   }
 
   @override
@@ -49,7 +62,7 @@ class LanguagesQuestionCardState extends State<LanguagesQuestionCard> {
         ),
         const SizedBox(height: AppPaddings.padding_12),
         IconButton(
-          onPressed: _speak,
+          onPressed: () async => await _speak('es-ES', 'Estar en las nubes'),
           icon: const Icon(Icons.volume_up),
           color: MediaQuery.of(context).platformBrightness == Brightness.light
               ? AppColors.primaryColorLight

@@ -26,6 +26,14 @@ class AppStrings {
   static const String navLeaderboard = 'Leaderboard';
   static const String navProfile = 'Profile';
 
+  /// Home Screen Strings
+  static String homeTitle(String? username) {
+    return username != null ? 'Hello $username, let\'s\nstart learning' : 'Let\'s start learning';
+  }
+
+  /// Categories Screen Strings
+  static const String categoriesTitle = 'Explore Europe in various categories';
+
   /// Learning Categories Strings
   static String getCategoryText(Category category) {
     switch (category) {
@@ -46,16 +54,27 @@ class AppStrings {
   static const String completedQuizzesFilter = 'Completed';
 
   static String getDateTimeText(DateTime? dateTime) {
-    return dateTime != null ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}' : 'Open • No playthrough yet';
+    return dateTime != null
+        ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}'
+        : 'Open';
   }
 
   /// Quiz Strings
-  static const exitQuiz = 'Exit Quiz';
+  static const String exitQuiz = 'Exit Quiz';
+  static const String textToSpeechFail = 'Sorry, audio output not possible';
 
   /// Hint Dialog Strings
-  static const hintDialogTitle = 'Do you need a hint?';
+  static const String hintDialogTitle = 'Do you need a hint?';
+
+  /// Result Screen Strings
+  static const String returnToHomeButton = 'Return to home';
+  static const String playAgainButton = 'Play again';
+
+  /// Leaderboard Screen Strings
+  static const String leaderboardTitle = 'Your place on the leaderboard';
 
   /// Profile Strings
-  static const logoutButton = 'Logout';
-  static const logoutFail = 'Logout failed, please try again';
+  static const String profileTitle = 'Profile';
+  static const String logoutButton = 'Logout';
+  static const String logoutFail = 'Logout failed, please try again';
 }

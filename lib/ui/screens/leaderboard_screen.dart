@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
+import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/ui/components/leaderboard_card.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -20,7 +21,7 @@ class LeaderboardScreen extends StatelessWidget {
           padding: const EdgeInsets.all(AppPaddings.padding_16),
           child: Column(
             children: [
-              const PageHeadline(title: "Your place on the leaderboard"),
+              const PageHeadline(title: AppStrings.leaderboardTitle),
               const SizedBox(height: AppPaddings.padding_32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

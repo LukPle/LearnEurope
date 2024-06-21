@@ -22,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.all(AppPaddings.padding_16),
       child: Column(
         children: [
-          const PageHeadline(title: 'Profile'),
+          const PageHeadline(title: AppStrings.profileTitle),
           const SizedBox(height: AppPaddings.padding_16),
           Container(
             width: double.infinity,
