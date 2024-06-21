@@ -5,6 +5,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/network/db_services.dart';
+import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
 import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
@@ -21,10 +22,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  final DatabaseServices _dbServices = DatabaseServices();
+  final CtaButtonLoadingStore _ctaButtonLoadingStore = CtaButtonLoadingStore();
+
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late PasswordFieldStore passwordFieldStore;
-  final DatabaseServices _dbServices = DatabaseServices();
 
   @override
   void initState() {
@@ -43,8 +46,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = false;
-
     return AppScaffold(
       appBar: const AppAppBar(),
       body: Observer(
@@ -90,7 +91,7 @@ class LoginScreenState extends State<LoginScreen> {
               CtaButton.primary(
                 onPressed: () async => _login(),
                 label: AppStrings.loginButton,
-                loading: isLoading,
+                loading: _ctaButtonLoadingStore.isLoading,
               ),
             ],
           );
@@ -102,6 +103,7 @@ class LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       try {
+        _ctaButtonLoadingStore.setLoading();
         await _dbServices.loginUser(emailController.text.trim(), passwordController.text.trim());
         if (mounted) {
           Navigator.of(context).pushNamedAndRemoveUntil(
@@ -110,6 +112,7 @@ class LoginScreenState extends State<LoginScreen> {
           );
         }
       } catch (e) {
+        _ctaButtonLoadingStore.resetLoading();
         if (mounted) {
           showAlertSnackBar(context, AppStrings.loginFail, isError: true);
         }

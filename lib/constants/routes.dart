@@ -26,7 +26,7 @@ Route<dynamic> generateRoute(RouteSettings destination) {
     case loading:
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => const LoadingScreen(),
+        builder: (context) => LoadingScreen(),
       );
     case start:
       return MaterialPageRoute(

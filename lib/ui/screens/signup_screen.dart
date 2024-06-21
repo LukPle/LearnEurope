@@ -4,6 +4,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/network/db_services.dart';
+import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
 import 'package:learn_europe/ui/components/altert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
@@ -21,6 +22,7 @@ class SignupScreen extends StatefulWidget {
 
 class SignupScreenState extends State<SignupScreen> {
   final DatabaseServices _dbServices = DatabaseServices();
+  final CtaButtonLoadingStore _ctaButtonLoadingStore = CtaButtonLoadingStore();
 
   late TextEditingController nameController;
   late TextEditingController emailController;
@@ -46,8 +48,6 @@ class SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = false;
-
     return AppScaffold(
       appBar: const AppAppBar(),
       body: Observer(
@@ -87,7 +87,7 @@ class SignupScreenState extends State<SignupScreen> {
               CtaButton.primary(
                 onPressed: () => _signup(),
                 label: AppStrings.signupButton,
-                loading: isLoading,
+                loading: _ctaButtonLoadingStore.isLoading,
               ),
             ],
           );
@@ -98,6 +98,7 @@ class SignupScreenState extends State<SignupScreen> {
 
   Future<void> _signup() async {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty && nameController.text.isNotEmpty) {
+      _ctaButtonLoadingStore.setLoading();
       await _dbServices
           .createUser(emailController.text.trim(), passwordController.text.trim(), nameController.text.trim())
           .then((_) {
@@ -106,6 +107,7 @@ class SignupScreenState extends State<SignupScreen> {
           (Route<dynamic> route) => false,
         );
       }).catchError((e) {
+        _ctaButtonLoadingStore.resetLoading();
         showAlertSnackBar(context, AppStrings.signupFail, isError: true);
       });
     } else {

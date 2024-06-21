@@ -44,7 +44,7 @@ class DatabaseServices {
         String userId = user.uid;
 
         DocumentSnapshot userDoc =
-            await FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection).doc(userId).get();
+        await FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection).doc(userId).get();
 
         String userName = userDoc['name'];
 
@@ -64,6 +64,24 @@ class DatabaseServices {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<bool> isUserLoggedIn() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      String userId = user.uid;
+
+      DocumentSnapshot userDoc =
+      await FirebaseFirestore.instance.collection(FirebaseConstants.usersCollection).doc(userId).get();
+
+      String userName = userDoc['name'];
+
+      getIt<UserStore>().saveUserProfile(userId, userName);
+
+      return true;
+    } else {
+      return false;
     }
   }
 }
