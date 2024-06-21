@@ -50,8 +50,8 @@ class CategoryCard extends StatelessWidget {
             bottom: 90,
             child: Image.network(
               'https://cdn.pixabay.com/photo/2014/04/03/11/58/rocket-312767_640.png', // Replace with your image URL
-              width: 100,
-              height: 100,
+              width: MediaQuery.of(context).size.width * 0.25,
+              height: MediaQuery.of(context).size.width * 0.25,
             ),
           ),
         ],

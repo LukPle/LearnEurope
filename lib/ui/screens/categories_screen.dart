@@ -19,7 +19,7 @@ class CategoriesScreen extends StatelessWidget {
           const Spacer(),
           GridView.count(
             crossAxisCount: 2,
-            mainAxisSpacing: AppPaddings.padding_48,
+            mainAxisSpacing: AppPaddings.padding_32,
             crossAxisSpacing: AppPaddings.padding_16,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
