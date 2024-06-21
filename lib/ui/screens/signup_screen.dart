@@ -6,7 +6,7 @@ import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/password_field_store.dart';
-import 'package:learn_europe/ui/components/altert_snackbar.dart';
+import 'package:learn_europe/ui/components/alert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';

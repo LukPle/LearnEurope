@@ -69,4 +69,6 @@ class AppTextStyles {
   }
 
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
+
+  static const TextStyle profileSectionTitles = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 }

@@ -4,7 +4,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
-import 'package:learn_europe/ui/components/altert_snackbar.dart';
+import 'package:learn_europe/ui/components/alert_snackbar.dart';
 
 class LanguagesQuestionCard extends StatefulWidget {
   const LanguagesQuestionCard({super.key});
