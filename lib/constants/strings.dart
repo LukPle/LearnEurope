@@ -54,9 +54,7 @@ class AppStrings {
   static const String completedQuizzesFilter = 'Completed';
 
   static String getDateTimeText(DateTime? dateTime) {
-    return dateTime != null
-        ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}'
-        : 'Open';
+    return dateTime != null ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}' : 'Open';
   }
 
   /// Quiz Strings
@@ -75,6 +73,19 @@ class AppStrings {
 
   /// Profile Strings
   static const String profileTitle = 'Profile';
+
+  static String learnerRegistrationText(DateTime dateTime) {
+    return 'Student of Europe\nsince ${dateTime.day}.${dateTime.month}.${dateTime.year}';
+  }
+
+  static const scoreAndActivityAnalyticsTitle = 'Score and Activity';
+  static const String totalPointsAnalytics = 'Total Points';
+
+  static String activityAnalytics(int activeDays) {
+    return activeDays == 1 ? '$activeDays Day Active' : '$activeDays Days Active';
+  }
+
+  static const categoriesAnalyticsTitle = 'Categories Progress';
   static const String logoutButton = 'Logout';
   static const String logoutFail = 'Logout failed, please try again';
 }

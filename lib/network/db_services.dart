@@ -28,6 +28,7 @@ class DatabaseServices {
             'name': name,
             'email': email,
             'totalPoints': 0,
+            'registrationDate': FieldValue.serverTimestamp(),
           },
         );
 

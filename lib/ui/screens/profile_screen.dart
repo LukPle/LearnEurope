@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
@@ -11,7 +9,8 @@ import 'package:learn_europe/network/service_locator.dart';
 import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
-import 'package:learn_europe/ui/components/categories_progress_analytics.dart';
+import 'package:learn_europe/ui/components/profile_analytics/score_activity_analytics.dart';
+import 'package:learn_europe/ui/components/profile_analytics/categories_progress_analytics.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -72,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: AppPaddings.padding_2),
                                       Text(
-                                        'Student of Europe\nsince 12.06.2024',
+                                        AppStrings.learnerRegistrationText(DateTime.now()),
                                         style: AppTextStyles.quizCardDetailsTextStyle(
                                             MediaQuery.of(context).platformBrightness),
                                         textAlign: TextAlign.center,
@@ -83,59 +82,19 @@ class ProfileScreen extends StatelessWidget {
                                 const SizedBox(height: AppPaddings.padding_16),
                                 const Divider(height: 0, thickness: 0.5, color: Colors.grey),
                                 const SizedBox(height: AppPaddings.padding_16),
-                                Text('Score', style: AppTextStyles.profileSectionTitles),
-                                const SizedBox(height: AppPaddings.padding_8),
-                                Padding(
-                                  padding: const EdgeInsets.all(AppPaddings.padding_8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${760.toString()} Points',
-                                        style: AppTextStyles.standardTitleTextStyle.copyWith(
-                                          color: MediaQuery.of(context).platformBrightness == Brightness.light
-                                              ? AppColors.primaryColorLight
-                                              : AppColors.primaryColorDark,
-                                        ),
-                                      ),
-                                      Text(
-                                        '#2 on Leaderboard',
-                                        style: AppTextStyles.standardTitleTextStyle.copyWith(
-                                          color: MediaQuery.of(context).platformBrightness == Brightness.light
-                                              ? AppColors.primaryColorLight
-                                              : AppColors.primaryColorDark,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                const Text(
+                                  AppStrings.scoreAndActivityAnalyticsTitle,
+                                  style: AppTextStyles.profileSectionTitles,
                                 ),
+                                const SizedBox(height: AppPaddings.padding_8),
+                                const ScoreAndActivityAnalytics(totalPoints: 720, activeDays: 4),
                                 const SizedBox(height: AppPaddings.padding_24),
-                                Text('Categories Progress', style: AppTextStyles.profileSectionTitles),
+                                const Text(
+                                  AppStrings.categoriesAnalyticsTitle,
+                                  style: AppTextStyles.profileSectionTitles,
+                                ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 const CategoriesProgressAnalytics(),
-                                const SizedBox(height: AppPaddings.padding_24),
-                                Text('Activity Streak', style: AppTextStyles.profileSectionTitles),
-                                const SizedBox(height: AppPaddings.padding_8),
-                                Padding(
-                                  padding: const EdgeInsets.all(AppPaddings.padding_8),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.local_fire_department_rounded,
-                                        size: MediaQuery.of(context).size.width * 0.05,
-                                        color: AppColors.activityFlameColors[1],
-                                      ),
-                                      const SizedBox(width: AppPaddings.padding_8),
-                                      Text(
-                                        '4 Consecutive Days',
-                                        style: TextStyle(
-                                          color: AppColors.activityFlameColors[1],
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             ),
                           ),
