@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -54,26 +55,26 @@ class QuizSelectionScreen extends StatelessWidget {
               color: AppColors.categoryColor(category),
             ),
           ),
-          FutureBuilder<List<QuizModel>>(
-            future: _fetchQuizzes(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  showAlertSnackBar(context, AppStrings.loadingError);
-                });
-                return _buildEmptyListComponent(context);
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return _buildEmptyListComponent(context);
-              } else {
-                final quizzes = snapshot.data!;
-                return Observer(
-                  builder: (context) {
-                    return Expanded(
-                      child: Column(
+          Expanded(
+            child: FutureBuilder<List<QuizModel>>(
+              future: _fetchQuizzes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showAlertSnackBar(context, AppStrings.loadingError);
+                  });
+                  return _buildEmptyListComponent(context);
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildEmptyListComponent(context);
+                } else {
+                  final quizzes = snapshot.data!;
+                  return Observer(
+                    builder: (context) {
+                      return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: AppPaddings.padding_24),
@@ -131,12 +132,12 @@ class QuizSelectionScreen extends StatelessWidget {
                             ),
                           ),
                         ],
-                      ),
-                    );
-                  },
-                );
-              }
-            },
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -144,22 +145,20 @@ class QuizSelectionScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyListComponent(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error,
-              size: MediaQuery.of(context).size.width * 0.075,
-              color: MediaQuery.of(context).platformBrightness == Brightness.light
-                  ? AppColors.primaryColorLight
-                  : AppColors.primaryColorDark,
-            ),
-            const SizedBox(height: AppPaddings.padding_8),
-            const Text(AppStrings.noQuizzesAvailable),
-          ],
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error,
+            size: MediaQuery.of(context).size.width * 0.075,
+            color: MediaQuery.of(context).platformBrightness == Brightness.light
+                ? AppColors.primaryColorLight
+                : AppColors.primaryColorDark,
+          ),
+          const SizedBox(height: AppPaddings.padding_8),
+          const Text(AppStrings.noQuizzesAvailable),
+        ],
       ),
     );
   }
