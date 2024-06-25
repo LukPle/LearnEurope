@@ -133,4 +133,12 @@ class DatabaseServices {
       rethrow;
     }
   }
+
+  Future<void> deleteDocument({required String collection, required String docId}) async {
+    try {
+      await _firestore.collection(collection).doc(docId).delete();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

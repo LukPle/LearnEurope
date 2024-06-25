@@ -3,18 +3,23 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 
 class QuizCard extends StatelessWidget {
   const QuizCard(
       {super.key,
       required this.title,
+      required this.quizDifficulty,
       required this.numberOfTotalQuestions,
+      required this.pointsPerQuestion,
       this.lastPlaythrough,
       this.numberOfCorrectQuestions});
 
   final String title;
-  final DateTime? lastPlaythrough;
+  final QuizDifficulty quizDifficulty;
   final int numberOfTotalQuestions;
+  final int pointsPerQuestion;
+  final DateTime? lastPlaythrough;
   final int? numberOfCorrectQuestions;
 
   @override
@@ -54,13 +59,13 @@ class QuizCard extends StatelessWidget {
         Row(
           children: [
             Icon(
-              Icons.numbers,
+              Icons.stacked_line_chart,
               color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
               size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
             ),
             const SizedBox(width: AppPaddings.padding_4),
             Text(
-              '${numberOfTotalQuestions.toString()} Questions',
+              AppStrings.getDifficultyText(quizDifficulty),
               style: AppTextStyles.quizCardDetailsTextStyle(brightness),
             ),
           ],
@@ -69,13 +74,13 @@ class QuizCard extends StatelessWidget {
         Row(
           children: [
             Icon(
-              Icons.stacked_line_chart,
+              Icons.numbers,
               color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
               size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
             ),
             const SizedBox(width: AppPaddings.padding_4),
             Text(
-              'Beginner Level',
+              '${numberOfTotalQuestions.toString()} Questions • ${pointsPerQuestion.toString()} Points each',
               style: AppTextStyles.quizCardDetailsTextStyle(brightness),
             ),
           ],

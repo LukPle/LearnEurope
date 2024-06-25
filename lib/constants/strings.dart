@@ -1,4 +1,5 @@
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 
 class AppStrings {
   AppStrings._();
@@ -52,6 +53,16 @@ class AppStrings {
   static const String allQuizzesFilter = 'All';
   static const String openQuizzesFilter = 'Open';
   static const String completedQuizzesFilter = 'Completed';
+  static const String loadingError = 'Quizzes couldn\'t be loaded';
+  static const String noQuizzesAvailable = 'No quizzes available';
+
+  static String getDifficultyText(QuizDifficulty quizDifficulty) {
+    if (quizDifficulty == QuizDifficulty.beginner) {
+      return 'Beginner Level';
+    } else {
+      return 'Expert Level';
+    }
+  }
 
   static String getDateTimeText(DateTime? dateTime) {
     return dateTime != null ? 'Last completed on ${dateTime.day}.${dateTime.month}.${dateTime.year}' : 'Open';

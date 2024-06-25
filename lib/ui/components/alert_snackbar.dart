@@ -21,7 +21,7 @@ class AlertSnackBar {
   }) {
     return SnackBar(
       content: Text(message),
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 3000),
       showCloseIcon: true,
     );
   }
