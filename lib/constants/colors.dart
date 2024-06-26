@@ -23,24 +23,21 @@ class AppColors {
   static const Color error = Colors.red;
 
   // Category Colors
-  static Color categoryColor(Category category) {
+  static Color categoryColor(Category category, Brightness brightness) {
+    bool isLightMode = brightness == Brightness.light;
+
     switch (category) {
       case Category.europe101:
-        return Colors.red;
+        return isLightMode ? const Color(0xff4B96DA) : const Color(0xff9DCAF3); // Hex: #4B96DA, #9DCAF3
       case Category.languages:
-        return Colors.green;
+        return isLightMode ? const Color(0xffE9AE00) : const Color(0xffEDD17E); // Hex: #E9AE00, #EDD17E
       case Category.countryBorders:
-        return Colors.cyan;
+        return isLightMode ? const Color(0xff528F6E) : const Color(0xff6CD196); // Hex: #528F6E, #6CD196
       case Category.geoPosition:
-        return Colors.purpleAccent;
+        return isLightMode ? const Color(0xffB34535) : const Color(0xffD97588); // Hex: #B34535, #D97588
     }
   }
 
   // Activity Flame Colors
-  static const List activityFlameColors = [
-    Colors.amber,
-    Colors.orange,
-    Colors.deepOrangeAccent,
-    Colors.red
-  ];
+  static const List activityFlameColors = [Colors.amber, Colors.orange, Colors.deepOrangeAccent, Colors.red];
 }

@@ -49,6 +49,19 @@ class AppStrings {
     }
   }
 
+  static String getCategoryImage(Category category) {
+    switch (category) {
+      case Category.europe101:
+        return 'assets/europe_101.svg';
+      case Category.languages:
+        return 'assets/languages.svg';
+      case Category.countryBorders:
+        return 'assets/country_borders.svg';
+      case Category.geoPosition:
+        return 'assets/geo_position.svg';
+    }
+  }
+
   /// Quiz Selection Screen String
   static const String allQuizzesFilter = 'All';
   static const String openQuizzesFilter = 'Open';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
@@ -16,7 +17,10 @@ class StartScreen extends StatelessWidget {
         children: [
           const PageHeadline(title: 'Welcome to Learn Europe'),
           const Spacer(),
-          Image.asset('assets/image.webp'),
+          SvgPicture.asset(
+            'assets/europe_illustration.svg',
+            width: MediaQuery.of(context).size.width,
+          ),
           const Spacer(),
           CtaButton.primary(onPressed: () => _navigateToLogin(context), label: AppStrings.loginButton),
           const SizedBox(height: AppPaddings.padding_12),

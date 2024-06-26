@@ -44,6 +44,8 @@ class QuizSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+
     return AppScaffold(
       appBar: const AppAppBar(),
       body: Column(
@@ -52,7 +54,7 @@ class QuizSelectionScreen extends StatelessWidget {
           Text(
             AppStrings.getCategoryText(category),
             style: AppTextStyles.standardTitleTextStyle.copyWith(
-              color: AppColors.categoryColor(category),
+              color: AppColors.categoryColor(category, brightness),
             ),
           ),
           Expanded(
@@ -108,9 +110,8 @@ class QuizSelectionScreen extends StatelessWidget {
                           const SizedBox(height: AppPaddings.padding_12),
                           Expanded(
                             child: ListFadingShaderWidget(
-                              color: MediaQuery.of(context).platformBrightness == Brightness.light
-                                  ? AppColors.lightBackground
-                                  : AppColors.darkBackground,
+                              color:
+                                  brightness == Brightness.light ? AppColors.lightBackground : AppColors.darkBackground,
                               child: ListView.builder(
                                 padding: const EdgeInsets.only(top: AppPaddings.padding_12),
                                 itemCount: quizzes.length,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
@@ -34,6 +35,8 @@ class CategoryProgressRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
+
     return Column(
       children: [
         Row(
@@ -41,30 +44,36 @@ class CategoryProgressRow extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.network(
-                  'https://cdn.pixabay.com/photo/2014/04/03/11/58/rocket-312767_640.png',
+                SvgPicture.asset(
+                  AppStrings.getCategoryImage(category),
                   width: MediaQuery.of(context).size.width * 0.05,
                   height: MediaQuery.of(context).size.width * 0.05,
                 ),
                 const SizedBox(width: AppPaddings.padding_8),
                 Text(
                   AppStrings.getCategoryText(category),
-                  style: TextStyle(color: AppColors.categoryColor(category), fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    color: AppColors.categoryColor(category, brightness),
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
             Text(
               '${(progress * 100).ceil()} %',
-              style: TextStyle(color: AppColors.categoryColor(category), fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: AppColors.categoryColor(category, brightness),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
         const SizedBox(height: AppPaddings.padding_8),
         LinearProgressIndicator(
           value: progress,
-          backgroundColor: Colors.grey.shade400,
+          backgroundColor: brightness == Brightness.light ? Colors.grey.shade400 : Colors.grey.shade600,
           borderRadius: BorderRadius.circular(10),
-          color: AppColors.categoryColor(category),
+          color: AppColors.categoryColor(category, brightness),
           minHeight: 7.5,
         ),
       ],
