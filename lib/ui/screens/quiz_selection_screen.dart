@@ -31,11 +31,11 @@ class QuizSelectionScreen extends StatelessWidget {
       case Category.europe101:
         collection = FirebaseConstants.europe101QuizCollection;
       case Category.languages:
-        collection = FirebaseConstants.europe101QuizCollection;
+        collection = FirebaseConstants.languagesQuizCollection;
       case Category.countryBorders:
-        collection = FirebaseConstants.europe101QuizCollection;
+        collection = FirebaseConstants.countryBordersQuizCollection;
       case Category.geoPosition:
-        collection = FirebaseConstants.europe101QuizCollection;
+        collection = FirebaseConstants.geoPositionQuizCollection;
     }
 
     final docs = await dbServices.getAllDocuments(collection: collection);
