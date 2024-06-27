@@ -42,15 +42,19 @@ class HomeScreen extends StatelessWidget {
 
   void _navigateToCountryBordersMultipleChoice(BuildContext context) {
     MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
-        questionCardContent: const CountryBorderQuestionCard(),
-        answerOptions: ['Germany', 'Serbia', 'Croatia', 'Spain']);
+        questionCardContent: const CountryBorderQuestionCard(
+            question: 'Which country can be seen here',
+            imageUrl: 'https://i.pinimg.com/originals/de/cd/15/decd15e39360f7ba7acd4077b79912de.gif'),
+        answerOptions: ['Germany', 'Serbia', 'Croatia', 'Spain'],
+        hint: 'THE HINT');
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
   }
 
   void _navigateToLanguagesMultipleChoice(BuildContext context) {
     MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
         questionCardContent: const LanguagesQuestionCard(),
-        answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish']);
+        answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish'],
+        hint: 'THE HINT');
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
   }
 

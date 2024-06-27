@@ -4,8 +4,10 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/country_borders_question_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
+import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/quiz_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
@@ -14,7 +16,9 @@ import 'package:learn_europe/ui/components/alert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
+import 'package:learn_europe/ui/components/multiple_choice_question_cards/country_border_question_card.dart';
 import 'package:learn_europe/ui/components/quiz_card.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class QuizSelectionScreen extends StatelessWidget {
   QuizSelectionScreen({super.key, required this.category});
@@ -39,6 +43,53 @@ class QuizSelectionScreen extends StatelessWidget {
 
     final docs = await dbServices.getAllDocuments(collection: collection);
     return docs.map((doc) => QuizModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<dynamic>> _fetchQuestions() async {
+    final DatabaseServices dbServices = DatabaseServices();
+    String collection;
+
+    switch (category) {
+      case Category.europe101:
+        collection = FirebaseConstants.europe101QuestionsCollection;
+        final docs = await dbServices.getAllDocuments(collection: collection);
+        return [];
+      case Category.languages:
+        collection = FirebaseConstants.languagesQuestionsCollection;
+        final docs = await dbServices.getAllDocuments(collection: collection);
+        return [];
+      case Category.countryBorders:
+        collection = FirebaseConstants.countryBordersQuestionsCollection;
+        final docs = await dbServices.getAllDocuments(collection: collection);
+        return docs.map((doc) => CountryBordersQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+      case Category.geoPosition:
+        collection = FirebaseConstants.geoPositionQuestionsCollection;
+        final docs = await dbServices.getAllDocuments(collection: collection);
+        return [];
+    }
+  }
+
+  Future<void> _navigateToQuestions(BuildContext context) async {
+    switch (category) {
+      case Category.europe101:
+        break;
+      case Category.languages:
+        break;
+      case Category.countryBorders:
+        List<CountryBordersQuestionModel> countryBordersQuestions =
+            await _fetchQuestions() as List<CountryBordersQuestionModel>;
+        MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
+            questionCardContent: CountryBorderQuestionCard(
+                question: countryBordersQuestions.first.question, imageUrl: countryBordersQuestions.first.image_url),
+            answerOptions: countryBordersQuestions.first.answers,
+            hint: countryBordersQuestions.first.hint);
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
+        }
+        break;
+      case Category.geoPosition:
+        break;
+    }
   }
 
   @override
@@ -120,6 +171,7 @@ class QuizSelectionScreen extends StatelessWidget {
                                     padding: const EdgeInsets.only(bottom: AppPaddings.padding_12),
                                     child: QuizCard(
                                       title: quiz.title,
+                                      onTap: () async => await _navigateToQuestions(context),
                                       quizDifficulty: quiz.difficulty,
                                       numberOfTotalQuestions: quiz.questions.length,
                                       pointsPerQuestion: quiz.pointsPerQuestion,

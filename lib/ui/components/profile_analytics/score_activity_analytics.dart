@@ -7,7 +7,7 @@ import 'package:learn_europe/constants/textstyles.dart';
 class ScoreAndActivityAnalytics extends StatelessWidget {
   const ScoreAndActivityAnalytics({super.key, required this.totalPoints, required this.activeDays});
 
-  final int totalPoints;
+  final int? totalPoints;
   final int activeDays;
 
   @override
@@ -20,7 +20,7 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
           Expanded(
             child: ScoreAndActivityAnalyticsItem(
               upperComponent: Text(
-                totalPoints.toString(),
+                totalPoints != null ? totalPoints.toString() : '/',
                 style: TextStyle(
                   fontSize: 24,
                   color: MediaQuery.of(context).platformBrightness == Brightness.light

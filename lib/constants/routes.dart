@@ -61,6 +61,7 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         builder: (context) => MultipleChoiceScreen(
           questionCardContent: multipleChoiceContent.questionCardContent,
           answerOptions: multipleChoiceContent.answerOptions,
+          hint: multipleChoiceContent.hint,
         ),
       );
     case dragAndDrop:

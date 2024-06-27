@@ -12,10 +12,12 @@ class MultipleChoiceScreen extends StatefulWidget {
     super.key,
     required this.questionCardContent,
     required this.answerOptions,
+    required this.hint,
   });
 
   final Widget questionCardContent;
   final List<String> answerOptions;
+  final String hint;
 
   @override
   MultipleChoiceScreenState createState() => MultipleChoiceScreenState();
@@ -39,7 +41,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const HintDialog(scoreReduction: -25, hint: 'THE HINT');
+                    return HintDialog(scoreReduction: -25, hint: widget.hint);
                   }),
               child: const Icon(Icons.question_mark),
             ),
@@ -88,12 +90,12 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
   Widget _buildMultipleChoiceAnswerCard({required Widget child, required int index}) {
     return GestureDetector(
       onTap: () => {
-        print('Click $index'),
+        print('Clicked $index'),
       },
       child: Container(
         decoration: BoxDecoration(
           color:
-          MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(

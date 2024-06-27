@@ -6,16 +6,19 @@ import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/enums/difficulties_enum.dart';
 
 class QuizCard extends StatelessWidget {
-  const QuizCard(
-      {super.key,
-      required this.title,
-      required this.quizDifficulty,
-      required this.numberOfTotalQuestions,
-      required this.pointsPerQuestion,
-      this.lastPlaythrough,
-      this.numberOfCorrectQuestions});
+  const QuizCard({
+    super.key,
+    required this.title,
+    required this.onTap,
+    required this.quizDifficulty,
+    required this.numberOfTotalQuestions,
+    required this.pointsPerQuestion,
+    this.lastPlaythrough,
+    this.numberOfCorrectQuestions,
+  });
 
   final String title;
+  final VoidCallback onTap;
   final QuizDifficulty quizDifficulty;
   final int numberOfTotalQuestions;
   final int pointsPerQuestion;
@@ -26,29 +29,32 @@ class QuizCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Brightness brightness = MediaQuery.of(context).platformBrightness;
 
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: brightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.black12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 0.5,
-            offset: const Offset(0.5, 0.5),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(AppPaddings.padding_16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: AppTextStyles.quizCardTitleTextStyle),
-          const SizedBox(height: AppPaddings.padding_4),
-          _buildDetailsArea(brightness),
-          lastPlaythrough != null ? _buildStatsArea(brightness) : const SizedBox.shrink(),
-        ],
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: brightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: Colors.black12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 0.5,
+              offset: const Offset(0.5, 0.5),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(AppPaddings.padding_16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: AppTextStyles.quizCardTitleTextStyle),
+            const SizedBox(height: AppPaddings.padding_4),
+            _buildDetailsArea(brightness),
+            lastPlaythrough != null ? _buildStatsArea(brightness) : const SizedBox.shrink(),
+          ],
+        ),
       ),
     );
   }

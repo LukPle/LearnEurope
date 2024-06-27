@@ -30,6 +30,15 @@ class ProfileScreen extends StatelessWidget {
     return (doc['registrationDate'] as Timestamp).toDate();
   }
 
+  Future<int> _fetchTotalPoints() async {
+    final DatabaseServices dbServices = DatabaseServices();
+    final doc = await dbServices.getDocument(
+      collection: FirebaseConstants.usersCollection,
+      docId: getIt<UserStore>().userId.toString(),
+    );
+    return (doc['totalPoints'] as int);
+  }
+
   @override
   Widget build(BuildContext context) {
     final DatabaseServices dbServices = DatabaseServices();
@@ -110,7 +119,19 @@ class ProfileScreen extends StatelessWidget {
                                   style: AppTextStyles.profileSectionTitles,
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
-                                const ScoreAndActivityAnalytics(totalPoints: 720, activeDays: 4),
+                                FutureBuilder(
+                                  future: _fetchTotalPoints(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return const Center(
+                                        child: SizedBox.shrink(),
+                                      );
+                                    } else {
+                                      final totalPoints = snapshot.data;
+                                      return ScoreAndActivityAnalytics(totalPoints: totalPoints, activeDays: 4);
+                                    }
+                                  },
+                                ),
                                 const SizedBox(height: AppPaddings.padding_24),
                                 const Text(
                                   AppStrings.categoriesAnalyticsTitle,
