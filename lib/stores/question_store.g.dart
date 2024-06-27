@@ -25,6 +25,22 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
+  late final _$isAnsweredAtom =
+      Atom(name: '_QuestionStore.isAnswered', context: context);
+
+  @override
+  bool get isAnswered {
+    _$isAnsweredAtom.reportRead();
+    return super.isAnswered;
+  }
+
+  @override
+  set isAnswered(bool value) {
+    _$isAnsweredAtom.reportWrite(value, super.isAnswered, () {
+      super.isAnswered = value;
+    });
+  }
+
   late final _$_QuestionStoreActionController =
       ActionController(name: '_QuestionStore', context: context);
 
@@ -40,9 +56,32 @@ mixin _$QuestionStore on _QuestionStore, Store {
   }
 
   @override
+  void setAnswered() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setAnswered');
+    try {
+      return super.setAnswered();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setUnanswered() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setUnanswered');
+    try {
+      return super.setUnanswered();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-numbQuestion: ${numbQuestion}
+numbQuestion: ${numbQuestion},
+isAnswered: ${isAnswered}
     ''';
   }
 }

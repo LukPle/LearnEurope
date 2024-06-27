@@ -68,8 +68,11 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                 shrinkWrap: true,
                 children: List.generate(4, (index) {
                   return _buildMultipleChoiceAnswerCard(
-                      child: Text(widget.multipleChoiceContentModel[questionStore.numbQuestion].answerOptions[index]),
-                      index: index);
+                    child: Text(
+                        widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index]),
+                    correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
+                    index: index,
+                  );
                 }),
               ),
             ],
@@ -93,23 +96,29 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
     );
   }
 
-  Widget _buildMultipleChoiceAnswerCard({required Widget child, required int index}) {
+  Widget _buildMultipleChoiceAnswerCard({required Widget child, required correctAnswer, required int index}) {
     return GestureDetector(
       onTap: () => {
-        print('Clicked $index'),
-        if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1))
-          {
-            questionStore.nextQuestion(),
+        questionStore.setAnswered(),
+        Future.delayed(const Duration(seconds: 3), () {
+          if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
+            questionStore.setUnanswered();
+            questionStore.nextQuestion();
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(routes.result, (Route<dynamic> route) => false);
           }
-        else
-          {
-            Navigator.of(context).pushNamedAndRemoveUntil(routes.result, (Route<dynamic> route) => false),
-          }
+        }),
       },
       child: Container(
         decoration: BoxDecoration(
-          color:
-              MediaQuery.of(context).platformBrightness == Brightness.light ? AppColors.lightCard : AppColors.darkCard,
+          color: questionStore.isAnswered
+              ? widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] ==
+                      correctAnswer
+                  ? AppColors.success
+                  : AppColors.error
+              : MediaQuery.of(context).platformBrightness == Brightness.light
+                  ? AppColors.lightCard
+                  : AppColors.darkCard,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
