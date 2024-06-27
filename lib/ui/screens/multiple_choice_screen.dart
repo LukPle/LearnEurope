@@ -1,75 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
+import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
 class MultipleChoiceScreen extends StatefulWidget {
-  const MultipleChoiceScreen({
-    super.key,
-    required this.questionCardContent,
-    required this.answerOptions,
-    required this.hint,
-  });
+  const MultipleChoiceScreen({super.key, required this.multipleChoiceContentModel});
 
-  final Widget questionCardContent;
-  final List<String> answerOptions;
-  final String hint;
+  final List<MultipleChoiceContentModel> multipleChoiceContentModel;
 
   @override
   MultipleChoiceScreenState createState() => MultipleChoiceScreenState();
 }
 
 class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
+  final QuestionStore questionStore = QuestionStore();
+
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appBar: AppAppBar(
-        title: AppStrings.exitQuiz,
-        centerTitle: false,
-        leadingIcon: Icons.close,
-        leadingIconAction: () => {
-          Navigator.of(context).pop(routes.tabSelector),
-        },
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: AppPaddings.padding_16),
-            child: GestureDetector(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return HintDialog(scoreReduction: -25, hint: widget.hint);
-                  }),
-              child: const Icon(Icons.question_mark),
-            ),
+    return Observer(
+      builder: (context) {
+        return AppScaffold(
+          appBar: AppAppBar(
+            title: AppStrings.exitQuiz,
+            centerTitle: false,
+            leadingIcon: Icons.close,
+            leadingIconAction: () => {
+              Navigator.of(context).pop(routes.tabSelector),
+            },
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: AppPaddings.padding_16),
+                child: GestureDetector(
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return HintDialog(
+                            scoreReduction: -25,
+                            hint: widget.multipleChoiceContentModel[questionStore.numbQuestion].hint);
+                      }),
+                  child: const Icon(Icons.question_mark),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: _buildMultipleChoiceQuestionCard(
-              child: widget.questionCardContent,
-            ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _buildMultipleChoiceQuestionCard(
+                  child: widget.multipleChoiceContentModel[questionStore.numbQuestion].questionCardContent,
+                ),
+              ),
+              const SizedBox(height: AppPaddings.padding_32),
+              GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 2 / 1.65,
+                mainAxisSpacing: AppPaddings.padding_16,
+                crossAxisSpacing: AppPaddings.padding_16,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                children: List.generate(4, (index) {
+                  return _buildMultipleChoiceAnswerCard(
+                      child: Text(widget.multipleChoiceContentModel[questionStore.numbQuestion].answerOptions[index]),
+                      index: index);
+                }),
+              ),
+            ],
           ),
-          const SizedBox(height: AppPaddings.padding_32),
-          GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: 2 / 1.65,
-            mainAxisSpacing: AppPaddings.padding_16,
-            crossAxisSpacing: AppPaddings.padding_16,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: List.generate(4, (index) {
-              return _buildMultipleChoiceAnswerCard(child: Text(widget.answerOptions[index]), index: index);
-            }),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -91,6 +97,14 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
     return GestureDetector(
       onTap: () => {
         print('Clicked $index'),
+        if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1))
+          {
+            questionStore.nextQuestion(),
+          }
+        else
+          {
+            Navigator.of(context).pushNamedAndRemoveUntil(routes.result, (Route<dynamic> route) => false),
+          }
       },
       child: Container(
         decoration: BoxDecoration(

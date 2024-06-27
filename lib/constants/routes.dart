@@ -55,13 +55,11 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         builder: (context) => QuizSelectionScreen(category: category),
       );
     case multipleChoice:
-      final multipleChoiceContent = destination.arguments as MultipleChoiceContentModel;
+      final multipleChoiceContent = destination.arguments as List<MultipleChoiceContentModel>;
       return MaterialPageRoute(
         settings: destination,
         builder: (context) => MultipleChoiceScreen(
-          questionCardContent: multipleChoiceContent.questionCardContent,
-          answerOptions: multipleChoiceContent.answerOptions,
-          hint: multipleChoiceContent.hint,
+          multipleChoiceContentModel: multipleChoiceContent,
         ),
       );
     case dragAndDrop:

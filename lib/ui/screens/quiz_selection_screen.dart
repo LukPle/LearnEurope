@@ -78,13 +78,20 @@ class QuizSelectionScreen extends StatelessWidget {
       case Category.countryBorders:
         List<CountryBordersQuestionModel> countryBordersQuestions =
             await _fetchQuestions() as List<CountryBordersQuestionModel>;
-        MultipleChoiceContentModel multipleChoiceContentModel = MultipleChoiceContentModel(
-            questionCardContent: CountryBorderQuestionCard(
-                question: countryBordersQuestions.first.question, imageUrl: countryBordersQuestions.first.image_url),
-            answerOptions: countryBordersQuestions.first.answers,
-            hint: countryBordersQuestions.first.hint);
+
+        List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
+
+        for (var question in countryBordersQuestions) {
+          multipleChoiceContentModels.add(
+            MultipleChoiceContentModel(
+              questionCardContent: CountryBorderQuestionCard(question: question.question, imageUrl: question.image_url),
+              answerOptions: question.answers,
+              hint: question.hint,
+            ),
+          );
+        }
         if (context.mounted) {
-          Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModel);
+          Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
         }
         break;
       case Category.geoPosition:
