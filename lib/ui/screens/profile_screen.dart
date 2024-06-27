@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -5,6 +6,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/network/db_services.dart';
+import 'package:learn_europe/network/firebase_constants.dart';
 import 'package:learn_europe/network/service_locator.dart';
 import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/user_store.dart';
@@ -18,6 +20,15 @@ import 'package:learn_europe/constants/routes.dart' as routes;
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
+  Future<DateTime> _fetchUserRegistrationDate() async {
+    final DatabaseServices dbServices = DatabaseServices();
+    final doc = await dbServices.getDocument(
+      collection: FirebaseConstants.usersCollection,
+      docId: getIt<UserStore>().userId.toString(),
+    );
+    return (doc['registrationDate'] as Timestamp).toDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +81,23 @@ class ProfileScreen extends StatelessWidget {
                                         style: AppTextStyles.standardTitleTextStyle,
                                       ),
                                       const SizedBox(height: AppPaddings.padding_2),
-                                      Text(
-                                        AppStrings.learnerRegistrationText(DateTime.now()),
-                                        style: AppTextStyles.quizCardDetailsTextStyle(
-                                            MediaQuery.of(context).platformBrightness),
-                                        textAlign: TextAlign.center,
+                                      FutureBuilder<DateTime>(
+                                        future: _fetchUserRegistrationDate(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return const Center(
+                                              child: SizedBox.shrink(),
+                                            );
+                                          } else {
+                                            final registrationDate = snapshot.data;
+                                            return Text(
+                                              AppStrings.learnerRegistrationText(registrationDate),
+                                              style: AppTextStyles.quizCardDetailsTextStyle(
+                                                  MediaQuery.of(context).platformBrightness),
+                                              textAlign: TextAlign.center,
+                                            );
+                                          }
+                                        },
                                       ),
                                     ],
                                   ),

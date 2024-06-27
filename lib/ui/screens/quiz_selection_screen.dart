@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -118,7 +117,7 @@ class QuizSelectionScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final quiz = quizzes[index];
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: AppPaddings.padding_8),
+                                    padding: const EdgeInsets.only(bottom: AppPaddings.padding_12),
                                     child: QuizCard(
                                       title: quiz.title,
                                       quizDifficulty: quiz.difficulty,

@@ -98,8 +98,10 @@ class AppStrings {
   /// Profile Strings
   static const String profileTitle = 'Profile';
 
-  static String learnerRegistrationText(DateTime dateTime) {
-    return 'Student of Europe\nsince ${dateTime.day}.${dateTime.month}.${dateTime.year}';
+  static String learnerRegistrationText(DateTime? dateTime) {
+    return dateTime != null
+        ? 'Student of Europe\nsince ${dateTime.day}.${dateTime.month}.${dateTime.year}'
+        : 'Student of Europe';
   }
 
   static const scoreAndActivityAnalyticsTitle = 'Score and Activity';
