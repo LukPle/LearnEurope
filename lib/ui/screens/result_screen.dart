@@ -23,12 +23,14 @@ class ResultScreen extends StatefulWidget {
 class ResultScreenState extends State<ResultScreen> {
   late ConfettiController confettiController;
   late AnimatedDigitController animatedDigitController;
+  late double performance;
 
   @override
   void initState() {
     super.initState();
     confettiController = ConfettiController(duration: const Duration(seconds: 2));
     animatedDigitController = AnimatedDigitController(0);
+    performance = widget.resultContentModel.earnedScore / widget.resultContentModel.availableScore;
   }
 
   @override
@@ -98,7 +100,7 @@ class ResultScreenState extends State<ResultScreen> {
             style: AppTextStyles.resultScreenPointsIntro(brightness: MediaQuery.of(context).platformBrightness),
           ),
           const Spacer(),
-          _buildConfettiPlayer(),
+          if (performance != 0) _buildConfettiPlayer(),
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: BoxDecoration(
@@ -138,8 +140,8 @@ class ResultScreenState extends State<ResultScreen> {
     return ConfettiWidget(
       confettiController: confettiController,
       blastDirectionality: BlastDirectionality.explosive,
-      numberOfParticles: 10,
-      maxBlastForce: 25,
+      numberOfParticles: performance > 0.5 ? 10 : 5,
+      maxBlastForce: performance > 0.5 ? 25 : 15,
     );
   }
 }
