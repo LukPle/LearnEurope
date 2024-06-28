@@ -40,6 +40,17 @@ mixin _$HintDialogStore on _HintDialogStore, Store {
   }
 
   @override
+  void resetHint() {
+    final _$actionInfo = _$_HintDialogStoreActionController.startAction(
+        name: '_HintDialogStore.resetHint');
+    try {
+      return super.resetHint();
+    } finally {
+      _$_HintDialogStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isHintRevealed: ${isHintRevealed}

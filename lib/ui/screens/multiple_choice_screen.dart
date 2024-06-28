@@ -137,6 +137,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
           },
         Future.delayed(const Duration(seconds: 3), () {
           if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
+            hintDialogStore.resetHint();
             questionStore.setUnanswered();
             questionStore.nextQuestion();
           } else {

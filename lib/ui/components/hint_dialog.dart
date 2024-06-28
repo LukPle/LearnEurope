@@ -64,7 +64,7 @@ class HintDialog extends Dialog {
                         text: '$scoreReduction points',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const TextSpan(text: ' that you can earn by correctly answering this question.'),
+                      const TextSpan(text: ' of the points that can be earned by correctly answering this question.'),
                     ],
                   ),
                 ),

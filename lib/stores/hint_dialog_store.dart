@@ -12,4 +12,9 @@ abstract class _HintDialogStore with Store {
   void revealHint() {
     isHintRevealed = true;
   }
+
+  @action
+  void resetHint() {
+    isHintRevealed = false;
+  }
 }
