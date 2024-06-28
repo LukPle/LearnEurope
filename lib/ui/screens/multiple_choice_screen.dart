@@ -121,39 +121,42 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
 
   Widget _buildMultipleChoiceAnswerCard({required Widget child, required correctAnswer, required int index}) {
     return GestureDetector(
-      onTap: () => {
-        questionStore.setAnswered(),
-        if (widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] == correctAnswer)
-          {
-            if (hintDialogStore.isHintRevealed)
-              {
-                score += (widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion +
-                    widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus),
-              }
-            else
-              {
-                score += widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion,
-              }
-          },
-        Future.delayed(const Duration(seconds: 3), () {
-          if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
-            hintDialogStore.resetHint();
-            questionStore.setUnanswered();
-            questionStore.nextQuestion();
-          } else {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              routes.result,
-              (Route<dynamic> route) => false,
-              arguments: ResultContentModel(
-                numbQuestions: widget.multipleChoiceContentModel.length,
-                earnedScore: score,
-                availableScore: (widget.multipleChoiceContentModel.length *
-                    widget.multipleChoiceContentModel.first.pointsPerQuestion),
-              ),
-            );
-          }
-        }),
-      },
+      onTap: () => questionStore.isAnswered
+          ? null
+          : {
+              questionStore.setAnswered(),
+              if (widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] ==
+                  correctAnswer)
+                {
+                  if (hintDialogStore.isHintRevealed)
+                    {
+                      score += (widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion +
+                          widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus),
+                    }
+                  else
+                    {
+                      score += widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion,
+                    }
+                },
+              Future.delayed(const Duration(seconds: 3), () {
+                if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
+                  hintDialogStore.resetHint();
+                  questionStore.setUnanswered();
+                  questionStore.nextQuestion();
+                } else {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    routes.result,
+                    (Route<dynamic> route) => false,
+                    arguments: ResultContentModel(
+                      numbQuestions: widget.multipleChoiceContentModel.length,
+                      earnedScore: score,
+                      availableScore: (widget.multipleChoiceContentModel.length *
+                          widget.multipleChoiceContentModel.first.pointsPerQuestion),
+                    ),
+                  );
+                }
+              }),
+            },
       child: Container(
         decoration: BoxDecoration(
           color: questionStore.isAnswered
