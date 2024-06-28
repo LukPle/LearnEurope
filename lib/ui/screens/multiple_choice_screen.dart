@@ -5,12 +5,13 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
+import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
-import 'package:learn_europe/constants/routes.dart' as routes;
 import 'package:learn_europe/ui/components/quiz_progress_bar.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class MultipleChoiceScreen extends StatefulWidget {
   const MultipleChoiceScreen({super.key, required this.multipleChoiceContentModel});
@@ -23,10 +24,13 @@ class MultipleChoiceScreen extends StatefulWidget {
 
 class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
   final QuestionStore questionStore = QuestionStore();
+  final HintDialogStore hintDialogStore = HintDialogStore();
   int score = 0;
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.height < 700;
+
     return Observer(
       builder: (context) {
         return AppScaffold(
@@ -45,8 +49,10 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                       context: context,
                       builder: (BuildContext context) {
                         return HintDialog(
-                            scoreReduction: -25,
-                            hint: widget.multipleChoiceContentModel[questionStore.numbQuestion].hint);
+                          hintDialogStore: hintDialogStore,
+                          scoreReduction: widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus,
+                          hint: widget.multipleChoiceContentModel[questionStore.numbQuestion].hint,
+                        );
                       }),
                   child: const Icon(Icons.question_mark),
                 ),
@@ -69,7 +75,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               const SizedBox(height: AppPaddings.padding_32),
               GridView.count(
                 crossAxisCount: 2,
-                childAspectRatio: 2 / 1.65,
+                childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.65),
                 mainAxisSpacing: AppPaddings.padding_16,
                 crossAxisSpacing: AppPaddings.padding_16,
                 physics: const NeverScrollableScrollPhysics(),
@@ -119,7 +125,15 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
         questionStore.setAnswered(),
         if (widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] == correctAnswer)
           {
-            score += 20,
+            if (hintDialogStore.isHintRevealed)
+              {
+                score += (widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion +
+                    widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus),
+              }
+            else
+              {
+                score += widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion,
+              }
           },
         Future.delayed(const Duration(seconds: 3), () {
           if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
@@ -131,7 +145,9 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               (Route<dynamic> route) => false,
               arguments: ResultContentModel(
                 numbQuestions: widget.multipleChoiceContentModel.length,
-                score: score,
+                earnedScore: score,
+                availableScore: (widget.multipleChoiceContentModel.length *
+                    widget.multipleChoiceContentModel.first.pointsPerQuestion),
               ),
             );
           }

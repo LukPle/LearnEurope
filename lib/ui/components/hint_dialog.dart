@@ -9,15 +9,20 @@ import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 
 class HintDialog extends Dialog {
-  const HintDialog({super.key, required this.scoreReduction, required this.hint});
+  const HintDialog({
+    super.key,
+    required this.hintDialogStore,
+    required this.scoreReduction,
+    required this.hint,
+  });
 
+  final HintDialogStore hintDialogStore;
   final int scoreReduction;
   final String hint;
 
   @override
   Widget build(BuildContext context) {
     Brightness brightness = MediaQuery.of(context).platformBrightness;
-    HintDialogStore hintDialogStore = HintDialogStore();
 
     return Observer(
       builder: (context) {
@@ -53,7 +58,8 @@ class HintDialog extends Dialog {
                           color: brightness == Brightness.light ? Colors.black : Colors.white,
                         ),
                     children: [
-                      const TextSpan(text: 'If you look up the hint for this question, this will result in a reduction of '),
+                      const TextSpan(
+                          text: 'If you look up the hint for this question, this will result in a reduction of '),
                       TextSpan(
                         text: '$scoreReduction points',
                         style: const TextStyle(fontWeight: FontWeight.bold),

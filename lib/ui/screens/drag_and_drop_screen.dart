@@ -4,6 +4,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/stores/drag_and_drop_store.dart';
+import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
@@ -21,6 +22,7 @@ class DragAndDropScreen extends StatefulWidget {
 
 class DragAndDropScreenState extends State<DragAndDropScreen> {
   final dragAndDropStore = DragAndDropStore();
+  final hintDialogStore = HintDialogStore();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
               onTap: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return const HintDialog(scoreReduction: -25, hint: 'THE HINT');
+                    return HintDialog(hintDialogStore: hintDialogStore, scoreReduction: -25, hint: 'THE HINT');
                   }),
               child: const Icon(Icons.question_mark),
             ),

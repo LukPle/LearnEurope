@@ -53,7 +53,7 @@ class ResultScreenState extends State<ResultScreen> {
             style: AppTextStyles.resultScreenHeadline(brightness: MediaQuery.of(context).platformBrightness),
           ),
           const SizedBox(height: AppPaddings.padding_8),
-          buildScoreCard(widget.resultContentModel.score),
+          buildScoreCard(widget.resultContentModel.earnedScore, widget.resultContentModel.availableScore),
           const Spacer(),
           CtaButton.primary(
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
@@ -69,7 +69,7 @@ class ResultScreenState extends State<ResultScreen> {
     );
   }
 
-  Widget buildScoreCard(int score) {
+  Widget buildScoreCard(int earnedCore, int availableScore) {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.5,
@@ -107,8 +107,17 @@ class ResultScreenState extends State<ResultScreen> {
                     : AppColors.accentColorDark,
                 shape: BoxShape.circle),
             child: Center(
-              child: _buildScoreText(score),
-            ),
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildScoreText(earnedCore),
+                const SizedBox(height: AppPaddings.padding_4),
+                Text(
+                  'Out of ${availableScore.toString()}',
+                  style: AppTextStyles.questionTextStyle,
+                ),
+              ],
+            )),
           ),
           const Spacer(flex: 2),
         ],

@@ -1,9 +1,11 @@
 class ResultContentModel {
   int numbQuestions;
-  int score;
+  int earnedScore;
+  int availableScore;
 
   ResultContentModel({
     required this.numbQuestions,
-    required this.score,
+    required this.earnedScore,
+    required this.availableScore,
   });
 }
