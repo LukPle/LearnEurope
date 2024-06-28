@@ -5,13 +5,16 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({super.key});
+  const ResultScreen({super.key, required this.resultContentModel});
+
+  final ResultContentModel resultContentModel;
 
   @override
   ResultScreenState createState() => ResultScreenState();
@@ -37,9 +40,6 @@ class ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = (ModalRoute.of(context)?.settings.arguments);
-    int points = 50;
-
     confettiController.play();
 
     return AppScaffold(
@@ -49,11 +49,11 @@ class ResultScreenState extends State<ResultScreen> {
           const PageHeadline(title: 'Your results'),
           const SizedBox(height: AppPaddings.padding_16),
           Text(
-            'After 10 answered questions',
+            'After ${widget.resultContentModel.numbQuestions} answered questions',
             style: AppTextStyles.resultScreenHeadline(brightness: MediaQuery.of(context).platformBrightness),
           ),
           const SizedBox(height: AppPaddings.padding_8),
-          buildScoreCard(points),
+          buildScoreCard(widget.resultContentModel.score),
           const Spacer(),
           CtaButton.primary(
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(

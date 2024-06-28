@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/tab_selector.dart';
 import 'package:learn_europe/ui/screens/drag_and_drop_screen.dart';
 import 'package:learn_europe/ui/screens/loading_screen.dart';
@@ -56,6 +58,7 @@ Route<dynamic> generateRoute(RouteSettings destination) {
       );
     case multipleChoice:
       final multipleChoiceContent = destination.arguments as List<MultipleChoiceContentModel>;
+      multipleChoiceContent.shuffle(Random());
       return MaterialPageRoute(
         settings: destination,
         builder: (context) => MultipleChoiceScreen(
@@ -68,9 +71,10 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         builder: (context) => const DragAndDropScreen(),
       );
     case result:
+      final resultContent = destination.arguments as ResultContentModel;
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => const ResultScreen(),
+        builder: (context) => ResultScreen(resultContentModel: resultContent),
       );
     default:
       throw ('Route ${destination.name} does not exist');

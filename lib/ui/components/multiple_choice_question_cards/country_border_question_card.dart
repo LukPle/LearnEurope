@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
@@ -20,11 +21,16 @@ class CountryBorderQuestionCard extends StatelessWidget {
       children: [
         Text(question, style: AppTextStyles.questionTextStyle),
         const SizedBox(height: AppPaddings.padding_24),
-        SizedBox(
-          height: 225,
+        Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.25,
+          ),
           child: Transform.rotate(
             angle: 0 * (math.pi / 180),
-            child: Image.network(imageUrl),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.fitHeight,
+            ),
           ),
         ),
       ],

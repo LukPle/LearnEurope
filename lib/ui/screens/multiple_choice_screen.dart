@@ -4,11 +4,13 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
+import 'package:learn_europe/ui/components/quiz_progress_bar.dart';
 
 class MultipleChoiceScreen extends StatefulWidget {
   const MultipleChoiceScreen({super.key, required this.multipleChoiceContentModel});
@@ -21,6 +23,7 @@ class MultipleChoiceScreen extends StatefulWidget {
 
 class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
   final QuestionStore questionStore = QuestionStore();
+  int score = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +56,11 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              QuizProgressBar(
+                numbQuestions: widget.multipleChoiceContentModel.length,
+                currentQuestion: questionStore.numbQuestion + 1,
+              ),
+              const SizedBox(height: AppPaddings.padding_32),
               Expanded(
                 child: _buildMultipleChoiceQuestionCard(
                   child: widget.multipleChoiceContentModel[questionStore.numbQuestion].questionCardContent,
@@ -69,7 +77,16 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                 children: List.generate(4, (index) {
                   return _buildMultipleChoiceAnswerCard(
                     child: Text(
-                        widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index]),
+                      widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index],
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: questionStore.isAnswered
+                            ? Colors.white
+                            : MediaQuery.of(context).platformBrightness == Brightness.light
+                                ? Colors.black
+                                : Colors.white,
+                      ),
+                    ),
                     correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
                     index: index,
                   );
@@ -100,12 +117,23 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
     return GestureDetector(
       onTap: () => {
         questionStore.setAnswered(),
+        if (widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] == correctAnswer)
+          {
+            score += 20,
+          },
         Future.delayed(const Duration(seconds: 3), () {
           if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
             questionStore.setUnanswered();
             questionStore.nextQuestion();
           } else {
-            Navigator.of(context).pushNamedAndRemoveUntil(routes.result, (Route<dynamic> route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              routes.result,
+              (Route<dynamic> route) => false,
+              arguments: ResultContentModel(
+                numbQuestions: widget.multipleChoiceContentModel.length,
+                score: score,
+              ),
+            );
           }
         }),
       },

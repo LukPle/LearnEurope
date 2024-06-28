@@ -6,11 +6,11 @@ import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/stores/drag_and_drop_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
-import 'package:learn_europe/constants/routes.dart' as routes;
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/dashed_border_container.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class DragAndDropScreen extends StatefulWidget {
   const DragAndDropScreen({super.key});
@@ -188,7 +188,12 @@ class DraggableItem extends StatelessWidget {
             : AppColors.accentColorDark,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(text, style: const TextStyle(color: Colors.black), overflow: TextOverflow.fade),
+      child: Text(text,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+          overflow: TextOverflow.fade),
     );
   }
 }
