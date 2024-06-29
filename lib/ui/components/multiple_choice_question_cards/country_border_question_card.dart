@@ -20,7 +20,7 @@ class CountryBorderQuestionCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(question, style: AppTextStyles.questionTextStyle),
-        const SizedBox(height: AppPaddings.padding_24),
+        const SizedBox(height: AppPaddings.padding_12),
         Container(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.25,
