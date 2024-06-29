@@ -83,12 +83,22 @@ class AppStrings {
 
   /// Quiz Strings
   static const String exitQuiz = 'Exit Quiz';
+  static const String correctAnswer = 'Correct Answer';
+  static const String wrongAnswer = 'Wrong Answer';
+  static const String continueButton = 'Continue';
   static const String textToSpeechFail = 'Sorry, audio output not possible';
 
   /// Hint Dialog Strings
   static const String hintDialogTitle = 'Do you need a hint?';
 
   /// Result Screen Strings
+  static const String resultTitle = 'Your result';
+
+  static String answeredQuestion(int numbQuestions) {
+    return 'After $numbQuestions answered questions';
+  }
+
+  static const String pointsIntroduction = 'Earned points';
   static const String returnToHomeButton = 'Return to home';
   static const String playAgainButton = 'Play again';
 

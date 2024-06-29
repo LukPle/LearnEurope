@@ -1,14 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
+import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
+import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/ui/components/quiz_progress_bar.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
@@ -25,6 +29,7 @@ class MultipleChoiceScreen extends StatefulWidget {
 class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
   final QuestionStore questionStore = QuestionStore();
   final HintDialogStore hintDialogStore = HintDialogStore();
+  bool isCorrectlyAnswered = false;
   int score = 0;
 
   @override
@@ -73,31 +78,35 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                 ),
               ),
               const SizedBox(height: AppPaddings.padding_32),
-              GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.65),
-                mainAxisSpacing: AppPaddings.padding_16,
-                crossAxisSpacing: AppPaddings.padding_16,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: List.generate(4, (index) {
-                  return _buildMultipleChoiceAnswerCard(
-                    child: Text(
-                      widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index],
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: questionStore.isAnswered
-                            ? Colors.white
-                            : MediaQuery.of(context).platformBrightness == Brightness.light
-                                ? Colors.black
-                                : Colors.white,
-                      ),
+              questionStore.isExplained
+                  ? Expanded(
+                      child: _buildExplanationArea(isCorrectlyAnswered),
+                    )
+                  : GridView.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.65),
+                      mainAxisSpacing: AppPaddings.padding_16,
+                      crossAxisSpacing: AppPaddings.padding_16,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: List.generate(4, (index) {
+                        return _buildMultipleChoiceAnswerCard(
+                          child: Text(
+                            widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index],
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: questionStore.isAnswered
+                                  ? Colors.white
+                                  : MediaQuery.of(context).platformBrightness == Brightness.light
+                                      ? Colors.black
+                                      : Colors.white,
+                            ),
+                          ),
+                          correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
+                          index: index,
+                        );
+                      }),
                     ),
-                    correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
-                    index: index,
-                  );
-                }),
-              ),
             ],
           ),
         );
@@ -128,33 +137,11 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               if (widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index] ==
                   correctAnswer)
                 {
-                  if (hintDialogStore.isHintRevealed)
-                    {
-                      score += (widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion +
-                          widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus),
-                    }
-                  else
-                    {
-                      score += widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion,
-                    }
+                  isCorrectlyAnswered = true,
+                  _calculateScore(),
                 },
               Future.delayed(const Duration(seconds: 3), () {
-                if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
-                  hintDialogStore.resetHint();
-                  questionStore.setUnanswered();
-                  questionStore.nextQuestion();
-                } else {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    routes.result,
-                    (Route<dynamic> route) => false,
-                    arguments: ResultContentModel(
-                      numbQuestions: widget.multipleChoiceContentModel.length,
-                      earnedScore: score,
-                      availableScore: (widget.multipleChoiceContentModel.length *
-                          widget.multipleChoiceContentModel.first.pointsPerQuestion),
-                    ),
-                  );
-                }
+                questionStore.setExplained();
               }),
             },
       child: Container(
@@ -182,5 +169,67 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildExplanationArea(bool isCorrect) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  isCorrect ? Icons.check_circle : Icons.cancel,
+                  color: isCorrect ? AppColors.success : AppColors.error,
+                ),
+                const SizedBox(width: AppPaddings.padding_4),
+                Text(
+                  isCorrect ? AppStrings.correctAnswer : AppStrings.wrongAnswer,
+                  style: AppTextStyles.standardTitleTextStyle.copyWith(
+                    color: isCorrect ? AppColors.success : AppColors.error,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppPaddings.padding_8),
+            Text(widget.multipleChoiceContentModel[questionStore.numbQuestion].explanation),
+          ],
+        ),
+        const SizedBox(height: AppPaddings.padding_8),
+        CtaButton.primary(onPressed: () => _navigateToNextQuestionOrResult(), label: AppStrings.continueButton),
+      ],
+    );
+  }
+
+  void _calculateScore() {
+    if (hintDialogStore.isHintRevealed) {
+      score += (widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion +
+          widget.multipleChoiceContentModel[questionStore.numbQuestion].hintMinus);
+    } else {
+      score += widget.multipleChoiceContentModel[questionStore.numbQuestion].pointsPerQuestion;
+    }
+  }
+
+  void _navigateToNextQuestionOrResult() {
+    if (widget.multipleChoiceContentModel.length > (questionStore.numbQuestion + 1)) {
+      isCorrectlyAnswered = false;
+      hintDialogStore.resetHint();
+      questionStore.setUnanswered();
+      questionStore.setUnexplained();
+      questionStore.nextQuestion();
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        routes.result,
+        (Route<dynamic> route) => false,
+        arguments: ResultContentModel(
+          numbQuestions: widget.multipleChoiceContentModel.length,
+          earnedScore: score,
+          availableScore:
+              (widget.multipleChoiceContentModel.length * widget.multipleChoiceContentModel.first.pointsPerQuestion),
+        ),
+      );
+    }
   }
 }

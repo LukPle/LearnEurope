@@ -52,6 +52,7 @@ class HomeScreen extends StatelessWidget {
         pointsPerQuestion: 20,
         hint: 'THE HINT',
         hintMinus: -10,
+        explanation: 'I love this country.'
       ),
     );
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
@@ -66,6 +67,7 @@ class HomeScreen extends StatelessWidget {
         pointsPerQuestion: 40,
         hint: 'THE HINT',
         hintMinus: -20,
+        explanation: 'I love this language'
       ),
     );
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);

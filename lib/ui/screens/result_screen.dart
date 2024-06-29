@@ -48,10 +48,10 @@ class ResultScreenState extends State<ResultScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const PageHeadline(title: 'Your results'),
+          const PageHeadline(title: AppStrings.resultTitle),
           const SizedBox(height: AppPaddings.padding_16),
           Text(
-            'After ${widget.resultContentModel.numbQuestions} answered questions',
+            AppStrings.answeredQuestion(widget.resultContentModel.numbQuestions),
             style: AppTextStyles.resultScreenHeadline(brightness: MediaQuery.of(context).platformBrightness),
           ),
           const SizedBox(height: AppPaddings.padding_8),
@@ -96,7 +96,7 @@ class ResultScreenState extends State<ResultScreen> {
         children: [
           const Spacer(),
           Text(
-            'Earned points',
+            AppStrings.pointsIntroduction,
             style: AppTextStyles.resultScreenPointsIntro(brightness: MediaQuery.of(context).platformBrightness),
           ),
           const Spacer(),
@@ -141,7 +141,7 @@ class ResultScreenState extends State<ResultScreen> {
       confettiController: confettiController,
       blastDirectionality: BlastDirectionality.explosive,
       numberOfParticles: performance > 0.5 ? 10 : 5,
-      maxBlastForce: performance > 0.5 ? 25 : 15,
+      maxBlastForce: performance > 0.5 ? 20 : 15,
     );
   }
 }

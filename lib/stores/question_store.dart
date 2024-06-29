@@ -11,6 +11,9 @@ abstract class _QuestionStore with Store {
   @observable
   bool isAnswered = false;
 
+  @observable
+  bool isExplained = false;
+
   @action
   void nextQuestion() {
     numbQuestion++;
@@ -24,5 +27,15 @@ abstract class _QuestionStore with Store {
   @action
   void setUnanswered() {
     isAnswered = false;
+  }
+
+  @action
+  void setExplained() {
+    isExplained = true;
+  }
+
+  @action
+  void setUnexplained() {
+    isExplained = false;
   }
 }

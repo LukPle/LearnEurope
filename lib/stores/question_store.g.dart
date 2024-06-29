@@ -41,6 +41,22 @@ mixin _$QuestionStore on _QuestionStore, Store {
     });
   }
 
+  late final _$isExplainedAtom =
+      Atom(name: '_QuestionStore.isExplained', context: context);
+
+  @override
+  bool get isExplained {
+    _$isExplainedAtom.reportRead();
+    return super.isExplained;
+  }
+
+  @override
+  set isExplained(bool value) {
+    _$isExplainedAtom.reportWrite(value, super.isExplained, () {
+      super.isExplained = value;
+    });
+  }
+
   late final _$_QuestionStoreActionController =
       ActionController(name: '_QuestionStore', context: context);
 
@@ -78,10 +94,33 @@ mixin _$QuestionStore on _QuestionStore, Store {
   }
 
   @override
+  void setExplained() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setExplained');
+    try {
+      return super.setExplained();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setUnexplained() {
+    final _$actionInfo = _$_QuestionStoreActionController.startAction(
+        name: '_QuestionStore.setUnexplained');
+    try {
+      return super.setUnexplained();
+    } finally {
+      _$_QuestionStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 numbQuestion: ${numbQuestion},
-isAnswered: ${isAnswered}
+isAnswered: ${isAnswered},
+isExplained: ${isExplained}
     ''';
   }
 }

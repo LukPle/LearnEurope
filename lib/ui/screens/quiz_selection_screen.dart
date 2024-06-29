@@ -89,6 +89,7 @@ class QuizSelectionScreen extends StatelessWidget {
               pointsPerQuestion: pointsPerQuestion,
               hint: question.hint,
               hintMinus: hintMinus,
+              explanation: question.explanation,
             ),
           );
         }
