@@ -66,7 +66,7 @@ class AppStrings {
   static const String allQuizzesFilter = 'All';
   static const String openQuizzesFilter = 'Open';
   static const String completedQuizzesFilter = 'Completed';
-  static const String loadingError = 'Quizzes couldn\'t be loaded';
+  static const String quizzesLoadingError = 'Quizzes couldn\'t be loaded';
   static const String noQuizzesAvailable = 'No quizzes available';
 
   static String getDifficultyText(QuizDifficulty quizDifficulty) {
@@ -104,6 +104,7 @@ class AppStrings {
 
   /// Leaderboard Screen Strings
   static const String leaderboardTitle = 'Your place on the leaderboard';
+  static const String leaderboardLoadingError = 'Leaderboard couldn\'t be loaded';
 
   /// Profile Strings
   static const String profileTitle = 'Profile';

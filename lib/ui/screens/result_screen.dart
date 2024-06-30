@@ -1,4 +1,5 @@
 import 'package:animated_digit/animated_digit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -6,6 +7,10 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/result_content_model.dart';
+import 'package:learn_europe/network/db_services.dart';
+import 'package:learn_europe/network/firebase_constants.dart';
+import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -31,6 +36,9 @@ class ResultScreenState extends State<ResultScreen> {
     confettiController = ConfettiController(duration: const Duration(seconds: 2));
     animatedDigitController = AnimatedDigitController(0);
     performance = widget.resultContentModel.earnedScore / widget.resultContentModel.availableScore;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _fetchAndUpdateTotalPoints();
+    });
   }
 
   @override
@@ -38,6 +46,16 @@ class ResultScreenState extends State<ResultScreen> {
     confettiController.dispose();
     animatedDigitController.dispose();
     super.dispose();
+  }
+
+  Future<void> _fetchAndUpdateTotalPoints() async {
+    var data = {
+      'totalPoints': FieldValue.increment(widget.resultContentModel.earnedScore),
+    };
+
+    final DatabaseServices dbServices = DatabaseServices();
+    await dbServices.updateDocument(
+        collection: FirebaseConstants.usersCollection, docId: getIt<UserStore>().userId.toString(), data: data);
   }
 
   @override

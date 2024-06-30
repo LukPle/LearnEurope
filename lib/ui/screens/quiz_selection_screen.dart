@@ -104,9 +104,7 @@ class QuizSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery
-        .of(context)
-        .platformBrightness;
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
 
     return AppScaffold(
       appBar: const AppAppBar(),
@@ -129,7 +127,7 @@ class QuizSelectionScreen extends StatelessWidget {
                   );
                 } else if (snapshot.hasError) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    showAlertSnackBar(context, AppStrings.loadingError);
+                    showAlertSnackBar(context, AppStrings.quizzesLoadingError, isError: true);
                   });
                   return _buildEmptyListComponent(context);
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
