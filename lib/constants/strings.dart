@@ -68,6 +68,8 @@ class AppStrings {
   static const String completedQuizzesFilter = 'Completed';
   static const String quizzesLoadingError = 'Quizzes couldn\'t be loaded';
   static const String noQuizzesAvailable = 'No quizzes available';
+  static const String noOpenQuizzesAvailable = 'No open quizzes left';
+  static const String noCompletedQuizzesAvailable = 'No quizzes completed yet';
 
   static String getDifficultyText(QuizDifficulty quizDifficulty) {
     if (quizDifficulty == QuizDifficulty.beginner) {

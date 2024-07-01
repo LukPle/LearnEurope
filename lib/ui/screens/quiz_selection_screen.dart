@@ -8,10 +8,14 @@ import 'package:learn_europe/models/country_borders_question_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
+import 'package:learn_europe/models/quiz_history_model.dart';
 import 'package:learn_europe/models/quiz_model.dart';
+import 'package:learn_europe/models/quiz_selection_content_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
+import 'package:learn_europe/network/service_locator.dart';
 import 'package:learn_europe/stores/quiz_selection_filter_store.dart';
+import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
@@ -43,6 +47,44 @@ class QuizSelectionScreen extends StatelessWidget {
 
     final docs = await dbServices.getAllDocuments(collection: collection);
     return docs.map((doc) => QuizModel.fromMap(doc.id, doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<QuizHistoryModel>> _fetchQuizHistory() async {
+    final DatabaseServices dbServices = DatabaseServices();
+    String collection;
+
+    switch (category) {
+      case Category.europe101:
+        collection = FirebaseConstants.europe101HistoryCollection;
+      case Category.languages:
+        collection = FirebaseConstants.languagesHistoryCollection;
+      case Category.countryBorders:
+        collection = FirebaseConstants.countryBordersHistoryCollection;
+      case Category.geoPosition:
+        collection = FirebaseConstants.geoPositionHistoryCollection;
+    }
+
+    final docs = await dbServices.getDocumentsByAttribute(
+        collection: collection, field: 'user_id', value: getIt<UserStore>().userId);
+    return docs.map((doc) => QuizHistoryModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<QuizSelectionContentModel>> _fetchQuizzesWithHistory() async {
+    List<QuizModel> quizzes = await _fetchQuizzes();
+    List<QuizHistoryModel> quizHistory = await _fetchQuizHistory();
+
+    Map<String, QuizHistoryModel> quizHistoryMap = {for (var history in quizHistory) history.quizId: history};
+
+    List<QuizSelectionContentModel> quizSelectionContent = quizzes.map((quiz) {
+      QuizHistoryModel? matchingHistory = quizHistoryMap[quiz.id];
+
+      return QuizSelectionContentModel(
+        quizModel: quiz,
+        quizHistoryModel: matchingHistory,
+      );
+    }).toList();
+
+    return quizSelectionContent;
   }
 
   Future<List<dynamic>> _fetchQuestions() async {
@@ -120,8 +162,8 @@ class QuizSelectionScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<QuizModel>>(
-              future: _fetchQuizzes(),
+            child: FutureBuilder<List<QuizSelectionContentModel>>(
+              future: _fetchQuizzesWithHistory(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -131,13 +173,26 @@ class QuizSelectionScreen extends StatelessWidget {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     showAlertSnackBar(context, AppStrings.quizzesLoadingError, isError: true);
                   });
-                  return _buildEmptyListComponent(context);
+                  return _buildEmptyListComponent(context, AppStrings.noQuizzesAvailable);
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return _buildEmptyListComponent(context);
+                  return _buildEmptyListComponent(context, AppStrings.noQuizzesAvailable);
                 } else {
-                  final quizzes = snapshot.data!;
+                  final quizzesWithHistory = snapshot.data!;
                   return Observer(
                     builder: (context) {
+                      List<QuizSelectionContentModel> filteredQuizzes;
+                      switch (quizSelectionFilterStore.quizListFilter) {
+                        case QuizListFilter.all:
+                          filteredQuizzes = quizzesWithHistory;
+                          break;
+                        case QuizListFilter.open:
+                          filteredQuizzes = quizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
+                          break;
+                        case QuizListFilter.completed:
+                          filteredQuizzes = quizzesWithHistory.where((quiz) => quiz.quizHistoryModel != null).toList();
+                          break;
+                      }
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -170,32 +225,44 @@ class QuizSelectionScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: AppPaddings.padding_12),
-                          Expanded(
-                            child: ListFadingShaderWidget(
-                              color:
-                                  brightness == Brightness.light ? AppColors.lightBackground : AppColors.darkBackground,
-                              child: ListView.builder(
-                                padding: const EdgeInsets.only(top: AppPaddings.padding_12),
-                                itemCount: quizzes.length,
-                                itemBuilder: (context, index) {
-                                  final quiz = quizzes[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: AppPaddings.padding_12),
-                                    child: QuizCard(
-                                      title: quiz.title,
-                                      onTap: () async => await _navigateToQuestions(
-                                          context, quiz.id, quiz.pointsPerQuestion, quiz.hintPointsMinus),
-                                      quizDifficulty: quiz.difficulty,
-                                      numberOfTotalQuestions: quiz.questions.length,
-                                      pointsPerQuestion: quiz.pointsPerQuestion,
-                                      numberOfCorrectQuestions: 0,
-                                      lastPlaythrough: DateTime.now(),
+                          filteredQuizzes.isNotEmpty
+                              ? Expanded(
+                                  child: ListFadingShaderWidget(
+                                    color: brightness == Brightness.light
+                                        ? AppColors.lightBackground
+                                        : AppColors.darkBackground,
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.only(top: AppPaddings.padding_12),
+                                      itemCount: filteredQuizzes.length,
+                                      itemBuilder: (context, index) {
+                                        final quiz = filteredQuizzes[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(bottom: AppPaddings.padding_12),
+                                          child: QuizCard(
+                                            title: quiz.quizModel.title,
+                                            onTap: () async => await _navigateToQuestions(context, quiz.quizModel.id,
+                                                quiz.quizModel.pointsPerQuestion, quiz.quizModel.hintPointsMinus),
+                                            quizDifficulty: quiz.quizModel.difficulty,
+                                            numberOfTotalQuestions: quiz.quizModel.questions.length,
+                                            pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
+                                            numberOfCorrectQuestions: 0,
+                                            lastPlaythrough: quiz.quizHistoryModel?.completionDate,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
+                                  ),
+                                )
+                              : Expanded(
+                                  child: _buildEmptyListComponent(
+                                    context,
+                                    quizSelectionFilterStore.quizListFilter == QuizListFilter.all
+                                        ? AppStrings.noQuizzesAvailable
+                                        : quizSelectionFilterStore.quizListFilter == QuizListFilter.open
+                                            ? AppStrings.noOpenQuizzesAvailable
+                                            : AppStrings.noCompletedQuizzesAvailable,
+                                  ),
+                                ),
                         ],
                       );
                     },
@@ -209,7 +276,7 @@ class QuizSelectionScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyListComponent(BuildContext context) {
+  Widget _buildEmptyListComponent(BuildContext context, String message) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +289,7 @@ class QuizSelectionScreen extends StatelessWidget {
                 : AppColors.primaryColorDark,
           ),
           const SizedBox(height: AppPaddings.padding_8),
-          const Text(AppStrings.noQuizzesAvailable),
+          Text(message),
         ],
       ),
     );
