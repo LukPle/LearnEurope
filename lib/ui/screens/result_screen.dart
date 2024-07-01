@@ -6,6 +6,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
@@ -38,6 +39,7 @@ class ResultScreenState extends State<ResultScreen> {
     performance = widget.resultContentModel.earnedScore / widget.resultContentModel.availableScore;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _fetchAndUpdateTotalPoints();
+      await _saveQuizInHistory();
     });
   }
 
@@ -56,6 +58,47 @@ class ResultScreenState extends State<ResultScreen> {
     final DatabaseServices dbServices = DatabaseServices();
     await dbServices.updateDocument(
         collection: FirebaseConstants.usersCollection, docId: getIt<UserStore>().userId.toString(), data: data);
+  }
+
+  Future<void> _saveQuizInHistory() async {
+    final DatabaseServices dbServices = DatabaseServices();
+    String collection;
+
+    switch (widget.resultContentModel.quizCategory) {
+      case Category.europe101:
+        collection = FirebaseConstants.europe101HistoryCollection;
+      case Category.languages:
+        collection = FirebaseConstants.languagesHistoryCollection;
+      case Category.countryBorders:
+        collection = FirebaseConstants.countryBordersHistoryCollection;
+      case Category.geoPosition:
+        collection = FirebaseConstants.geoPositionHistoryCollection;
+    }
+
+    final quizHistory = await dbServices.getDocumentsByAttribute(
+      collection: collection,
+      field: 'quiz_id',
+      value: widget.resultContentModel.quizId,
+    );
+
+    var data = {
+      'quiz_id': widget.resultContentModel.quizId,
+      'user_id': getIt<UserStore>().userId,
+      'completion_date': Timestamp.now(),
+    };
+
+    if (quizHistory.isNotEmpty) {
+      await dbServices.updateDocument(
+        collection: collection,
+        docId: quizHistory.first.id,
+        data: data,
+      );
+    } else {
+      await dbServices.createDocument(
+        collection: collection,
+        data: data,
+      );
+    }
   }
 
   @override

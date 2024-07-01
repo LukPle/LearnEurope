@@ -1,6 +1,7 @@
 import 'enums/difficulties_enum.dart';
 
 class QuizModel {
+  String id;
   String title;
   QuizDifficulty difficulty;
   List<String> questions;
@@ -8,6 +9,7 @@ class QuizModel {
   int hintPointsMinus;
 
   QuizModel({
+    required this.id,
     required this.title,
     required this.difficulty,
     required this.questions,
@@ -15,8 +17,9 @@ class QuizModel {
     required this.hintPointsMinus,
   });
 
-  factory QuizModel.fromMap(Map<String, dynamic> data) {
+  factory QuizModel.fromMap(String id, Map<String, dynamic> data) {
     return QuizModel(
+      id: id,
       title: data['title'] as String,
       difficulty: _getQuizDifficulty(data['difficulty'] as String),
       questions: List<String>.from(data['questions']),

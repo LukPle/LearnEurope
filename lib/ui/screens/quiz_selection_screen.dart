@@ -42,7 +42,7 @@ class QuizSelectionScreen extends StatelessWidget {
     }
 
     final docs = await dbServices.getAllDocuments(collection: collection);
-    return docs.map((doc) => QuizModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    return docs.map((doc) => QuizModel.fromMap(doc.id, doc.data() as Map<String, dynamic>)).toList();
   }
 
   Future<List<dynamic>> _fetchQuestions() async {
@@ -69,7 +69,7 @@ class QuizSelectionScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _navigateToQuestions(BuildContext context, int pointsPerQuestion, int hintMinus) async {
+  Future<void> _navigateToQuestions(BuildContext context, String quizId, int pointsPerQuestion, int hintMinus) async {
     switch (category) {
       case Category.europe101:
         break;
@@ -77,13 +77,15 @@ class QuizSelectionScreen extends StatelessWidget {
         break;
       case Category.countryBorders:
         List<CountryBordersQuestionModel> countryBordersQuestions =
-        await _fetchQuestions() as List<CountryBordersQuestionModel>;
+            await _fetchQuestions() as List<CountryBordersQuestionModel>;
 
         List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
         for (var question in countryBordersQuestions) {
           multipleChoiceContentModels.add(
             MultipleChoiceContentModel(
+              quizCategory: category,
+              quizId: quizId,
               questionCardContent: CountryBorderQuestionCard(question: question.question, imageUrl: question.image_url),
               answerOptions: question.answers,
               pointsPerQuestion: pointsPerQuestion,
@@ -171,7 +173,7 @@ class QuizSelectionScreen extends StatelessWidget {
                           Expanded(
                             child: ListFadingShaderWidget(
                               color:
-                              brightness == Brightness.light ? AppColors.lightBackground : AppColors.darkBackground,
+                                  brightness == Brightness.light ? AppColors.lightBackground : AppColors.darkBackground,
                               child: ListView.builder(
                                 padding: const EdgeInsets.only(top: AppPaddings.padding_12),
                                 itemCount: quizzes.length,
@@ -181,8 +183,8 @@ class QuizSelectionScreen extends StatelessWidget {
                                     padding: const EdgeInsets.only(bottom: AppPaddings.padding_12),
                                     child: QuizCard(
                                       title: quiz.title,
-                                      onTap: () async =>
-                                      await _navigateToQuestions(context, quiz.pointsPerQuestion, quiz.hintPointsMinus),
+                                      onTap: () async => await _navigateToQuestions(
+                                          context, quiz.id, quiz.pointsPerQuestion, quiz.hintPointsMinus),
                                       quizDifficulty: quiz.difficulty,
                                       numberOfTotalQuestions: quiz.questions.length,
                                       pointsPerQuestion: quiz.pointsPerQuestion,
@@ -214,13 +216,8 @@ class QuizSelectionScreen extends StatelessWidget {
         children: [
           Icon(
             Icons.error,
-            size: MediaQuery
-                .of(context)
-                .size
-                .width * 0.075,
-            color: MediaQuery
-                .of(context)
-                .platformBrightness == Brightness.light
+            size: MediaQuery.of(context).size.width * 0.075,
+            color: MediaQuery.of(context).platformBrightness == Brightness.light
                 ? AppColors.primaryColorLight
                 : AppColors.primaryColorDark,
           ),
@@ -240,9 +237,7 @@ class FilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = MediaQuery
-        .of(context)
-        .platformBrightness;
+    Brightness brightness = MediaQuery.of(context).platformBrightness;
 
     return Container(
       decoration: BoxDecoration(
@@ -268,8 +263,8 @@ class FilterButton extends StatelessWidget {
           style: TextStyle(
             color: isActive
                 ? brightness == Brightness.light
-                ? Colors.white
-                : Colors.black
+                    ? Colors.white
+                    : Colors.black
                 : null,
             fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
           ),

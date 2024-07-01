@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
@@ -224,6 +222,8 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
         routes.result,
         (Route<dynamic> route) => false,
         arguments: ResultContentModel(
+          quizCategory: widget.multipleChoiceContentModel.first.quizCategory,
+          quizId: widget.multipleChoiceContentModel.first.quizId,
           numbQuestions: widget.multipleChoiceContentModel.length,
           earnedScore: score,
           availableScore:

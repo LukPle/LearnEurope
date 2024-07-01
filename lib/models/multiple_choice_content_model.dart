@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 
 class MultipleChoiceContentModel {
+  Category quizCategory;
+  String quizId;
   Widget questionCardContent;
   List<String> answerOptions;
   String correctAnswer;
@@ -11,6 +14,8 @@ class MultipleChoiceContentModel {
   String explanation;
 
   MultipleChoiceContentModel({
+    required this.quizCategory,
+    required this.quizId,
     required this.questionCardContent,
     required this.answerOptions,
     required this.pointsPerQuestion,

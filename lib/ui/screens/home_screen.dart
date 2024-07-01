@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/network/service_locator.dart';
@@ -45,15 +46,16 @@ class HomeScreen extends StatelessWidget {
     List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
     multipleChoiceContentModels.add(
       MultipleChoiceContentModel(
-        questionCardContent: const CountryBorderQuestionCard(
-            question: 'Which country can be seen here',
-            imageUrl: 'https://i.pinimg.com/originals/de/cd/15/decd15e39360f7ba7acd4077b79912de.gif'),
-        answerOptions: ['Germany', 'Serbia', 'Croatia', 'Spain'],
-        pointsPerQuestion: 20,
-        hint: 'THE HINT',
-        hintMinus: -10,
-        explanation: 'I love this country.'
-      ),
+          quizCategory: Category.countryBorders,
+          quizId: '36rf76f4rf',
+          questionCardContent: const CountryBorderQuestionCard(
+              question: 'Which country can be seen here',
+              imageUrl: 'https://i.pinimg.com/originals/de/cd/15/decd15e39360f7ba7acd4077b79912de.gif'),
+          answerOptions: ['Germany', 'Serbia', 'Croatia', 'Spain'],
+          pointsPerQuestion: 20,
+          hint: 'THE HINT',
+          hintMinus: -10,
+          explanation: 'I love this country.'),
     );
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
   }
@@ -62,13 +64,14 @@ class HomeScreen extends StatelessWidget {
     List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
     multipleChoiceContentModels.add(
       MultipleChoiceContentModel(
-        questionCardContent: const LanguagesQuestionCard(),
-        answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish'],
-        pointsPerQuestion: 40,
-        hint: 'THE HINT',
-        hintMinus: -20,
-        explanation: 'I love this language'
-      ),
+          quizCategory: Category.languages,
+          quizId: 'jg8zifztdf',
+          questionCardContent: const LanguagesQuestionCard(),
+          answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish'],
+          pointsPerQuestion: 40,
+          hint: 'THE HINT',
+          hintMinus: -20,
+          explanation: 'I love this language'),
     );
     Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
   }
@@ -79,6 +82,11 @@ class HomeScreen extends StatelessWidget {
 
   void _navigateToResult(BuildContext context) {
     Navigator.of(context).pushNamed(routes.result,
-        arguments: ResultContentModel(numbQuestions: 10, earnedScore: 50, availableScore: 80));
+        arguments: ResultContentModel(
+            quizCategory: Category.countryBorders,
+            quizId: '3483zrigfigi',
+            numbQuestions: 10,
+            earnedScore: 50,
+            availableScore: 80));
   }
 }
