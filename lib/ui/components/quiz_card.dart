@@ -122,8 +122,8 @@ class QuizCard extends StatelessWidget {
           Row(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.045,
-                width: MediaQuery.of(context).size.width * 0.045,
+                height: MediaQuery.of(context).size.width * 0.04,
+                width: MediaQuery.of(context).size.width * 0.04,
                 child: CircularProgressIndicator(
                   value: performance,
                   strokeWidth: 5.5,
@@ -132,7 +132,10 @@ class QuizCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppPaddings.padding_16),
-              Text('${(performance! * 100).ceil().toString()} % correct'),
+              Text(
+                '${(performance! * 100).ceil().toString()} % correct',
+                style: AppTextStyles.thinDetailTextStyle(brightness),
+              ),
               const SizedBox(width: AppPaddings.padding_32),
               Text(
                 earnedPoints.toString(),
@@ -141,7 +144,10 @@ class QuizCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppPaddings.padding_8),
-              const Text('points earned'),
+              Text(
+                'points earned',
+                style: AppTextStyles.thinDetailTextStyle(brightness),
+              ),
             ],
           ),
       ],
