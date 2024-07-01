@@ -85,6 +85,8 @@ class ResultScreenState extends State<ResultScreen> {
       'quiz_id': widget.resultContentModel.quizId,
       'user_id': getIt<UserStore>().userId,
       'completion_date': Timestamp.now(),
+      'performance': performance,
+      'earned_points': widget.resultContentModel.earnedScore,
     };
 
     if (quizHistory.isNotEmpty) {

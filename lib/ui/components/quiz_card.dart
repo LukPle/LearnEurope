@@ -14,7 +14,8 @@ class QuizCard extends StatelessWidget {
     required this.numberOfTotalQuestions,
     required this.pointsPerQuestion,
     this.lastPlaythrough,
-    this.numberOfCorrectQuestions,
+    this.performance,
+    this.earnedPoints,
   });
 
   final String title;
@@ -23,7 +24,8 @@ class QuizCard extends StatelessWidget {
   final int numberOfTotalQuestions;
   final int pointsPerQuestion;
   final DateTime? lastPlaythrough;
-  final int? numberOfCorrectQuestions;
+  final double? performance;
+  final int? earnedPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class QuizCard extends StatelessWidget {
             Text(title, style: AppTextStyles.quizCardTitleTextStyle),
             const SizedBox(height: AppPaddings.padding_4),
             _buildDetailsArea(brightness),
-            lastPlaythrough != null ? _buildStatsArea(brightness) : const SizedBox.shrink(),
+            lastPlaythrough != null ? _buildStatsArea(context, brightness) : const SizedBox.shrink(),
           ],
         ),
       ),
@@ -110,13 +112,38 @@ class QuizCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsArea(Brightness brightness) {
-    return const Column(
+  Widget _buildStatsArea(BuildContext context, Brightness brightness) {
+    return Column(
       children: [
-        SizedBox(height: AppPaddings.padding_16),
-        Divider(height: 0, thickness: 0.5, color: Colors.grey),
-        SizedBox(height: AppPaddings.padding_16),
-        Text('Crazy Stats'),
+        const SizedBox(height: AppPaddings.padding_16),
+        const Divider(height: 0, thickness: 0.5, color: Colors.grey),
+        const SizedBox(height: AppPaddings.padding_16),
+        if (performance != null && earnedPoints != null)
+          Row(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.045,
+                width: MediaQuery.of(context).size.width * 0.045,
+                child: CircularProgressIndicator(
+                  value: performance,
+                  strokeWidth: 5.5,
+                  color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
+                  backgroundColor: brightness == Brightness.light ? Colors.grey.shade400 : Colors.grey.shade600,
+                ),
+              ),
+              const SizedBox(width: AppPaddings.padding_16),
+              Text('${(performance! * 100).ceil().toString()} % correct'),
+              const SizedBox(width: AppPaddings.padding_32),
+              Text(
+                earnedPoints.toString(),
+                style: AppTextStyles.standardTitleTextStyle.copyWith(
+                  color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
+                ),
+              ),
+              const SizedBox(width: AppPaddings.padding_8),
+              const Text('points earned'),
+            ],
+          ),
       ],
     );
   }

@@ -245,7 +245,8 @@ class QuizSelectionScreen extends StatelessWidget {
                                             quizDifficulty: quiz.quizModel.difficulty,
                                             numberOfTotalQuestions: quiz.quizModel.questions.length,
                                             pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
-                                            numberOfCorrectQuestions: 0,
+                                            performance: quiz.quizHistoryModel?.performance,
+                                            earnedPoints: quiz.quizHistoryModel?.earnedPoints,
                                             lastPlaythrough: quiz.quizHistoryModel?.completionDate,
                                           ),
                                         );
