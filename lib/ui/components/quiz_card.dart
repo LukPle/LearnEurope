@@ -66,13 +66,13 @@ class QuizCard extends StatelessWidget {
           children: [
             Icon(
               Icons.stacked_line_chart,
-              color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
-              size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
+              color: AppTextStyles.thinDetailTextStyle(brightness).color,
+              size: AppTextStyles.thinDetailTextStyle(brightness).fontSize!.toDouble() + 2,
             ),
             const SizedBox(width: AppPaddings.padding_4),
             Text(
               AppStrings.getDifficultyText(quizDifficulty),
-              style: AppTextStyles.quizCardDetailsTextStyle(brightness),
+              style: AppTextStyles.thinDetailTextStyle(brightness),
             ),
           ],
         ),
@@ -81,13 +81,13 @@ class QuizCard extends StatelessWidget {
           children: [
             Icon(
               Icons.numbers,
-              color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
-              size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
+              color: AppTextStyles.thinDetailTextStyle(brightness).color,
+              size: AppTextStyles.thinDetailTextStyle(brightness).fontSize!.toDouble() + 2,
             ),
             const SizedBox(width: AppPaddings.padding_4),
             Text(
               '${numberOfTotalQuestions.toString()} Questions • ${pointsPerQuestion.toString()} Points each',
-              style: AppTextStyles.quizCardDetailsTextStyle(brightness),
+              style: AppTextStyles.thinDetailTextStyle(brightness),
             ),
           ],
         ),
@@ -96,13 +96,13 @@ class QuizCard extends StatelessWidget {
           children: [
             Icon(
               Icons.update,
-              color: AppTextStyles.quizCardDetailsTextStyle(brightness).color,
-              size: AppTextStyles.quizCardDetailsTextStyle(brightness).fontSize!.toDouble() + 2,
+              color: AppTextStyles.thinDetailTextStyle(brightness).color,
+              size: AppTextStyles.thinDetailTextStyle(brightness).fontSize!.toDouble() + 2,
             ),
             const SizedBox(width: AppPaddings.padding_4),
             Text(
               AppStrings.getDateTimeText(lastPlaythrough),
-              style: AppTextStyles.quizCardDetailsTextStyle(brightness),
+              style: AppTextStyles.thinDetailTextStyle(brightness),
             ),
           ],
         ),

@@ -105,6 +105,8 @@ class AppStrings {
   /// Leaderboard Screen Strings
   static const String leaderboardTitle = 'Your place on the leaderboard';
   static const String leaderboardLoadingError = 'Leaderboard couldn\'t be loaded';
+  static const String noLeaderboardAvailable = 'No leaderboard available';
+  static const String ownCard = 'You';
 
   /// Profile Strings
   static const String profileTitle = 'Profile';

@@ -101,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
                                             final registrationDate = snapshot.data;
                                             return Text(
                                               AppStrings.learnerRegistrationText(registrationDate),
-                                              style: AppTextStyles.quizCardDetailsTextStyle(
+                                              style: AppTextStyles.thinDetailTextStyle(
                                                   MediaQuery.of(context).platformBrightness),
                                               textAlign: TextAlign.center,
                                             );

@@ -5,8 +5,11 @@ import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/leaderboard_entry_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
+import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
 import 'package:learn_europe/ui/components/leaderboard_card.dart';
+import 'package:learn_europe/ui/components/leaderboard_podium.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 
@@ -22,7 +25,7 @@ class LeaderboardScreen extends StatelessWidget {
         .map((doc) {
           final data = doc.data() as Map<String, dynamic>;
           if (data.containsKey('name') && data.containsKey('totalPoints')) {
-            return LeaderboardEntryModel.fromMap(data);
+            return LeaderboardEntryModel.fromMap(doc.id, data);
           } else {
             return null;
           }
@@ -37,6 +40,7 @@ class LeaderboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.height < 700;
     bool isSheetExpanded = false;
 
     return FutureBuilder<List<LeaderboardEntryModel>>(
@@ -50,9 +54,9 @@ class LeaderboardScreen extends StatelessWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             showAlertSnackBar(context, AppStrings.leaderboardLoadingError, isError: true);
           });
-          return SizedBox.shrink(); //_buildEmptyListComponent(context);
+          return _buildEmptyLeaderboardComponent(context);
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return SizedBox.shrink(); //_buildEmptyListComponent(context);
+          return _buildEmptyLeaderboardComponent(context);
         } else {
           final leaderboardEntries = snapshot.data!;
           final podiumEntries = leaderboardEntries.take(3).toList();
@@ -70,25 +74,25 @@ class LeaderboardScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        _buildPodiumPlace(
-                          context: context,
+                        LeaderboardPodium(
                           rank: 2,
                           username: podiumEntries[1].username,
                           totalPoints: podiumEntries[1].totalPoints,
+                          isUser: podiumEntries[1].id == getIt<UserStore>().userId,
                         ),
                         const SizedBox(width: AppPaddings.padding_12),
-                        _buildPodiumPlace(
-                          context: context,
+                        LeaderboardPodium(
                           rank: 1,
                           username: podiumEntries[0].username,
                           totalPoints: podiumEntries[0].totalPoints,
+                          isUser: podiumEntries[0].id == getIt<UserStore>().userId,
                         ),
                         const SizedBox(width: AppPaddings.padding_12),
-                        _buildPodiumPlace(
-                          context: context,
+                        LeaderboardPodium(
                           rank: 3,
                           username: podiumEntries[2].username,
                           totalPoints: podiumEntries[2].totalPoints,
+                          isUser: podiumEntries[2].id == getIt<UserStore>().userId,
                         ),
                       ],
                     ),
@@ -96,18 +100,24 @@ class LeaderboardScreen extends StatelessWidget {
                 ),
               ),
               DraggableScrollableSheet(
-                initialChildSize: 0.5,
-                minChildSize: 0.5,
+                initialChildSize: isSmallScreen ? 0.4 : 0.5,
+                minChildSize: isSmallScreen ? 0.4 : 0.5,
                 maxChildSize: 0.8,
                 snap: true,
-                snapSizes: const [0.5, 0.8],
+                snapSizes: isSmallScreen ? [0.4, 0.8] : [0.5, 0.8],
                 controller: draggableScrollableController,
                 builder: (BuildContext context, ScrollController scrollController) {
                   return GestureDetector(
                     onDoubleTap: () {
                       isSheetExpanded = !isSheetExpanded;
-                      draggableScrollableController.animateTo(isSheetExpanded ? 0.5 : 0.8,
-                          duration: const Duration(milliseconds: 300), curve: Curves.ease);
+                      draggableScrollableController.animateTo(
+                          isSheetExpanded
+                              ? isSmallScreen
+                                  ? 0.4
+                                  : 0.5
+                              : 0.8,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease);
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -159,6 +169,7 @@ class LeaderboardScreen extends StatelessWidget {
                                             rank: index + 4,
                                             name: sheetEntries[index].username,
                                             points: sheetEntries[index].totalPoints,
+                                            isUser: sheetEntries[index].id == getIt<UserStore>().userId,
                                           ),
                                         );
                                       },
@@ -182,49 +193,22 @@ class LeaderboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPodiumPlace({
-    required BuildContext context,
-    required int rank,
-    required String username,
-    required int totalPoints,
-  }) {
-    return Container(
-      width: 100,
-      height: (MediaQuery.of(context).size.height * 0.275) - (rank - 1) * 25,
-      decoration: BoxDecoration(
-        color: (MediaQuery.of(context).platformBrightness == Brightness.light
+  Widget _buildEmptyLeaderboardComponent(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.leaderboard,
+            size: MediaQuery.of(context).size.width * 0.075,
+            color: MediaQuery.of(context).platformBrightness == Brightness.light
                 ? AppColors.primaryColorLight
-                : AppColors.primaryColorDark)
-            .withOpacity(
-          rank == 1 ? 1 : (rank == 2 ? 0.8 : 0.6),
-        ),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '#$rank',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: AppPaddings.padding_4),
-            Text(
-              username,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppPaddings.padding_4),
-            Text(
-              '${totalPoints.toString()} Points',
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ],
-        ),
+                : AppColors.primaryColorDark,
+          ),
+          const SizedBox(height: AppPaddings.padding_8),
+          const Text(AppStrings.noLeaderboardAvailable),
+        ],
       ),
     );
   }

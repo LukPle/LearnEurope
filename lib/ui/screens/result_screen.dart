@@ -134,7 +134,9 @@ class ResultScreenState extends State<ResultScreen> {
                 const SizedBox(height: AppPaddings.padding_4),
                 Text(
                   'Out of ${availableScore.toString()}',
-                  style: AppTextStyles.questionTextStyle,
+                  style: AppTextStyles.questionTextStyle.copyWith(
+                    color: Colors.black,
+                  ),
                 ),
               ],
             )),

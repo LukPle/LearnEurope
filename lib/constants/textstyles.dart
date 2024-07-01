@@ -20,6 +20,13 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle thinDetailTextStyle(Brightness brightness) {
+    return TextStyle(
+      fontSize: 14,
+      color: brightness == Brightness.light ? Colors.black54 : Colors.white54,
+    );
+  }
+
   static TextStyle buttonTextStyle({required bool isPrimary, required Brightness brightness}) {
     return TextStyle(
       fontWeight: isPrimary ? FontWeight.w500 : FontWeight.normal,
@@ -42,13 +49,6 @@ class AppTextStyles {
   }
 
   static const TextStyle quizCardTitleTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
-
-  static TextStyle quizCardDetailsTextStyle(Brightness brightness) {
-    return TextStyle(
-      fontSize: 14,
-      color: brightness == Brightness.light ? Colors.black54 : Colors.white54,
-    );
-  }
 
   static const TextStyle questionTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500);
 
