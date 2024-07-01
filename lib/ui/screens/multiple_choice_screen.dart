@@ -3,15 +3,14 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
-import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
-import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
+import 'package:learn_europe/ui/components/quiz_explanation.dart';
 import 'package:learn_europe/ui/components/quiz_progress_bar.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
@@ -78,7 +77,11 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
               const SizedBox(height: AppPaddings.padding_32),
               questionStore.isExplained
                   ? Expanded(
-                      child: _buildExplanationArea(isCorrectlyAnswered),
+                      child: ExplanationArea(
+                        isCorrect: isCorrectlyAnswered,
+                        explanationText: widget.multipleChoiceContentModel[questionStore.numbQuestion].explanation,
+                        action: () => _navigateToNextQuestionOrResult(),
+                      ),
                     )
                   : GridView.count(
                       crossAxisCount: 2,
@@ -166,38 +169,6 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
           child: child,
         ),
       ),
-    );
-  }
-
-  Widget _buildExplanationArea(bool isCorrect) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  isCorrect ? Icons.check_circle : Icons.cancel,
-                  color: isCorrect ? AppColors.success : AppColors.error,
-                ),
-                const SizedBox(width: AppPaddings.padding_4),
-                Text(
-                  isCorrect ? AppStrings.correctAnswer : AppStrings.wrongAnswer,
-                  style: AppTextStyles.standardTitleTextStyle.copyWith(
-                    color: isCorrect ? AppColors.success : AppColors.error,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppPaddings.padding_8),
-            Text(widget.multipleChoiceContentModel[questionStore.numbQuestion].explanation),
-          ],
-        ),
-        const SizedBox(height: AppPaddings.padding_8),
-        CtaButton.primary(onPressed: () => _navigateToNextQuestionOrResult(), label: AppStrings.continueButton),
-      ],
     );
   }
 

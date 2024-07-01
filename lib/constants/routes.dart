@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
@@ -66,9 +67,11 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         ),
       );
     case dragAndDrop:
+      final dragAndDropContentModel = destination.arguments as List<DragAndDropContentModel>;
+      dragAndDropContentModel.shuffle(Random());
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => const DragAndDropScreen(),
+        builder: (context) => DragAndDropScreen(dragAndDropContentModel: dragAndDropContentModel),
       );
     case result:
       final resultContent = destination.arguments as ResultContentModel;

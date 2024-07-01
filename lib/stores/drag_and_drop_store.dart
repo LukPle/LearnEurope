@@ -8,14 +8,7 @@ class DragAndDropStore = _DragAndDropStore with _$DragAndDropStore;
 
 abstract class _DragAndDropStore with Store {
   @observable
-  ObservableList<Widget> availableItems = ObservableList.of([
-    const DraggableItem(text: 'Germany'),
-    const DraggableItem(text: 'Austria'),
-    const DraggableItem(text: 'Turkey'),
-    const DraggableItem(text: 'Poland'),
-    const DraggableItem(text: 'Norway'),
-    const DraggableItem(text: 'United Kingdom'),
-  ]);
+  ObservableList<Widget> availableItems = ObservableList<DraggableItem>();
 
   @observable
   ObservableList<Widget> selectedItems = ObservableList<DraggableItem>();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
+import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
@@ -81,7 +82,20 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _navigateToDragAnDrop(BuildContext context) {
-    Navigator.of(context).pushNamed(routes.dragAndDrop);
+    List<DragAndDropContentModel> dragAndDropContentModels = [];
+    dragAndDropContentModels.add(
+      DragAndDropContentModel(
+          quizCategory: Category.languages,
+          quizId: '477b78bffHG',
+          question: 'Which of these countries is part of the EU?',
+          answerOptions: ['Germany', 'Austria', 'Poland', 'Norway', 'United Kingdom', 'Turkey'],
+          numbCorrectAnswers: 3,
+          pointsPerQuestion: 40,
+          hint: 'THE HINT',
+          hintMinus: -20,
+          explanation: 'The number of correct states is 3'),
+    );
+    Navigator.of(context).pushNamed(routes.dragAndDrop, arguments: dragAndDropContentModels);
   }
 
   void _navigateToResult(BuildContext context) {

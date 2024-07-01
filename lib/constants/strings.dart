@@ -88,6 +88,8 @@ class AppStrings {
   static const String correctAnswer = 'Correct Answer';
   static const String wrongAnswer = 'Wrong Answer';
   static const String continueButton = 'Continue';
+  static const String selectionPane = 'Drop your answer(s) here';
+  static const String submitSelectionButton = 'Submit selection';
   static const String textToSpeechFail = 'Sorry, audio output not possible';
 
   /// Hint Dialog Strings

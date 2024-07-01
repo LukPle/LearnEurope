@@ -63,7 +63,11 @@ class LanguagesQuestionCardState extends State<LanguagesQuestionCard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: AppPaddings.padding_32),
-        Text(widget.question, style: AppTextStyles.questionTextStyle),
+        Text(
+          widget.question,
+          style: AppTextStyles.questionTextStyle,
+          textAlign: TextAlign.center,
+        ),
         const Spacer(),
         Text(
           '"${widget.quote}"',

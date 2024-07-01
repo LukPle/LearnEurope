@@ -5,8 +5,10 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/country_borders_question_model.dart';
+import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
+import 'package:learn_europe/models/europe101_question_model.dart';
 import 'package:learn_europe/models/languages_question_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/quiz_history_model.dart';
@@ -97,7 +99,7 @@ class QuizSelectionScreen extends StatelessWidget {
       case Category.europe101:
         collection = FirebaseConstants.europe101QuestionsCollection;
         final docs = await dbServices.getAllDocuments(collection: collection);
-        return [];
+        return docs.map((doc) => Europe101QuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
       case Category.languages:
         collection = FirebaseConstants.languagesQuestionsCollection;
         final docs = await dbServices.getAllDocuments(collection: collection);
@@ -116,6 +118,28 @@ class QuizSelectionScreen extends StatelessWidget {
   Future<void> _navigateToQuestions(BuildContext context, String quizId, int pointsPerQuestion, int hintMinus) async {
     switch (category) {
       case Category.europe101:
+        List<Europe101QuestionModel> europe101Questions = await _fetchQuestions() as List<Europe101QuestionModel>;
+
+        List<DragAndDropContentModel> dragAndDropContentModel = [];
+
+        for (var question in europe101Questions) {
+          dragAndDropContentModel.add(
+            DragAndDropContentModel(
+              quizCategory: category,
+              quizId: quizId,
+              question: question.question,
+              answerOptions: question.answers,
+              numbCorrectAnswers: question.numbCorrectAnswers,
+              pointsPerQuestion: pointsPerQuestion,
+              hint: question.hint,
+              hintMinus: hintMinus,
+              explanation: question.explanation,
+            ),
+          );
+        }
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(routes.dragAndDrop, arguments: dragAndDropContentModel);
+        }
         break;
       case Category.languages:
         List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions() as List<LanguagesQuestionModel>;
