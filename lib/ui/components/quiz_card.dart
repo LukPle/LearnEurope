@@ -131,7 +131,7 @@ class QuizCard extends StatelessWidget {
                   backgroundColor: brightness == Brightness.light ? Colors.grey.shade400 : Colors.grey.shade600,
                 ),
               ),
-              const SizedBox(width: AppPaddings.padding_16),
+              const SizedBox(width: AppPaddings.padding_12),
               Text(
                 '${(performance! * 100).ceil().toString()} % correct',
                 style: AppTextStyles.thinDetailTextStyle(brightness),

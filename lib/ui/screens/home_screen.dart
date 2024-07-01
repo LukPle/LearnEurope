@@ -66,7 +66,11 @@ class HomeScreen extends StatelessWidget {
       MultipleChoiceContentModel(
           quizCategory: Category.languages,
           quizId: 'jg8zifztdf',
-          questionCardContent: const LanguagesQuestionCard(),
+          questionCardContent: const LanguagesQuestionCard(
+            question: 'What language is this?',
+            quote: '"Estar en las nubes"',
+            languageCode: 'es-ES',
+          ),
           answerOptions: ['Spanish', 'Portuguese', 'Greece', 'Danish'],
           pointsPerQuestion: 40,
           hint: 'THE HINT',

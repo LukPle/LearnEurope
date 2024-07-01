@@ -7,6 +7,7 @@ import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/country_borders_question_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
+import 'package:learn_europe/models/languages_question_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/quiz_history_model.dart';
 import 'package:learn_europe/models/quiz_model.dart';
@@ -21,6 +22,7 @@ import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/list_fading_shader.dart';
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/country_border_question_card.dart';
+import 'package:learn_europe/ui/components/multiple_choice_question_cards/languages_question_card.dart';
 import 'package:learn_europe/ui/components/quiz_card.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
@@ -99,7 +101,7 @@ class QuizSelectionScreen extends StatelessWidget {
       case Category.languages:
         collection = FirebaseConstants.languagesQuestionsCollection;
         final docs = await dbServices.getAllDocuments(collection: collection);
-        return [];
+        return docs.map((doc) => LanguagesQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
       case Category.countryBorders:
         collection = FirebaseConstants.countryBordersQuestionsCollection;
         final docs = await dbServices.getAllDocuments(collection: collection);
@@ -116,6 +118,31 @@ class QuizSelectionScreen extends StatelessWidget {
       case Category.europe101:
         break;
       case Category.languages:
+        List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions() as List<LanguagesQuestionModel>;
+
+        List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
+
+        for (var question in languagesQuestions) {
+          multipleChoiceContentModels.add(
+            MultipleChoiceContentModel(
+              quizCategory: category,
+              quizId: quizId,
+              questionCardContent: LanguagesQuestionCard(
+                question: question.question,
+                quote: question.quote,
+                languageCode: question.languageCode,
+              ),
+              answerOptions: question.answers,
+              pointsPerQuestion: pointsPerQuestion,
+              hint: question.hint,
+              hintMinus: hintMinus,
+              explanation: question.explanation,
+            ),
+          );
+        }
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
+        }
         break;
       case Category.countryBorders:
         List<CountryBordersQuestionModel> countryBordersQuestions =
@@ -128,7 +155,10 @@ class QuizSelectionScreen extends StatelessWidget {
             MultipleChoiceContentModel(
               quizCategory: category,
               quizId: quizId,
-              questionCardContent: CountryBorderQuestionCard(question: question.question, imageUrl: question.image_url),
+              questionCardContent: CountryBorderQuestionCard(
+                question: question.question,
+                imageUrl: question.image_url,
+              ),
               answerOptions: question.answers,
               pointsPerQuestion: pointsPerQuestion,
               hint: question.hint,

@@ -7,7 +7,16 @@ import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
 
 class LanguagesQuestionCard extends StatefulWidget {
-  const LanguagesQuestionCard({super.key});
+  const LanguagesQuestionCard({
+    super.key,
+    required this.question,
+    required this.quote,
+    required this.languageCode,
+  });
+
+  final String question;
+  final String quote;
+  final String languageCode;
 
   @override
   LanguagesQuestionCardState createState() => LanguagesQuestionCardState();
@@ -54,15 +63,15 @@ class LanguagesQuestionCardState extends State<LanguagesQuestionCard> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: AppPaddings.padding_32),
-        Text('What language is this?', style: AppTextStyles.questionTextStyle),
+        Text(widget.question, style: AppTextStyles.questionTextStyle),
         const Spacer(),
         Text(
-          '"Estar en las nubes"',
+          '"${widget.quote}"',
           style: AppTextStyles.questionTextStyle.copyWith(fontStyle: FontStyle.italic, fontWeight: FontWeight.normal),
         ),
         const SizedBox(height: AppPaddings.padding_12),
         IconButton(
-          onPressed: () async => await _speak('es-ES', 'Estar en las nubes'),
+          onPressed: () async => await _speak(widget.languageCode, widget.quote),
           icon: const Icon(Icons.volume_up),
           color: MediaQuery.of(context).platformBrightness == Brightness.light
               ? AppColors.primaryColorLight
