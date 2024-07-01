@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
@@ -40,6 +39,19 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
     final answerOptions = widget.dragAndDropContentModel[questionStore.numbQuestion].shuffledAnswerOptions;
     for (var option in answerOptions) {
       dragAndDropStore.addAvailableItem(DraggableItem(text: option));
+    }
+  }
+
+  void _resetDragAndDropItems() {
+    List<Widget> selectedItemsList = List.of(dragAndDropStore.selectedItems);
+    List<Widget> availableItemsList = List.of(dragAndDropStore.availableItems);
+
+    for (var item in selectedItemsList) {
+      dragAndDropStore.removeSelectedItem(item);
+    }
+
+    for (var item in availableItemsList) {
+      dragAndDropStore.removeAvailableItem(item);
     }
   }
 
@@ -257,10 +269,12 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
   void _navigateToNextQuestionOrResult() {
     if (widget.dragAndDropContentModel.length > (questionStore.numbQuestion + 1)) {
       isCorrectlyAnswered = false;
+      _resetDragAndDropItems();
       hintDialogStore.resetHint();
       questionStore.setUnanswered();
       questionStore.setUnexplained();
       questionStore.nextQuestion();
+      _addAvailableDragAndDropItems();
     } else {
       Navigator.of(context).pushNamedAndRemoveUntil(
         routes.result,
