@@ -38,7 +38,11 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
   void _addAvailableDragAndDropItems() {
     final answerOptions = widget.dragAndDropContentModel[questionStore.numbQuestion].shuffledAnswerOptions;
     for (var option in answerOptions) {
-      dragAndDropStore.addAvailableItem(DraggableItem(text: option));
+      dragAndDropStore.addAvailableItem(DraggableItem(
+        text: option,
+        questionStore: questionStore,
+        isCorrect: widget.dragAndDropContentModel[questionStore.numbQuestion].correctAnswerOptions.contains(option),
+      ));
     }
   }
 
@@ -293,21 +297,32 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
 }
 
 class DraggableItem extends StatelessWidget {
-  const DraggableItem({super.key, required this.text});
+  const DraggableItem({
+    super.key,
+    required this.text,
+    required this.questionStore,
+    required this.isCorrect,
+  });
 
+  final QuestionStore questionStore;
   final String text;
+  final bool isCorrect;
 
   @override
   Widget build(BuildContext context) {
-    return Draggable<Widget>(
-      key: Key(text),
-      data: this,
-      feedback: Material(
-        borderRadius: BorderRadius.circular(15),
-        child: _buildContentContainer(context),
-      ),
-      childWhenDragging: const SizedBox.shrink(),
-      child: _buildContentContainer(context),
+    return Observer(
+      builder: (context) {
+        return Draggable<Widget>(
+          key: Key(text),
+          data: this,
+          feedback: Material(
+            borderRadius: BorderRadius.circular(15),
+            child: _buildContentContainer(context),
+          ),
+          childWhenDragging: const SizedBox.shrink(),
+          child: _buildContentContainer(context),
+        );
+      },
     );
   }
 
@@ -315,14 +330,18 @@ class DraggableItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppPaddings.padding_8),
       decoration: BoxDecoration(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
-            ? AppColors.accentColorLight
-            : AppColors.accentColorDark,
+        color: questionStore.isAnswered
+            ? isCorrect
+                ? AppColors.success
+                : AppColors.error
+            : MediaQuery.of(context).platformBrightness == Brightness.light
+                ? AppColors.accentColorLight
+                : AppColors.accentColorDark,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Text(text,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: questionStore.isAnswered ? Colors.white : Colors.black,
             fontWeight: FontWeight.w500,
           ),
           overflow: TextOverflow.fade),
