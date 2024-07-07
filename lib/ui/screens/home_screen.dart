@@ -37,6 +37,8 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToDragAnDrop(context), label: 'Go to Drag and Drop'),
           const SizedBox(height: AppPaddings.padding_16),
+          CtaButton.primary(onPressed: () => _navigateToMap(context), label: 'Go to Map'),
+          const SizedBox(height: AppPaddings.padding_16),
           CtaButton.primary(onPressed: () => _navigateToResult(context), label: 'Go to Result Screen'),
         ],
       ),
@@ -96,6 +98,10 @@ class HomeScreen extends StatelessWidget {
           explanation: 'The number of correct states is 3'),
     );
     Navigator.of(context).pushNamed(routes.dragAndDrop, arguments: dragAndDropContentModels);
+  }
+
+  void _navigateToMap(BuildContext context) {
+    Navigator.of(context).pushNamed(routes.map);
   }
 
   void _navigateToResult(BuildContext context) {
