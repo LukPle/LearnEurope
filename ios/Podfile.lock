@@ -1026,6 +1026,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_tts (0.0.1):
     - Flutter
+  - geolocator_apple (1.2.0):
+    - Flutter
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -1143,6 +1145,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
 
 SPEC REPOS:
   trunk:
@@ -1181,6 +1184,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_tts:
     :path: ".symlinks/plugins/flutter_tts/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/ios"
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
@@ -1202,6 +1207,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: 255526c3d04c49874d7a5e3886964a79f77d6f33
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
+  geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   "gRPC-C++": e725ef63c4475d7cdb7e2cf16eb0fde84bd9ee51
   gRPC-Core: eee4be35df218649fe66d721a05a7f27a28f069b

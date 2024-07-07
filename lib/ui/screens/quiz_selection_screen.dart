@@ -91,26 +91,62 @@ class QuizSelectionScreen extends StatelessWidget {
     return quizSelectionContent;
   }
 
-  Future<List<dynamic>> _fetchQuestions() async {
+  Future<List<String>> _fetchQuestionList(String quizId) async {
     final DatabaseServices dbServices = DatabaseServices();
     String collection;
 
     switch (category) {
       case Category.europe101:
+        collection = FirebaseConstants.europe101QuizCollection;
+        break;
+      case Category.languages:
+        collection = FirebaseConstants.languagesQuizCollection;
+        break;
+      case Category.countryBorders:
+        collection = FirebaseConstants.countryBordersQuizCollection;
+        break;
+      case Category.geoPosition:
+        collection = FirebaseConstants.geoPositionQuizCollection;
+        break;
+    }
+
+    final doc = await dbServices.getDocument(collection: collection, docId: quizId);
+    return List<String>.from(doc['questions']);
+  }
+
+  Future<List<dynamic>> _fetchQuestions(String quizId) async {
+    final DatabaseServices dbServices = DatabaseServices();
+    String collection;
+
+    List<String> questionIds = await _fetchQuestionList(quizId);
+
+    switch (category) {
+      case Category.europe101:
         collection = FirebaseConstants.europe101QuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => Europe101QuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<Europe101QuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(Europe101QuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.languages:
         collection = FirebaseConstants.languagesQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => LanguagesQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<LanguagesQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(LanguagesQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.countryBorders:
         collection = FirebaseConstants.countryBordersQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => CountryBordersQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<CountryBordersQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(CountryBordersQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.geoPosition:
         collection = FirebaseConstants.geoPositionQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
         return [];
     }
   }
@@ -118,7 +154,7 @@ class QuizSelectionScreen extends StatelessWidget {
   Future<void> _navigateToQuestions(BuildContext context, String quizId, int pointsPerQuestion, int hintMinus) async {
     switch (category) {
       case Category.europe101:
-        List<Europe101QuestionModel> europe101Questions = await _fetchQuestions() as List<Europe101QuestionModel>;
+        List<Europe101QuestionModel> europe101Questions = await _fetchQuestions(quizId) as List<Europe101QuestionModel>;
 
         List<DragAndDropContentModel> dragAndDropContentModel = [];
 
@@ -142,7 +178,7 @@ class QuizSelectionScreen extends StatelessWidget {
         }
         break;
       case Category.languages:
-        List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions() as List<LanguagesQuestionModel>;
+        List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions(quizId) as List<LanguagesQuestionModel>;
 
         List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -170,7 +206,7 @@ class QuizSelectionScreen extends StatelessWidget {
         break;
       case Category.countryBorders:
         List<CountryBordersQuestionModel> countryBordersQuestions =
-            await _fetchQuestions() as List<CountryBordersQuestionModel>;
+            await _fetchQuestions(quizId) as List<CountryBordersQuestionModel>;
 
         List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
