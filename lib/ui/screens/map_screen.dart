@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
+import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
@@ -65,7 +66,7 @@ class MapScreenState extends State<MapScreen> {
           FlutterMap(
             mapController: mapController,
             options: MapOptions(
-              initialCenter: LatLng(48.8566, 2.3522), // Initial position (Paris)
+              initialCenter: const LatLng(48.8566, 2.3522), // Initial position (Paris)
               initialZoom: 5.0,
               onTap: _onTap,
             ),
@@ -74,22 +75,35 @@ class MapScreenState extends State<MapScreen> {
                 urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
               ),
-            ],
-          ),
-          Positioned(
-            top: AppPaddings.padding_16,
-            left: AppPaddings.padding_16,
-            child: Container(
-              padding: const EdgeInsets.all(AppPaddings.padding_12),
-              decoration: BoxDecoration(
-                color: MediaQuery.of(context).platformBrightness == Brightness.light
-                    ? AppColors.lightCard
-                    : AppColors.darkCard,
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.black12),
+              if (selectedLocation != null)
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      point: selectedLocation!,
+                      child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+                    ),
+                  ],
+                ),
+              Positioned(
+                top: AppPaddings.padding_16,
+                left: AppPaddings.padding_16,
+                right: AppPaddings.padding_16,
+                child: Container(
+                  padding: const EdgeInsets.all(AppPaddings.padding_12),
+                  decoration: BoxDecoration(
+                    color: MediaQuery.of(context).platformBrightness == Brightness.light
+                        ? AppColors.lightBackground
+                        : AppColors.darkBackground,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(color: Colors.black12),
+                  ),
+                  child: Text(
+                    'Mark the location of the capital of France.',
+                    style: AppTextStyles.questionTextStyle,
+                  ),
+                ),
               ),
-              child: Text('Mark the location of the capital of France.'),
-            ),
+            ],
           ),
         ],
       ),
@@ -111,6 +125,8 @@ class MapScreenState extends State<MapScreen> {
   }
 
   void _calculateDistance() {
+    print(selectedLocation!.latitude.toString());
+    print(selectedLocation!.longitude.toString());
     const parisLocation = LatLng(48.8566, 2.3522);
     final distance = Geolocator.distanceBetween(
       selectedLocation!.latitude,
@@ -123,7 +139,7 @@ class MapScreenState extends State<MapScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Distance from Paris: ${distance.toStringAsFixed(2)} km'),
+          content: Text('Distance from Paris: ${(distance / 1000).toStringAsFixed(2)} km'),
         );
       },
     );
