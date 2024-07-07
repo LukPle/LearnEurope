@@ -133,7 +133,38 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
                                       itemBuilder: (context, index) {
                                         return Padding(
                                           padding: const EdgeInsets.only(bottom: AppPaddings.padding_8),
-                                          child: dragAndDropStore.selectedItems[index],
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(child: dragAndDropStore.selectedItems[index]),
+                                              questionStore.isExplained
+                                                  ? Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: AppPaddings.padding_8,
+                                                        ),
+                                                        Icon(
+                                                          widget.dragAndDropContentModel[questionStore.numbQuestion]
+                                                                  .correctAnswerOptions
+                                                                  .contains((dragAndDropStore.selectedItems[index]
+                                                                          as DraggableItem)
+                                                                      .text)
+                                                              ? Icons.check_circle
+                                                              : Icons.cancel,
+                                                          color: widget
+                                                                  .dragAndDropContentModel[questionStore.numbQuestion]
+                                                                  .correctAnswerOptions
+                                                                  .contains((dragAndDropStore.selectedItems[index]
+                                                                          as DraggableItem)
+                                                                      .text)
+                                                              ? AppColors.success
+                                                              : AppColors.error,
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : const SizedBox.shrink(),
+                                            ],
+                                          ),
                                         );
                                       },
                                     );
