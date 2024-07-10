@@ -17,6 +17,7 @@ import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
+import 'package:learn_europe/ui/components/quiz_explanation.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key, required this.mapContentModel});
@@ -32,7 +33,9 @@ class MapScreenState extends State<MapScreen> {
   final QuestionStore questionStore = QuestionStore();
   final MapStore mapStore = MapStore();
   final HintDialogStore hintDialogStore = HintDialogStore();
+
   int score = 0;
+  bool isCorrectlyAnswered = false;
 
   void _onMapTap(TapPosition tapPosition, LatLng location) {
     mapStore.setLocation(location);
@@ -150,34 +153,28 @@ class MapScreenState extends State<MapScreen> {
 
   void _validateAnswerAndProceedQuiz() {
     double distanceFromTarget = _calculateDistance();
+    if (distanceFromTarget.ceil() <= widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference) {
+      isCorrectlyAnswered = true;
+      _calculateScore();
+    }
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          elevation: 1,
-          insetPadding: const EdgeInsets.symmetric(horizontal: AppPaddings.padding_16),
-          content: Padding(
-            padding: const EdgeInsets.all(AppPaddings.padding_16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  AppStrings.geoPositionResult(distanceFromTarget),
-                ),
-                const SizedBox(height: AppPaddings.padding_24),
-                CtaButton.primary(
-                  onPressed: () => {
-                    if (distanceFromTarget.ceil() <=
-                        widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference)
-                      {
-                        _calculateScore(),
-                      },
-                    _proceedQuiz(),
-                  },
-                  label: AppStrings.continueButton,
-                )
-              ],
+        return PopScope(
+          canPop: false,
+          child: Dialog(
+            elevation: 1,
+            insetPadding: const EdgeInsets.symmetric(horizontal: AppPaddings.padding_16),
+            child: Padding(
+              padding: const EdgeInsets.all(AppPaddings.padding_16),
+              child: ExplanationArea(
+                isCorrect: isCorrectlyAnswered,
+                explanationText: AppStrings.geoPositionResult(distanceFromTarget),
+                action: () => _proceedQuiz(),
+                isMinHeight: true,
+              ),
             ),
           ),
         );
@@ -208,6 +205,7 @@ class MapScreenState extends State<MapScreen> {
 
   void _proceedQuiz() {
     if (widget.mapContentModel.length > (questionStore.numbQuestion + 1)) {
+      isCorrectlyAnswered = false;
       hintDialogStore.resetHint();
       questionStore.nextQuestion();
       Navigator.of(context).pop();
