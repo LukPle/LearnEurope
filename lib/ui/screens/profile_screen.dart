@@ -39,6 +39,46 @@ class ProfileScreen extends StatelessWidget {
     return (doc['totalPoints'] as int);
   }
 
+  Future<List<double>> _fetchCategoryProgress() async {
+    final DatabaseServices dbServices = DatabaseServices();
+
+    final List<Map<String, String>> categories = [
+      {
+        'quizCollection': FirebaseConstants.europe101QuizCollection,
+        'historyCollection': FirebaseConstants.europe101HistoryCollection
+      },
+      {
+        'quizCollection': FirebaseConstants.languagesQuizCollection,
+        'historyCollection': FirebaseConstants.languagesHistoryCollection
+      },
+      {
+        'quizCollection': FirebaseConstants.countryBordersQuizCollection,
+        'historyCollection': FirebaseConstants.countryBordersHistoryCollection
+      },
+      {
+        'quizCollection': FirebaseConstants.geoPositionQuizCollection,
+        'historyCollection': FirebaseConstants.geoPositionHistoryCollection
+      },
+    ];
+
+    List<double> categoryProgress = [];
+
+    for (Map<String, String> category in categories) {
+      List<DocumentSnapshot> allQuizzes = await dbServices.getAllDocuments(collection: category['quizCollection']!);
+      List<DocumentSnapshot> completedQuizzes = await dbServices.getDocumentsByAttribute(
+        collection: category['historyCollection']!,
+        field: 'user_id',
+        value: getIt<UserStore>().userId.toString(),
+      );
+
+      double progress = allQuizzes.isEmpty ? 1.0 : completedQuizzes.length / allQuizzes.length;
+
+      categoryProgress.add(progress);
+    }
+
+    return categoryProgress;
+  }
+
   @override
   Widget build(BuildContext context) {
     final DatabaseServices dbServices = DatabaseServices();
@@ -122,7 +162,7 @@ class ProfileScreen extends StatelessWidget {
                                 FutureBuilder(
                                   future: _fetchTotalPoints(),
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                    if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError) {
                                       return const Center(
                                         child: SizedBox.shrink(),
                                       );
@@ -138,7 +178,25 @@ class ProfileScreen extends StatelessWidget {
                                   style: AppTextStyles.profileSectionTitles,
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
-                                const CategoriesProgressAnalytics(),
+                                FutureBuilder(
+                                  future: _fetchCategoryProgress(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting ||
+                                        snapshot.hasError ||
+                                        !snapshot.hasData ||
+                                        snapshot.data!.isEmpty) {
+                                      return const SizedBox.shrink();
+                                    } else {
+                                      final List<double> categoryProgress = snapshot.data!;
+                                      return CategoriesProgressAnalytics(
+                                        progressEurope101: categoryProgress[0],
+                                        progressLanguages: categoryProgress[1],
+                                        progressCountryBorders: categoryProgress[2],
+                                        progressGeoPosition: categoryProgress[3],
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),

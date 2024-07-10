@@ -6,21 +6,32 @@ import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 
 class CategoriesProgressAnalytics extends StatelessWidget {
-  const CategoriesProgressAnalytics({super.key});
+  const CategoriesProgressAnalytics({
+    super.key,
+    required this.progressEurope101,
+    required this.progressLanguages,
+    required this.progressCountryBorders,
+    required this.progressGeoPosition,
+  });
+
+  final double progressEurope101;
+  final double progressLanguages;
+  final double progressCountryBorders;
+  final double progressGeoPosition;
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(AppPaddings.padding_8),
+    return Padding(
+      padding: const EdgeInsets.all(AppPaddings.padding_8),
       child: Column(
         children: [
-          CategoryProgressRow(category: Category.europe101, progress: 0.75),
-          SizedBox(height: AppPaddings.padding_16),
-          CategoryProgressRow(category: Category.languages, progress: 0.60),
-          SizedBox(height: AppPaddings.padding_16),
-          CategoryProgressRow(category: Category.countryBorders, progress: 0.45),
-          SizedBox(height: AppPaddings.padding_16),
-          CategoryProgressRow(category: Category.geoPosition, progress: 0.90),
+          CategoryProgressRow(category: Category.europe101, progress: progressEurope101),
+          const SizedBox(height: AppPaddings.padding_16),
+          CategoryProgressRow(category: Category.languages, progress: progressLanguages),
+          const SizedBox(height: AppPaddings.padding_16),
+          CategoryProgressRow(category: Category.countryBorders, progress: progressCountryBorders),
+          const SizedBox(height: AppPaddings.padding_16),
+          CategoryProgressRow(category: Category.geoPosition, progress: progressGeoPosition),
         ],
       ),
     );
