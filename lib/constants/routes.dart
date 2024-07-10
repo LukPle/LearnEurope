@@ -2,12 +2,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/tab_selector.dart';
 import 'package:learn_europe/ui/screens/drag_and_drop_screen.dart';
 import 'package:learn_europe/ui/screens/loading_screen.dart';
 import 'package:learn_europe/ui/screens/login_screen.dart';
+import 'package:learn_europe/ui/screens/map_screen.dart';
 import 'package:learn_europe/ui/screens/multiple_choice_screen.dart';
 import 'package:learn_europe/ui/screens/quiz_selection_screen.dart';
 import 'package:learn_europe/ui/screens/result_screen.dart';
@@ -22,6 +24,7 @@ const String tabSelector = 'tab_selector';
 const String quizSelection = 'quiz_selection';
 const String multipleChoice = 'multiple_choice';
 const String dragAndDrop = 'drag_and_drop';
+const String map = 'map';
 const String result = 'result';
 
 Route<dynamic> generateRoute(RouteSettings destination) {
@@ -72,6 +75,13 @@ Route<dynamic> generateRoute(RouteSettings destination) {
       return MaterialPageRoute(
         settings: destination,
         builder: (context) => DragAndDropScreen(dragAndDropContentModel: dragAndDropContentModel),
+      );
+    case map:
+      final mapContentModel = destination.arguments as List<MapContentModel>;
+      mapContentModel.shuffle(Random());
+      return MaterialPageRoute(
+        settings: destination,
+        builder: (context) => MapScreen(mapContentModel: mapContentModel),
       );
     case result:
       final resultContent = destination.arguments as ResultContentModel;

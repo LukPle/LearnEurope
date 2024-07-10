@@ -11,16 +11,19 @@ class ExplanationArea extends StatelessWidget {
     required this.isCorrect,
     required this.explanationText,
     required this.action,
+    this.isMinHeight = false,
   });
 
   final bool isCorrect;
   final String explanationText;
   final VoidCallback action;
+  final bool isMinHeight;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: isMinHeight ? MainAxisSize.min : MainAxisSize.max,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +47,7 @@ class ExplanationArea extends StatelessWidget {
             Text(explanationText),
           ],
         ),
-        const SizedBox(height: AppPaddings.padding_8),
+        const SizedBox(height: AppPaddings.padding_24),
         CtaButton.primary(onPressed: () => action(), label: AppStrings.continueButton),
       ],
     );

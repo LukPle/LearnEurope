@@ -9,7 +9,9 @@ import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
 import 'package:learn_europe/models/europe101_question_model.dart';
+import 'package:learn_europe/models/geo_position_question_model.dart';
 import 'package:learn_europe/models/languages_question_model.dart';
+import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/quiz_history_model.dart';
 import 'package:learn_europe/models/quiz_model.dart';
@@ -91,34 +93,75 @@ class QuizSelectionScreen extends StatelessWidget {
     return quizSelectionContent;
   }
 
-  Future<List<dynamic>> _fetchQuestions() async {
+  Future<List<String>> _fetchQuestionList(String quizId) async {
     final DatabaseServices dbServices = DatabaseServices();
     String collection;
 
     switch (category) {
       case Category.europe101:
+        collection = FirebaseConstants.europe101QuizCollection;
+        break;
+      case Category.languages:
+        collection = FirebaseConstants.languagesQuizCollection;
+        break;
+      case Category.countryBorders:
+        collection = FirebaseConstants.countryBordersQuizCollection;
+        break;
+      case Category.geoPosition:
+        collection = FirebaseConstants.geoPositionQuizCollection;
+        break;
+    }
+
+    final doc = await dbServices.getDocument(collection: collection, docId: quizId);
+    return List<String>.from(doc['questions']);
+  }
+
+  Future<List<dynamic>> _fetchQuestions(String quizId) async {
+    final DatabaseServices dbServices = DatabaseServices();
+    String collection;
+
+    List<String> questionIds = await _fetchQuestionList(quizId);
+
+    switch (category) {
+      case Category.europe101:
         collection = FirebaseConstants.europe101QuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => Europe101QuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<Europe101QuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(Europe101QuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.languages:
         collection = FirebaseConstants.languagesQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => LanguagesQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<LanguagesQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(LanguagesQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.countryBorders:
         collection = FirebaseConstants.countryBordersQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return docs.map((doc) => CountryBordersQuestionModel.fromMap(doc.data() as Map<String, dynamic>)).toList();
+        List<CountryBordersQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(CountryBordersQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
       case Category.geoPosition:
         collection = FirebaseConstants.geoPositionQuestionsCollection;
-        final docs = await dbServices.getAllDocuments(collection: collection);
-        return [];
+        List<GeoPositionQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(GeoPositionQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
     }
   }
 
   Future<void> _navigateToQuestions(BuildContext context, String quizId, int pointsPerQuestion, int hintMinus) async {
     switch (category) {
       case Category.europe101:
-        List<Europe101QuestionModel> europe101Questions = await _fetchQuestions() as List<Europe101QuestionModel>;
+        List<Europe101QuestionModel> europe101Questions = await _fetchQuestions(quizId) as List<Europe101QuestionModel>;
 
         List<DragAndDropContentModel> dragAndDropContentModel = [];
 
@@ -142,7 +185,7 @@ class QuizSelectionScreen extends StatelessWidget {
         }
         break;
       case Category.languages:
-        List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions() as List<LanguagesQuestionModel>;
+        List<LanguagesQuestionModel> languagesQuestions = await _fetchQuestions(quizId) as List<LanguagesQuestionModel>;
 
         List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -170,7 +213,7 @@ class QuizSelectionScreen extends StatelessWidget {
         break;
       case Category.countryBorders:
         List<CountryBordersQuestionModel> countryBordersQuestions =
-            await _fetchQuestions() as List<CountryBordersQuestionModel>;
+            await _fetchQuestions(quizId) as List<CountryBordersQuestionModel>;
 
         List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -196,6 +239,29 @@ class QuizSelectionScreen extends StatelessWidget {
         }
         break;
       case Category.geoPosition:
+        List<GeoPositionQuestionModel> geoPositionsQuestions =
+            await _fetchQuestions(quizId) as List<GeoPositionQuestionModel>;
+
+        List<MapContentModel> mapContentModels = [];
+
+        for (var question in geoPositionsQuestions) {
+          mapContentModels.add(
+            MapContentModel(
+              quizCategory: category,
+              quizId: quizId,
+              question: question.question,
+              latitude: question.latitude,
+              longitude: question.longitude,
+              allowedKmDifference: question.allowedKmDifference,
+              pointsPerQuestion: pointsPerQuestion,
+              hint: question.hint,
+              hintMinus: hintMinus,
+            ),
+          );
+        }
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(routes.map, arguments: mapContentModels);
+        }
         break;
     }
   }
