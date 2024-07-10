@@ -13,6 +13,7 @@ import 'package:learn_europe/stores/map_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
+import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
@@ -87,7 +88,13 @@ class MapScreenState extends State<MapScreen> {
                       markers: [
                         Marker(
                           point: mapStore.selectedLocation!,
-                          child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+                          child: Icon(
+                            Icons.location_on,
+                            color: MediaQuery.of(context).platformBrightness == Brightness.light
+                                ? AppColors.primaryColorLight
+                                : AppColors.primaryColorDark,
+                            size: 40,
+                          ),
                         ),
                       ],
                     ),
@@ -104,25 +111,35 @@ class MapScreenState extends State<MapScreen> {
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(color: Colors.black12),
                       ),
-                      child: Text(
-                        widget.mapContentModel[questionStore.numbQuestion].question,
-                        style: AppTextStyles.questionTextStyle,
+                      child: Column(
+                        children: [
+                          Text('Question ${questionStore.numbQuestion + 1} / ${widget.mapContentModel.length}'),
+                          const SizedBox(height: AppPaddings.padding_8),
+                          Text(
+                            widget.mapContentModel[questionStore.numbQuestion].question,
+                            style: AppTextStyles.questionTextStyle,
+                          ),
+                          const SizedBox(height: AppPaddings.padding_8),
+                          Text(
+                            AppStrings.geoPositionAllowedRadius(
+                                widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference),
+                          ),
+                        ],
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    left: AppPaddings.padding_16,
+                    right: AppPaddings.padding_16,
+                    bottom: AppPaddings.padding_48,
+                    child: CtaButton.primary(
+                      onPressed: mapStore.selectedLocation != null ? () => _calculateDistance() : null,
+                      label: AppStrings.geoPositionCheckButton,
                     ),
                   ),
                 ],
               ),
             ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: mapStore.selectedLocation != null ? () => _calculateDistance() : null,
-            backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
-                ? AppColors.primaryColorLight
-                : AppColors.primaryColorDark,
-            child: Icon(
-              Icons.check,
-              color: MediaQuery.of(context).platformBrightness == Brightness.light ? Colors.white : Colors.black,
-            ),
           ),
         );
       },
@@ -142,7 +159,9 @@ class MapScreenState extends State<MapScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text('Distance from target: ${(distance / 1000).toStringAsFixed(2)} km'),
+          content: Text(
+            AppStrings.geoPositionResult(distance / 1000),
+          ),
         );
       },
     );

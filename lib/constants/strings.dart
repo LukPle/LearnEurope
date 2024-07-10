@@ -91,6 +91,15 @@ class AppStrings {
   static const String selectionPane = 'Drop your answer(s) here';
   static const String submitSelectionButton = 'Submit selection';
   static const String textToSpeechFail = 'Sorry, audio output not possible';
+  static const String geoPositionCheckButton = 'Check position';
+
+  static String geoPositionAllowedRadius(int allowedDifferenceInKm) {
+    return 'Search for the target in a $allowedDifferenceInKm km radius';
+  }
+
+  static String geoPositionResult(double distance) {
+    return 'Distance from target: ${distance.toStringAsFixed(2)} km';
+  }
 
   /// Hint Dialog Strings
   static const String hintDialogTitle = 'Do you need a hint?';
