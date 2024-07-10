@@ -85,7 +85,9 @@ class MapScreenState extends State<MapScreen> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png',
+                    urlTemplate: MediaQuery.of(context).platformBrightness == Brightness.light
+                        ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}.png'
+                        : 'https://{s}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                   ),
                   if (mapStore.selectedLocation != null)
@@ -112,7 +114,7 @@ class MapScreenState extends State<MapScreen> {
                       decoration: BoxDecoration(
                         color: MediaQuery.of(context).platformBrightness == Brightness.light
                             ? AppColors.lightBackground
-                            : AppColors.darkBackground,
+                            : AppColors.darkCard,
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(color: Colors.black12),
                       ),
