@@ -155,7 +155,8 @@ class MapScreenState extends State<MapScreen> {
                                 const SizedBox(height: AppPaddings.padding_8),
                                 Text(
                                   AppStrings.geoPositionAllowedRadius(
-                                      widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference),
+                                    widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference,
+                                  ),
                                 ),
                               ],
                             ),
