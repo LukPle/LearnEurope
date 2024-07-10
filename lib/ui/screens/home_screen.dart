@@ -111,6 +111,7 @@ class HomeScreen extends StatelessWidget {
         latitude: 52.520008,
         longitude: 13.404954,
         allowedKmDifference: 25,
+        pointsPerQuestion: 20,
         hint: 'THE HINT',
         hintMinus: -20,
       ),

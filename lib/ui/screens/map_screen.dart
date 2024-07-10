@@ -8,6 +8,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/models/map_content_model.dart';
+import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/map_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
@@ -31,8 +32,9 @@ class MapScreenState extends State<MapScreen> {
   final QuestionStore questionStore = QuestionStore();
   final MapStore mapStore = MapStore();
   final HintDialogStore hintDialogStore = HintDialogStore();
+  int score = 0;
 
-  void _onTap(TapPosition tapPosition, LatLng location) {
+  void _onMapTap(TapPosition tapPosition, LatLng location) {
     mapStore.setLocation(location);
   }
 
@@ -76,7 +78,7 @@ class MapScreenState extends State<MapScreen> {
                 options: MapOptions(
                   initialCenter: const LatLng(51.255, 10.528),
                   initialZoom: 5.0,
-                  onTap: _onTap,
+                  onTap: _onMapTap,
                 ),
                 children: [
                   TileLayer(
@@ -133,7 +135,7 @@ class MapScreenState extends State<MapScreen> {
                     right: AppPaddings.padding_16,
                     bottom: AppPaddings.padding_48,
                     child: CtaButton.primary(
-                      onPressed: mapStore.selectedLocation != null ? () => _calculateDistance() : null,
+                      onPressed: mapStore.selectedLocation != null ? () => _validateAnswerAndProceedQuiz() : null,
                       label: AppStrings.geoPositionCheckButton,
                     ),
                   ),
@@ -146,24 +148,81 @@ class MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _calculateDistance() {
+  void _validateAnswerAndProceedQuiz() {
+    double distanceFromTarget = _calculateDistance();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          elevation: 1,
+          insetPadding: const EdgeInsets.symmetric(horizontal: AppPaddings.padding_16),
+          content: Padding(
+            padding: const EdgeInsets.all(AppPaddings.padding_16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  AppStrings.geoPositionResult(distanceFromTarget),
+                ),
+                const SizedBox(height: AppPaddings.padding_24),
+                CtaButton.primary(
+                  onPressed: () => {
+                    if (distanceFromTarget.ceil() <=
+                        widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference)
+                      {
+                        _calculateScore(),
+                      },
+                    _proceedQuiz(),
+                  },
+                  label: AppStrings.continueButton,
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  double _calculateDistance() {
     LatLng targetLocation = widget.mapContentModel[questionStore.numbQuestion].latLng;
-    final distance = Geolocator.distanceBetween(
+    double distanceInMeter = Geolocator.distanceBetween(
       mapStore.selectedLocation!.latitude,
       mapStore.selectedLocation!.longitude,
       targetLocation.latitude,
       targetLocation.longitude,
     );
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Text(
-            AppStrings.geoPositionResult(distance / 1000),
-          ),
-        );
-      },
-    );
+    return distanceInMeter / 1000;
+  }
+
+  void _calculateScore() {
+    if (hintDialogStore.isHintRevealed) {
+      score += (widget.mapContentModel[questionStore.numbQuestion].pointsPerQuestion +
+          widget.mapContentModel[questionStore.numbQuestion].hintMinus);
+    } else {
+      score += widget.mapContentModel[questionStore.numbQuestion].pointsPerQuestion;
+    }
+  }
+
+  void _proceedQuiz() {
+    if (widget.mapContentModel.length > (questionStore.numbQuestion + 1)) {
+      hintDialogStore.resetHint();
+      questionStore.nextQuestion();
+      Navigator.of(context).pop();
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        routes.result,
+        (Route<dynamic> route) => false,
+        arguments: ResultContentModel(
+          quizCategory: widget.mapContentModel.first.quizCategory,
+          quizId: widget.mapContentModel.first.quizId,
+          numbQuestions: widget.mapContentModel.length,
+          earnedScore: score,
+          availableScore: (widget.mapContentModel.length * widget.mapContentModel.first.pointsPerQuestion),
+        ),
+      );
+    }
   }
 }

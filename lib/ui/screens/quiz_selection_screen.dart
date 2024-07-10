@@ -253,6 +253,7 @@ class QuizSelectionScreen extends StatelessWidget {
               latitude: question.latitude,
               longitude: question.longitude,
               allowedKmDifference: question.allowedKmDifference,
+              pointsPerQuestion: pointsPerQuestion,
               hint: question.hint,
               hintMinus: hintMinus,
             ),

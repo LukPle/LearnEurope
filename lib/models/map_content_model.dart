@@ -9,6 +9,7 @@ class MapContentModel {
   double longitude;
   LatLng latLng;
   int allowedKmDifference;
+  int pointsPerQuestion;
   String hint;
   int hintMinus;
 
@@ -19,6 +20,7 @@ class MapContentModel {
     required this.latitude,
     required this.longitude,
     required this.allowedKmDifference,
+    required this.pointsPerQuestion,
     required this.hint,
     required this.hintMinus,
   })  : latLng = LatLng(latitude, longitude);
