@@ -3,6 +3,7 @@ import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/network/service_locator.dart';
@@ -101,7 +102,20 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _navigateToMap(BuildContext context) {
-    Navigator.of(context).pushNamed(routes.map);
+    List<MapContentModel> mapContentModels = [];
+    mapContentModels.add(
+      MapContentModel(
+        quizCategory: Category.geoPosition,
+        quizId: '477b7thbffHG',
+        question: 'Mark the capital of Germany',
+        latitude: 52.520008,
+        longitude: 13.404954,
+        allowedKmDifference: 25,
+        hint: 'THE HINT',
+        hintMinus: -20,
+      ),
+    );
+    Navigator.of(context).pushNamed(routes.map, arguments: mapContentModels);
   }
 
   void _navigateToResult(BuildContext context) {

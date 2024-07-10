@@ -9,7 +9,9 @@ import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/enums/quiz_list_filter_enum.dart';
 import 'package:learn_europe/models/europe101_question_model.dart';
+import 'package:learn_europe/models/geo_position_question_model.dart';
 import 'package:learn_europe/models/languages_question_model.dart';
+import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/quiz_history_model.dart';
 import 'package:learn_europe/models/quiz_model.dart';
@@ -147,7 +149,12 @@ class QuizSelectionScreen extends StatelessWidget {
         return questions;
       case Category.geoPosition:
         collection = FirebaseConstants.geoPositionQuestionsCollection;
-        return [];
+        List<GeoPositionQuestionModel> questions = [];
+        for (String id in questionIds) {
+          final doc = await dbServices.getDocument(collection: collection, docId: id);
+          questions.add(GeoPositionQuestionModel.fromMap(doc.data() as Map<String, dynamic>));
+        }
+        return questions;
     }
   }
 
@@ -232,6 +239,28 @@ class QuizSelectionScreen extends StatelessWidget {
         }
         break;
       case Category.geoPosition:
+        List<GeoPositionQuestionModel> geoPositionsQuestions =
+            await _fetchQuestions(quizId) as List<GeoPositionQuestionModel>;
+
+        List<MapContentModel> mapContentModels = [];
+
+        for (var question in geoPositionsQuestions) {
+          mapContentModels.add(
+            MapContentModel(
+              quizCategory: category,
+              quizId: quizId,
+              question: question.question,
+              latitude: question.latitude,
+              longitude: question.longitude,
+              allowedKmDifference: question.allowedKmDifference,
+              hint: question.hint,
+              hintMinus: hintMinus,
+            ),
+          );
+        }
+        if (context.mounted) {
+          Navigator.of(context).pushNamed(routes.map, arguments: mapContentModels);
+        }
         break;
     }
   }
