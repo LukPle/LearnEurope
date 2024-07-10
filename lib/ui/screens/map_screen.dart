@@ -29,13 +29,30 @@ class MapScreen extends StatefulWidget {
 }
 
 class MapScreenState extends State<MapScreen> {
-  final MapController mapController = MapController();
   final QuestionStore questionStore = QuestionStore();
   final MapStore mapStore = MapStore();
   final HintDialogStore hintDialogStore = HintDialogStore();
+  late final MapController mapController;
 
   int score = 0;
   bool isCorrectlyAnswered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mapController = MapController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mapStore.setMapReady();
+      mapStore.setRotation(mapController.camera.rotation != 0);
+    });
+  }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    mapStore.resetMapReady();
+    super.dispose();
+  }
 
   void _onMapTap(TapPosition tapPosition, LatLng location) {
     mapStore.setLocation(location);
@@ -81,7 +98,13 @@ class MapScreenState extends State<MapScreen> {
                 options: MapOptions(
                   initialCenter: const LatLng(51.255, 10.528),
                   initialZoom: 5.0,
+                  maxZoom: 7.5,
                   onTap: _onMapTap,
+                  onMapEvent: (MapEvent event) {
+                    if (event is MapEventRotateEnd) {
+                      mapStore.setRotation(mapController.camera.rotation != 0);
+                    }
+                  },
                 ),
                 children: [
                   TileLayer(
@@ -105,34 +128,68 @@ class MapScreenState extends State<MapScreen> {
                         ),
                       ],
                     ),
-                  Positioned(
-                    top: AppPaddings.padding_16,
-                    left: AppPaddings.padding_16,
-                    right: AppPaddings.padding_16,
-                    child: Container(
-                      padding: const EdgeInsets.all(AppPaddings.padding_12),
-                      decoration: BoxDecoration(
-                        color: MediaQuery.of(context).platformBrightness == Brightness.light
-                            ? AppColors.lightBackground
-                            : AppColors.darkCard,
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: Colors.black12),
-                      ),
-                      child: Column(
-                        children: [
-                          Text('Question ${questionStore.numbQuestion + 1} / ${widget.mapContentModel.length}'),
-                          const SizedBox(height: AppPaddings.padding_8),
-                          Text(
-                            widget.mapContentModel[questionStore.numbQuestion].question,
-                            style: AppTextStyles.questionTextStyle,
+                  Positioned.fill(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(AppPaddings.padding_16),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(AppPaddings.padding_12),
+                            decoration: BoxDecoration(
+                              color: MediaQuery.of(context).platformBrightness == Brightness.light
+                                  ? AppColors.lightBackground
+                                  : AppColors.darkCard,
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(color: Colors.black12),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Question ${questionStore.numbQuestion + 1} / ${widget.mapContentModel.length}'),
+                                const SizedBox(height: AppPaddings.padding_8),
+                                Text(
+                                  widget.mapContentModel[questionStore.numbQuestion].question,
+                                  style: AppTextStyles.questionTextStyle,
+                                ),
+                                const SizedBox(height: AppPaddings.padding_8),
+                                Text(
+                                  AppStrings.geoPositionAllowedRadius(
+                                      widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference),
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: AppPaddings.padding_8),
-                          Text(
-                            AppStrings.geoPositionAllowedRadius(
-                                widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference),
+                        ),
+                        if (mapStore.isMapReady)
+                          Padding(
+                            padding: const EdgeInsets.only(right: AppPaddings.padding_16),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: FloatingActionButton(
+                                mini: true,
+                                elevation: 1,
+                                backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
+                                    ? mapStore.isRotated
+                                        ? AppColors.primaryColorLight
+                                        : AppColors.accentColorLight
+                                    : mapStore.isRotated
+                                        ? AppColors.primaryColorDark
+                                        : AppColors.accentColorDark,
+                                onPressed: () => {
+                                  mapController.rotate(0),
+                                  mapStore.setRotation(false),
+                                },
+                                child: Icon(
+                                  Icons.explore,
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.light
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                   Positioned(
