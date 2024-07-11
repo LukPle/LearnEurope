@@ -10,7 +10,7 @@ import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
-import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';

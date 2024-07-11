@@ -41,6 +41,22 @@ mixin _$MapStore on _MapStore, Store {
     });
   }
 
+  late final _$isZoomedInOutAtom =
+      Atom(name: '_MapStore.isZoomedInOut', context: context);
+
+  @override
+  bool get isZoomedInOut {
+    _$isZoomedInOutAtom.reportRead();
+    return super.isZoomedInOut;
+  }
+
+  @override
+  set isZoomedInOut(bool value) {
+    _$isZoomedInOutAtom.reportWrite(value, super.isZoomedInOut, () {
+      super.isZoomedInOut = value;
+    });
+  }
+
   late final _$selectedLocationAtom =
       Atom(name: '_MapStore.selectedLocation', context: context);
 
@@ -105,10 +121,22 @@ mixin _$MapStore on _MapStore, Store {
   }
 
   @override
+  void setZoom(bool isZoomedInOut) {
+    final _$actionInfo =
+        _$_MapStoreActionController.startAction(name: '_MapStore.setZoom');
+    try {
+      return super.setZoom(isZoomedInOut);
+    } finally {
+      _$_MapStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isMapReady: ${isMapReady},
 isRotated: ${isRotated},
+isZoomedInOut: ${isZoomedInOut},
 selectedLocation: ${selectedLocation}
     ''';
   }

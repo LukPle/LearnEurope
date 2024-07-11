@@ -5,7 +5,7 @@ import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/leaderboard_entry_model.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
-import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
 import 'package:learn_europe/ui/components/leaderboard_card.dart';

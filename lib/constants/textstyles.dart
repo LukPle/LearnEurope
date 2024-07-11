@@ -7,6 +7,8 @@ class AppTextStyles {
 
   static const TextStyle standardTitleTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
+  static const TextStyle sectionTitleTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+
   static TextStyle pageHeadlineTextStyle = const TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static TextStyle bottomNavigationActive = const TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
@@ -69,8 +71,6 @@ class AppTextStyles {
   }
 
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
-
-  static const TextStyle profileSectionTitles = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 
   static const scoreAndActivityTextStyle = TextStyle(fontWeight: FontWeight.w500);
 }

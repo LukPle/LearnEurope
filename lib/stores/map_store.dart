@@ -13,6 +13,9 @@ abstract class _MapStore with Store {
   bool isRotated = false;
 
   @observable
+  bool isZoomedInOut = false;
+
+  @observable
   LatLng? selectedLocation;
 
   @action
@@ -33,5 +36,10 @@ abstract class _MapStore with Store {
   @action
   void setRotation(bool isRotated) {
     this.isRotated = isRotated;
+  }
+
+  @action
+  void setZoom(bool isZoomedInOut) {
+    this.isZoomedInOut = isZoomedInOut;
   }
 }

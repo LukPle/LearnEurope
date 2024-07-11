@@ -7,7 +7,7 @@ import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
 import 'package:learn_europe/network/db_services.dart';
 import 'package:learn_europe/network/firebase_constants.dart';
-import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
@@ -156,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                                 const SizedBox(height: AppPaddings.padding_16),
                                 const Text(
                                   AppStrings.scoreAndActivityAnalyticsTitle,
-                                  style: AppTextStyles.profileSectionTitles,
+                                  style: AppTextStyles.sectionTitleTextStyle,
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 FutureBuilder(
@@ -175,7 +175,7 @@ class ProfileScreen extends StatelessWidget {
                                 const SizedBox(height: AppPaddings.padding_24),
                                 const Text(
                                   AppStrings.categoriesAnalyticsTitle,
-                                  style: AppTextStyles.profileSectionTitles,
+                                  style: AppTextStyles.sectionTitleTextStyle,
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 FutureBuilder(

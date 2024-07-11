@@ -34,6 +34,7 @@ class MapScreenState extends State<MapScreen> {
   final HintDialogStore hintDialogStore = HintDialogStore();
   late final MapController mapController;
 
+  LatLng centerOfGermany = const LatLng(51.255, 10.528);
   int score = 0;
   bool isCorrectlyAnswered = false;
 
@@ -96,13 +97,19 @@ class MapScreenState extends State<MapScreen> {
               FlutterMap(
                 mapController: mapController,
                 options: MapOptions(
-                  initialCenter: const LatLng(51.255, 10.528),
+                  initialCenter: centerOfGermany,
                   initialZoom: 5.0,
-                  maxZoom: 7.5,
+                  minZoom: 2.5,
                   onTap: _onMapTap,
                   onMapEvent: (MapEvent event) {
-                    if (event is MapEventRotateEnd) {
+                    if (event is MapEventRotateStart) {
                       mapStore.setRotation(mapController.camera.rotation != 0);
+                    }
+                    if (event is MapEventDoubleTapZoom) {
+                      mapStore.setZoom(mapController.camera.zoom != 5.0);
+                    }
+                    if (event is MapEventMoveStart) {
+                      mapStore.setZoom(mapController.camera.zoom != 5.0);
                     }
                   },
                 ),
@@ -146,17 +153,22 @@ class MapScreenState extends State<MapScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text('Question ${questionStore.numbQuestion + 1} / ${widget.mapContentModel.length}'),
+                                Text(
+                                  'Question ${questionStore.numbQuestion + 1} / ${widget.mapContentModel.length}',
+                                  textAlign: TextAlign.center,
+                                ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 Text(
                                   widget.mapContentModel[questionStore.numbQuestion].question,
                                   style: AppTextStyles.questionTextStyle,
+                                  textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 Text(
                                   AppStrings.geoPositionAllowedRadius(
                                     widget.mapContentModel[questionStore.numbQuestion].allowedKmDifference,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -168,6 +180,7 @@ class MapScreenState extends State<MapScreen> {
                             child: Align(
                               alignment: Alignment.topRight,
                               child: FloatingActionButton(
+                                heroTag: 'rotationButton',
                                 mini: true,
                                 elevation: 1,
                                 backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
@@ -183,6 +196,35 @@ class MapScreenState extends State<MapScreen> {
                                 },
                                 child: Icon(
                                   Icons.explore,
+                                  color: MediaQuery.of(context).platformBrightness == Brightness.light
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (mapStore.isMapReady)
+                          Padding(
+                            padding: const EdgeInsets.only(top: AppPaddings.padding_8, right: AppPaddings.padding_16),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: FloatingActionButton(
+                                heroTag: 'zoomButton',
+                                mini: true,
+                                elevation: 1,
+                                backgroundColor: MediaQuery.of(context).platformBrightness == Brightness.light
+                                    ? mapStore.isZoomedInOut
+                                        ? AppColors.primaryColorLight
+                                        : AppColors.accentColorLight
+                                    : mapStore.isZoomedInOut
+                                        ? AppColors.primaryColorDark
+                                        : AppColors.accentColorDark,
+                                onPressed: () => {
+                                  mapController.move(centerOfGermany, 5.0),
+                                  mapStore.setZoom(false),
+                                },
+                                child: Icon(
+                                  Icons.zoom_out_map,
                                   color: MediaQuery.of(context).platformBrightness == Brightness.light
                                       ? Colors.white
                                       : Colors.black,
@@ -265,6 +307,7 @@ class MapScreenState extends State<MapScreen> {
 
   void _proceedQuiz() {
     if (widget.mapContentModel.length > (questionStore.numbQuestion + 1)) {
+      mapStore.selectedLocation = null;
       isCorrectlyAnswered = false;
       hintDialogStore.resetHint();
       questionStore.nextQuestion();

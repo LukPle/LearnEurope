@@ -22,7 +22,7 @@ class TabSelectorState extends State<TabSelector> {
   final navigationStore = NavigationStore();
 
   final screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const CategoriesScreen(),
     LeaderboardScreen(),
     const ProfileScreen(),

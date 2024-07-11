@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:learn_europe/network/service_locator.dart';
+import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/util/uuid_generator.dart';
 
