@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
-import 'package:learn_europe/models/enums/difficulties_enum.dart';
 import 'package:learn_europe/network/data_fetching.dart';
 import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
@@ -24,12 +23,31 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: AppPaddings.padding_32),
           Text('Today\'s Quiz', style: AppTextStyles.sectionTitleTextStyle),
           const SizedBox(height: AppPaddings.padding_8),
-          QuizCard(
-            title: 'Quiz',
-            onTap: () => {},
-            quizDifficulty: QuizDifficulty.beginner,
-            numberOfTotalQuestions: 10,
-            pointsPerQuestion: 20,
+          FutureBuilder(
+            future: fetchRandomQuizWithNoHistory(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
+                return const SizedBox.shrink();
+              } else {
+                final quiz = snapshot.data!;
+                return QuizCard(
+                  title: quiz.quizModel.title,
+                  onTap: () => navigateToQuestions(
+                    context,
+                    quiz.category,
+                    quiz.quizModel.id,
+                    quiz.quizModel.pointsPerQuestion,
+                    quiz.quizModel.hintPointsMinus,
+                  ),
+                  quizDifficulty: quiz.quizModel.difficulty,
+                  numberOfTotalQuestions: quiz.quizModel.questions.length,
+                  pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
+                  lastPlaythrough: quiz.quizHistoryModel?.completionDate,
+                  performance: quiz.quizHistoryModel?.performance,
+                  earnedPoints: quiz.quizHistoryModel?.earnedPoints,
+                );
+              }
+            },
           ),
           const SizedBox(height: AppPaddings.padding_16),
           Text('Try Again?', style: AppTextStyles.sectionTitleTextStyle),

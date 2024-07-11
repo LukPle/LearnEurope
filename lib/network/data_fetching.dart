@@ -22,6 +22,26 @@ import 'package:learn_europe/models/leaderboard_entry_model.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
 /// Home Screen
+Future<QuizSelectionContentModel?> fetchRandomQuizWithNoHistory() async {
+  const allCategories = Category.values;
+  List<QuizSelectionContentModel> allQuizzesWithHistory = [];
+
+  for (Category category in allCategories) {
+    List<QuizSelectionContentModel> quizzesWithHistory = await fetchQuizzesWithHistory(category);
+    allQuizzesWithHistory.addAll(quizzesWithHistory);
+  }
+
+  List<QuizSelectionContentModel> quizzesWithNoHistory = allQuizzesWithHistory
+      .where((quiz) => quiz.quizHistoryModel == null)
+      .toList();
+
+  if (quizzesWithNoHistory.isNotEmpty) {
+    return quizzesWithNoHistory[Random().nextInt(quizzesWithNoHistory.length)];
+  } else {
+    return allQuizzesWithHistory[Random().nextInt(allQuizzesWithHistory.length)];
+  }
+}
+
 Future<QuizSelectionContentModel?> fetchQuizWithLowestPerformance() async {
   final dbServices = DatabaseServices();
 
