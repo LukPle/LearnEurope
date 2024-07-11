@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/network/data_fetching.dart';
 import 'package:learn_europe/network/db_services.dart';
-import 'package:learn_europe/network/firebase_constants.dart';
 import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/user_store.dart';
@@ -20,64 +19,6 @@ import 'package:learn_europe/constants/routes.dart' as routes;
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
-
-  Future<DateTime> _fetchUserRegistrationDate() async {
-    final DatabaseServices dbServices = DatabaseServices();
-    final doc = await dbServices.getDocument(
-      collection: FirebaseConstants.usersCollection,
-      docId: getIt<UserStore>().userId.toString(),
-    );
-    return (doc['registrationDate'] as Timestamp).toDate();
-  }
-
-  Future<int> _fetchTotalPoints() async {
-    final DatabaseServices dbServices = DatabaseServices();
-    final doc = await dbServices.getDocument(
-      collection: FirebaseConstants.usersCollection,
-      docId: getIt<UserStore>().userId.toString(),
-    );
-    return (doc['totalPoints'] as int);
-  }
-
-  Future<List<double>> _fetchCategoryProgress() async {
-    final DatabaseServices dbServices = DatabaseServices();
-
-    final List<Map<String, String>> categories = [
-      {
-        'quizCollection': FirebaseConstants.europe101QuizCollection,
-        'historyCollection': FirebaseConstants.europe101HistoryCollection
-      },
-      {
-        'quizCollection': FirebaseConstants.languagesQuizCollection,
-        'historyCollection': FirebaseConstants.languagesHistoryCollection
-      },
-      {
-        'quizCollection': FirebaseConstants.countryBordersQuizCollection,
-        'historyCollection': FirebaseConstants.countryBordersHistoryCollection
-      },
-      {
-        'quizCollection': FirebaseConstants.geoPositionQuizCollection,
-        'historyCollection': FirebaseConstants.geoPositionHistoryCollection
-      },
-    ];
-
-    List<double> categoryProgress = [];
-
-    for (Map<String, String> category in categories) {
-      List<DocumentSnapshot> allQuizzes = await dbServices.getAllDocuments(collection: category['quizCollection']!);
-      List<DocumentSnapshot> completedQuizzes = await dbServices.getDocumentsByAttribute(
-        collection: category['historyCollection']!,
-        field: 'user_id',
-        value: getIt<UserStore>().userId.toString(),
-      );
-
-      double progress = allQuizzes.isEmpty ? 1.0 : completedQuizzes.length / allQuizzes.length;
-
-      categoryProgress.add(progress);
-    }
-
-    return categoryProgress;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: AppPaddings.padding_2),
                                       FutureBuilder<DateTime>(
-                                        future: _fetchUserRegistrationDate(),
+                                        future: fetchUserRegistrationDate(),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState == ConnectionState.waiting) {
                                             return const Center(
@@ -160,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 FutureBuilder(
-                                  future: _fetchTotalPoints(),
+                                  future: fetchTotalPoints(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError) {
                                       return const Center(
@@ -179,7 +120,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 FutureBuilder(
-                                  future: _fetchCategoryProgress(),
+                                  future: fetchCategoryProgress(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting ||
                                         snapshot.hasError ||

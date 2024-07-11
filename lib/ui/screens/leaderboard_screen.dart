@@ -3,8 +3,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/models/leaderboard_entry_model.dart';
-import 'package:learn_europe/network/db_services.dart';
-import 'package:learn_europe/network/firebase_constants.dart';
+import 'package:learn_europe/network/data_fetching.dart';
 import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/alert_snackbar.dart';
@@ -18,33 +17,13 @@ class LeaderboardScreen extends StatelessWidget {
 
   final draggableScrollableController = DraggableScrollableController();
 
-  Future<List<LeaderboardEntryModel>> _fetchLeaderboardEntries() async {
-    final DatabaseServices dbServices = DatabaseServices();
-    final docs = await dbServices.getAllDocuments(collection: FirebaseConstants.usersCollection);
-    List<LeaderboardEntryModel> leaderboardEntries = docs
-        .map((doc) {
-          final data = doc.data() as Map<String, dynamic>;
-          if (data.containsKey('name') && data.containsKey('totalPoints')) {
-            return LeaderboardEntryModel.fromMap(doc.id, data);
-          } else {
-            return null;
-          }
-        })
-        .where((entry) => entry != null)
-        .cast<LeaderboardEntryModel>()
-        .toList();
-
-    leaderboardEntries.sort((a, b) => b.totalPoints.compareTo(a.totalPoints));
-    return leaderboardEntries;
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.height < 700;
     bool isSheetExpanded = false;
 
     return FutureBuilder<List<LeaderboardEntryModel>>(
-      future: _fetchLeaderboardEntries(),
+      future: fetchLeaderboardEntries(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(

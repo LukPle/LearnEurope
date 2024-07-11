@@ -1,17 +1,12 @@
 import 'package:animated_digit/animated_digit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
-import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/result_content_model.dart';
-import 'package:learn_europe/network/db_services.dart';
-import 'package:learn_europe/network/firebase_constants.dart';
-import 'package:learn_europe/service_locator.dart';
-import 'package:learn_europe/stores/user_store.dart';
+import 'package:learn_europe/network/data_fetching.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
@@ -38,8 +33,13 @@ class ResultScreenState extends State<ResultScreen> {
     animatedDigitController = AnimatedDigitController(0);
     performance = widget.resultContentModel.earnedScore / widget.resultContentModel.availableScore;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _fetchAndUpdateTotalPoints();
-      await _saveQuizInHistory();
+      await fetchAndUpdateTotalPoints(widget.resultContentModel.earnedScore);
+      await saveQuizInHistory(
+        widget.resultContentModel.quizCategory,
+        widget.resultContentModel.quizId,
+        performance,
+        widget.resultContentModel.earnedScore,
+      );
     });
   }
 
@@ -48,59 +48,6 @@ class ResultScreenState extends State<ResultScreen> {
     confettiController.dispose();
     animatedDigitController.dispose();
     super.dispose();
-  }
-
-  Future<void> _fetchAndUpdateTotalPoints() async {
-    var data = {
-      'totalPoints': FieldValue.increment(widget.resultContentModel.earnedScore),
-    };
-
-    final DatabaseServices dbServices = DatabaseServices();
-    await dbServices.updateDocument(
-        collection: FirebaseConstants.usersCollection, docId: getIt<UserStore>().userId.toString(), data: data);
-  }
-
-  Future<void> _saveQuizInHistory() async {
-    final DatabaseServices dbServices = DatabaseServices();
-    String collection;
-
-    switch (widget.resultContentModel.quizCategory) {
-      case Category.europe101:
-        collection = FirebaseConstants.europe101HistoryCollection;
-      case Category.languages:
-        collection = FirebaseConstants.languagesHistoryCollection;
-      case Category.countryBorders:
-        collection = FirebaseConstants.countryBordersHistoryCollection;
-      case Category.geoPosition:
-        collection = FirebaseConstants.geoPositionHistoryCollection;
-    }
-
-    final quizHistory = await dbServices.getDocumentsByAttribute(
-      collection: collection,
-      field: 'quiz_id',
-      value: widget.resultContentModel.quizId,
-    );
-
-    var data = {
-      'quiz_id': widget.resultContentModel.quizId,
-      'user_id': getIt<UserStore>().userId,
-      'completion_date': Timestamp.now(),
-      'performance': performance,
-      'earned_points': widget.resultContentModel.earnedScore,
-    };
-
-    if (quizHistory.isNotEmpty) {
-      await dbServices.updateDocument(
-        collection: collection,
-        docId: quizHistory.first.id,
-        data: data,
-      );
-    } else {
-      await dbServices.createDocument(
-        collection: collection,
-        data: data,
-      );
-    }
   }
 
   @override

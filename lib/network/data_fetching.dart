@@ -1,6 +1,7 @@
 import 'db_services.dart';
 import 'firebase_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_europe/models/country_borders_question_model.dart';
 import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
@@ -16,8 +17,10 @@ import 'package:learn_europe/service_locator.dart';
 import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/country_border_question_card.dart';
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/languages_question_card.dart';
+import 'package:learn_europe/models/leaderboard_entry_model.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
+/// Quiz Selection Screen
 Future<List<QuizModel>> _fetchQuizzes(Category category) async {
   final DatabaseServices dbServices = DatabaseServices();
   String collection;
@@ -249,4 +252,138 @@ Future<void> navigateToQuestions(
       }
       break;
   }
+}
+
+/// Result Screen
+Future<void> fetchAndUpdateTotalPoints(int earnedScore) async {
+  var data = {
+    'totalPoints': FieldValue.increment(earnedScore),
+  };
+
+  final DatabaseServices dbServices = DatabaseServices();
+  await dbServices.updateDocument(
+      collection: FirebaseConstants.usersCollection, docId: getIt<UserStore>().userId.toString(), data: data);
+}
+
+Future<void> saveQuizInHistory(Category category, String quizId, double performance, int earnedScore) async {
+  final DatabaseServices dbServices = DatabaseServices();
+  String collection;
+
+  switch (category) {
+    case Category.europe101:
+      collection = FirebaseConstants.europe101HistoryCollection;
+    case Category.languages:
+      collection = FirebaseConstants.languagesHistoryCollection;
+    case Category.countryBorders:
+      collection = FirebaseConstants.countryBordersHistoryCollection;
+    case Category.geoPosition:
+      collection = FirebaseConstants.geoPositionHistoryCollection;
+  }
+
+  final quizHistory = await dbServices.getDocumentsByAttribute(
+    collection: collection,
+    field: 'quiz_id',
+    value: quizId,
+  );
+
+  var data = {
+    'quiz_id': quizId,
+    'user_id': getIt<UserStore>().userId,
+    'completion_date': Timestamp.now(),
+    'performance': performance,
+    'earned_points': earnedScore,
+  };
+
+  if (quizHistory.isNotEmpty) {
+    await dbServices.updateDocument(
+      collection: collection,
+      docId: quizHistory.first.id,
+      data: data,
+    );
+  } else {
+    await dbServices.createDocument(
+      collection: collection,
+      data: data,
+    );
+  }
+}
+
+/// Leaderboard Screen
+Future<List<LeaderboardEntryModel>> fetchLeaderboardEntries() async {
+  final DatabaseServices dbServices = DatabaseServices();
+  final docs = await dbServices.getAllDocuments(collection: FirebaseConstants.usersCollection);
+  List<LeaderboardEntryModel> leaderboardEntries = docs
+      .map((doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    if (data.containsKey('name') && data.containsKey('totalPoints')) {
+      return LeaderboardEntryModel.fromMap(doc.id, data);
+    } else {
+      return null;
+    }
+  })
+      .where((entry) => entry != null)
+      .cast<LeaderboardEntryModel>()
+      .toList();
+
+  leaderboardEntries.sort((a, b) => b.totalPoints.compareTo(a.totalPoints));
+  return leaderboardEntries;
+}
+
+/// Profile Screen
+Future<DateTime> fetchUserRegistrationDate() async {
+  final DatabaseServices dbServices = DatabaseServices();
+  final doc = await dbServices.getDocument(
+    collection: FirebaseConstants.usersCollection,
+    docId: getIt<UserStore>().userId.toString(),
+  );
+  return (doc['registrationDate'] as Timestamp).toDate();
+}
+
+Future<int> fetchTotalPoints() async {
+  final DatabaseServices dbServices = DatabaseServices();
+  final doc = await dbServices.getDocument(
+    collection: FirebaseConstants.usersCollection,
+    docId: getIt<UserStore>().userId.toString(),
+  );
+  return (doc['totalPoints'] as int);
+}
+
+Future<List<double>> fetchCategoryProgress() async {
+  final DatabaseServices dbServices = DatabaseServices();
+
+  final List<Map<String, String>> categories = [
+    {
+      'quizCollection': FirebaseConstants.europe101QuizCollection,
+      'historyCollection': FirebaseConstants.europe101HistoryCollection
+    },
+    {
+      'quizCollection': FirebaseConstants.languagesQuizCollection,
+      'historyCollection': FirebaseConstants.languagesHistoryCollection
+    },
+    {
+      'quizCollection': FirebaseConstants.countryBordersQuizCollection,
+      'historyCollection': FirebaseConstants.countryBordersHistoryCollection
+    },
+    {
+      'quizCollection': FirebaseConstants.geoPositionQuizCollection,
+      'historyCollection': FirebaseConstants.geoPositionHistoryCollection
+    },
+  ];
+
+  List<double> categoryProgress = [];
+
+  for (Map<String, String> category in categories) {
+    List<DocumentSnapshot> allQuizzes = await dbServices.getAllDocuments(collection: category['quizCollection']!);
+    List<DocumentSnapshot> completedQuizzes = await dbServices.getDocumentsByAttribute(
+      collection: category['historyCollection']!,
+      field: 'user_id',
+      value: getIt<UserStore>().userId.toString(),
+    );
+
+    double progress = allQuizzes.isEmpty ? 1.0 : completedQuizzes.length / allQuizzes.length;
+
+    categoryProgress.add(progress);
+  }
+
+  return categoryProgress;
 }
