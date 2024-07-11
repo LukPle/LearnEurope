@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'db_services.dart';
 import 'firebase_constants.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,64 @@ import 'package:learn_europe/ui/components/multiple_choice_question_cards/countr
 import 'package:learn_europe/ui/components/multiple_choice_question_cards/languages_question_card.dart';
 import 'package:learn_europe/models/leaderboard_entry_model.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
+
+/// Home Screen
+Future<QuizSelectionContentModel?> fetchQuizWithLowestPerformance() async {
+  final dbServices = DatabaseServices();
+
+  final historyCollections = [
+    FirebaseConstants.europe101HistoryCollection,
+    FirebaseConstants.languagesHistoryCollection,
+    FirebaseConstants.countryBordersHistoryCollection,
+    FirebaseConstants.geoPositionHistoryCollection,
+  ];
+
+  final quizCollections = [
+    FirebaseConstants.europe101QuizCollection,
+    FirebaseConstants.languagesQuizCollection,
+    FirebaseConstants.countryBordersQuizCollection,
+    FirebaseConstants.geoPositionQuizCollection,
+  ];
+
+  final historyQueries =
+      await Future.wait(historyCollections.map((collection) => dbServices.getAllDocuments(collection: collection)));
+
+  final allHistory = historyQueries
+      .expand((query) => query.map((doc) => QuizHistoryModel.fromMap(doc.data() as Map<String, dynamic>)))
+      .toList();
+  if (allHistory.isEmpty) return null;
+
+  final quizWithLowestPerformance = allHistory.reduce((current, next) {
+    if (next.performance < current.performance) return next;
+    if (next.performance == current.performance && Random().nextBool()) return next;
+    return current;
+  });
+
+  Category? quizCategory;
+  String? quizCollection;
+
+  for (int i = 0; i < historyCollections.length; i++) {
+    final quizCollectionName = quizCollections[i];
+
+    final docs = await dbServices.getAllDocuments(collection: quizCollectionName);
+    if (docs.any((doc) => doc.id == quizWithLowestPerformance.quizId)) {
+      quizCollection = quizCollectionName;
+      quizCategory = Category.values[i];
+      break;
+    }
+  }
+
+  if (quizCollection == null || quizCategory == null) return null;
+
+  final quizDoc = await dbServices.getDocument(collection: quizCollection, docId: quizWithLowestPerformance.quizId);
+  final quiz = QuizModel.fromMap(quizDoc.id, quizDoc.data() as Map<String, dynamic>);
+
+  return QuizSelectionContentModel(
+    category: quizCategory,
+    quizModel: quiz,
+    quizHistoryModel: quizWithLowestPerformance,
+  );
+}
 
 /// Quiz Selection Screen
 Future<List<QuizModel>> _fetchQuizzes(Category category) async {
@@ -70,6 +129,7 @@ Future<List<QuizSelectionContentModel>> fetchQuizzesWithHistory(Category categor
     QuizHistoryModel? matchingHistory = quizHistoryMap[quiz.id];
 
     return QuizSelectionContentModel(
+      category: category,
       quizModel: quiz,
       quizHistoryModel: matchingHistory,
     );
@@ -314,13 +374,13 @@ Future<List<LeaderboardEntryModel>> fetchLeaderboardEntries() async {
   final docs = await dbServices.getAllDocuments(collection: FirebaseConstants.usersCollection);
   List<LeaderboardEntryModel> leaderboardEntries = docs
       .map((doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    if (data.containsKey('name') && data.containsKey('totalPoints')) {
-      return LeaderboardEntryModel.fromMap(doc.id, data);
-    } else {
-      return null;
-    }
-  })
+        final data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey('name') && data.containsKey('totalPoints')) {
+          return LeaderboardEntryModel.fromMap(doc.id, data);
+        } else {
+          return null;
+        }
+      })
       .where((entry) => entry != null)
       .cast<LeaderboardEntryModel>()
       .toList();
