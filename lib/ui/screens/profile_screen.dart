@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const PageHeadline(title: AppStrings.profileTitle),
-              const SizedBox(height: AppPaddings.padding_16),
+              const SizedBox(height: AppPaddings.padding_12),
               Expanded(
                 child: ListFadingShaderWidget(
                   color: MediaQuery.of(context).platformBrightness == Brightness.light

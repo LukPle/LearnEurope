@@ -25,7 +25,7 @@ class ListFadingShaderWidget extends StatelessWidget {
             color.withOpacity(0.5),
             color,
           ],
-          stops: const [0.0, 0.02, 0.025, 0.03, 0.05, 0.95, 0.97, 0.975, 0.98, 1.0],
+          stops: const [0.0, 0.02, 0.025, 0.03, 0.035, 0.965, 0.97, 0.975, 0.98, 1.0],
         ).createShader(rect);
       },
       blendMode: BlendMode.dstOut,
