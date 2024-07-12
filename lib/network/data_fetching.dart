@@ -1,6 +1,4 @@
 import 'dart:math';
-import 'package:learn_europe/models/enums/difficulties_enum.dart';
-
 import 'db_services.dart';
 import 'firebase_constants.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:learn_europe/models/country_borders_question_model.dart';
 import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 import 'package:learn_europe/models/europe101_question_model.dart';
 import 'package:learn_europe/models/geo_position_question_model.dart';
 import 'package:learn_europe/models/languages_question_model.dart';

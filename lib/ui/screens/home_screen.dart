@@ -9,6 +9,7 @@ import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/ui/components/quiz_card.dart';
 import 'package:learn_europe/ui/components/shimmer_container.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -87,9 +88,9 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: AppPaddings.padding_16),
-            const Text('Comming Soon', style: AppTextStyles.sectionTitleTextStyle),
+            const Text('Coming Soon', style: AppTextStyles.sectionTitleTextStyle),
             const SizedBox(height: AppPaddings.padding_8),
-            CtaButton.primary(onPressed: () => {}, label: 'Gaped Text Questions'),
+            CtaButton.primary(onPressed: () => Navigator.of(context).pushNamed(routes.gappedText), label: 'Gapped Text Questions'),
           ],
         ),
       ),

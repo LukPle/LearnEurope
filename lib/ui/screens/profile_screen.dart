@@ -147,6 +147,7 @@ class ProfileScreen extends StatelessWidget {
                             label: AppStrings.logoutButton,
                             loading: ctaButtonLoadingStore.isLoading,
                           ),
+                          const SizedBox(height: AppPaddings.padding_4),
                         ],
                       ),
                     ),

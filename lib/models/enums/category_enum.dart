@@ -1,3 +1,3 @@
 enum Category {
-  europe101, countryBorders, languages, geoPosition
+  europe101, languages, countryBorders, geoPosition
 }
