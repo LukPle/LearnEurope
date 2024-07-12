@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
+
 import 'db_services.dart';
 import 'firebase_constants.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,7 @@ Future<QuizSelectionContentModel?> fetchRandomQuizWithNoHistory() async {
   }
 
   List<QuizSelectionContentModel> quizzesWithNoHistory =
-      allQuizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
+  allQuizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
 
   if (quizzesWithNoHistory.isNotEmpty) {
     return quizzesWithNoHistory[Random().nextInt(quizzesWithNoHistory.length)];
@@ -59,7 +61,7 @@ Future<QuizSelectionContentModel?> fetchQuizWithLowestPerformance() async {
   ];
 
   final historyQueries =
-      await Future.wait(historyCollections.map((collection) => dbServices.getAllDocuments(collection: collection)));
+  await Future.wait(historyCollections.map((collection) => dbServices.getAllDocuments(collection: collection)));
 
   final allHistory = historyQueries
       .expand((query) => query.map((doc) => QuizHistoryModel.fromMap(doc.data() as Map<String, dynamic>)))
@@ -222,12 +224,12 @@ Future<List<dynamic>> _fetchQuestions(Category category, String quizId) async {
   }
 }
 
-Future<void> navigateToQuestions(
-    BuildContext context, Category category, String quizId, int pointsPerQuestion, int hintMinus) async {
+Future<void> navigateToQuestions(BuildContext context, Category category, String quizId, QuizDifficulty difficulty,
+    int pointsPerQuestion, int hintMinus) async {
   switch (category) {
     case Category.europe101:
       List<Europe101QuestionModel> europe101Questions =
-          await _fetchQuestions(category, quizId) as List<Europe101QuestionModel>;
+      await _fetchQuestions(category, quizId) as List<Europe101QuestionModel>;
 
       List<DragAndDropContentModel> dragAndDropContentModel = [];
 
@@ -252,7 +254,7 @@ Future<void> navigateToQuestions(
       break;
     case Category.languages:
       List<LanguagesQuestionModel> languagesQuestions =
-          await _fetchQuestions(category, quizId) as List<LanguagesQuestionModel>;
+      await _fetchQuestions(category, quizId) as List<LanguagesQuestionModel>;
 
       List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -280,7 +282,7 @@ Future<void> navigateToQuestions(
       break;
     case Category.countryBorders:
       List<CountryBordersQuestionModel> countryBordersQuestions =
-          await _fetchQuestions(category, quizId) as List<CountryBordersQuestionModel>;
+      await _fetchQuestions(category, quizId) as List<CountryBordersQuestionModel>;
 
       List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -292,6 +294,7 @@ Future<void> navigateToQuestions(
             questionCardContent: CountryBorderQuestionCard(
               question: question.question,
               imageUrl: question.image_url,
+              difficulty: difficulty,
             ),
             answerOptions: question.answers,
             pointsPerQuestion: pointsPerQuestion,
@@ -307,7 +310,7 @@ Future<void> navigateToQuestions(
       break;
     case Category.geoPosition:
       List<GeoPositionQuestionModel> geoPositionsQuestions =
-          await _fetchQuestions(category, quizId) as List<GeoPositionQuestionModel>;
+      await _fetchQuestions(category, quizId) as List<GeoPositionQuestionModel>;
 
       List<MapContentModel> mapContentModels = [];
 
@@ -393,13 +396,13 @@ Future<List<LeaderboardEntryModel>> fetchLeaderboardEntries() async {
   final docs = await dbServices.getAllDocuments(collection: FirebaseConstants.usersCollection);
   List<LeaderboardEntryModel> leaderboardEntries = docs
       .map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        if (data.containsKey('name') && data.containsKey('totalPoints')) {
-          return LeaderboardEntryModel.fromMap(doc.id, data);
-        } else {
-          return null;
-        }
-      })
+    final data = doc.data() as Map<String, dynamic>;
+    if (data.containsKey('name') && data.containsKey('totalPoints')) {
+      return LeaderboardEntryModel.fromMap(doc.id, data);
+    } else {
+      return null;
+    }
+  })
       .where((entry) => entry != null)
       .cast<LeaderboardEntryModel>()
       .toList();

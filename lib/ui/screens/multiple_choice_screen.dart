@@ -85,7 +85,7 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                     )
                   : GridView.count(
                       crossAxisCount: 2,
-                      childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.65),
+                      childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.55),
                       mainAxisSpacing: AppPaddings.padding_16,
                       crossAxisSpacing: AppPaddings.padding_16,
                       physics: const NeverScrollableScrollPhysics(),

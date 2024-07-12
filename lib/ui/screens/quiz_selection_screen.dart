@@ -119,6 +119,7 @@ class QuizSelectionScreen extends StatelessWidget {
                                                 context,
                                                 category,
                                                 quiz.quizModel.id,
+                                                quiz.quizModel.difficulty,
                                                 quiz.quizModel.pointsPerQuestion,
                                                 quiz.quizModel.hintPointsMinus),
                                             quizDifficulty: quiz.quizModel.difficulty,

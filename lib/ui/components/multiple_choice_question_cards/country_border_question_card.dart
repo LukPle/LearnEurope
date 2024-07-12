@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 import 'dart:math' as math;
 
 class CountryBorderQuestionCard extends StatelessWidget {
@@ -9,10 +10,12 @@ class CountryBorderQuestionCard extends StatelessWidget {
     super.key,
     required this.question,
     required this.imageUrl,
+    required this.difficulty,
   });
 
   final String question;
   final String imageUrl;
+  final QuizDifficulty difficulty;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +23,7 @@ class CountryBorderQuestionCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          question,
+          difficulty == QuizDifficulty.beginner ? question : '$question (rotated)',
           style: AppTextStyles.questionTextStyle,
           textAlign: TextAlign.center,
         ),
@@ -30,7 +33,9 @@ class CountryBorderQuestionCard extends StatelessWidget {
             maxHeight: MediaQuery.of(context).size.height * 0.25,
           ),
           child: Transform.rotate(
-            angle: 0 * (math.pi / 180),
+            angle: difficulty == QuizDifficulty.beginner
+                ? 0 * (math.pi / 180)
+                : math.Random().nextInt(361) * (math.pi / 180),
             child: Image.network(
               imageUrl,
               fit: BoxFit.fitHeight,
