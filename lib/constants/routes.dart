@@ -7,6 +7,7 @@ import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
 import 'package:learn_europe/tab_selector.dart';
 import 'package:learn_europe/ui/screens/drag_and_drop_screen.dart';
+import 'package:learn_europe/ui/screens/gapped_text_screen.dart';
 import 'package:learn_europe/ui/screens/loading_screen.dart';
 import 'package:learn_europe/ui/screens/login_screen.dart';
 import 'package:learn_europe/ui/screens/map_screen.dart';
@@ -25,6 +26,7 @@ const String quizSelection = 'quiz_selection';
 const String multipleChoice = 'multiple_choice';
 const String dragAndDrop = 'drag_and_drop';
 const String map = 'map';
+const String gappedText = 'gapped_text';
 const String result = 'result';
 
 Route<dynamic> generateRoute(RouteSettings destination) {
@@ -82,6 +84,11 @@ Route<dynamic> generateRoute(RouteSettings destination) {
       return MaterialPageRoute(
         settings: destination,
         builder: (context) => MapScreen(mapContentModel: mapContentModel),
+      );
+    case gappedText:
+      return MaterialPageRoute(
+        settings: destination,
+        builder: (context) => GappedTextScreen(),
       );
     case result:
       final resultContent = destination.arguments as ResultContentModel;
