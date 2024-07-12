@@ -31,9 +31,8 @@ Future<QuizSelectionContentModel?> fetchRandomQuizWithNoHistory() async {
     allQuizzesWithHistory.addAll(quizzesWithHistory);
   }
 
-  List<QuizSelectionContentModel> quizzesWithNoHistory = allQuizzesWithHistory
-      .where((quiz) => quiz.quizHistoryModel == null)
-      .toList();
+  List<QuizSelectionContentModel> quizzesWithNoHistory =
+      allQuizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
 
   if (quizzesWithNoHistory.isNotEmpty) {
     return quizzesWithNoHistory[Random().nextInt(quizzesWithNoHistory.length)];
@@ -410,6 +409,19 @@ Future<List<LeaderboardEntryModel>> fetchLeaderboardEntries() async {
 }
 
 /// Profile Screen
+Future<void> changeUserAvatar(String newAvatar) async {
+  final DatabaseServices dbServices = DatabaseServices();
+
+  var data = {
+    'avatar': newAvatar,
+  };
+
+  await dbServices.updateDocument(
+      collection: FirebaseConstants.usersCollection, docId: getIt<UserStore>().userId!, data: data);
+
+  getIt<UserStore>().updateAvatar(newAvatar);
+}
+
 Future<DateTime> fetchUserRegistrationDate() async {
   final DatabaseServices dbServices = DatabaseServices();
   final doc = await dbServices.getDocument(

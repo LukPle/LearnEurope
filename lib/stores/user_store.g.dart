@@ -40,13 +40,36 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$avatarAtom = Atom(name: '_UserStore.avatar', context: context);
+
+  @override
+  String? get avatar {
+    _$avatarAtom.reportRead();
+    return super.avatar;
+  }
+
+  @override
+  set avatar(String? value) {
+    _$avatarAtom.reportWrite(value, super.avatar, () {
+      super.avatar = value;
+    });
+  }
+
   late final _$saveUserProfileAsyncAction =
       AsyncAction('_UserStore.saveUserProfile', context: context);
 
   @override
-  Future<void> saveUserProfile(String userId, String username) {
+  Future<void> saveUserProfile(String userId, String username, String avatar) {
     return _$saveUserProfileAsyncAction
-        .run(() => super.saveUserProfile(userId, username));
+        .run(() => super.saveUserProfile(userId, username, avatar));
+  }
+
+  late final _$updateAvatarAsyncAction =
+      AsyncAction('_UserStore.updateAvatar', context: context);
+
+  @override
+  Future<void> updateAvatar(String avatar) {
+    return _$updateAvatarAsyncAction.run(() => super.updateAvatar(avatar));
   }
 
   late final _$resetUserProfileAsyncAction =
@@ -61,7 +84,8 @@ mixin _$UserStore on _UserStore, Store {
   String toString() {
     return '''
 userId: ${userId},
-username: ${username}
+username: ${username},
+avatar: ${avatar}
     ''';
   }
 }

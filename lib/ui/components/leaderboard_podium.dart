@@ -26,16 +26,14 @@ class LeaderboardPodium extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.275,
       height: (MediaQuery.of(context).size.height * (isSmallScreen ? 0.35 : 0.275)) - (rank - 1) * 25,
       decoration: BoxDecoration(
-        color: (brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark).withOpacity(
-          rank == 1 ? 1 : (rank == 2 ? 0.8 : 0.6),
-        ),
+        color: brightness == Brightness.light ? AppColors.primaryColorLight : AppColors.primaryColorDark,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
       ),
       child: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: brightness == Brightness.light ? AppColors.accentColorLight : Colors.amberAccent,
+              color: brightness == Brightness.light ? AppColors.accentColorLight : AppColors.accentColorDark,
               border: Border.all(color: Colors.black12, width: 2),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15),

@@ -32,6 +32,9 @@ class AppStrings {
     return username != null ? 'Hello $username, let\'s\nstart learning' : 'Let\'s start learning';
   }
 
+  static const String featuredNoHistoryQuizSection = 'Today\'s Quiz';
+  static const String featuredLowPerformanceQuizSection = 'Try Again?';
+
   /// Categories Screen Strings
   static const String categoriesTitle = 'Explore Europe in various categories';
 
@@ -123,6 +126,8 @@ class AppStrings {
 
   /// Profile Strings
   static const String profileTitle = 'Profile';
+  static const String selectAvatarTitle = 'Choose an avatar that suits you best';
+  static const String selectAvatarButton = 'Select avatar';
 
   static String learnerRegistrationText(DateTime? dateTime) {
     return dateTime != null

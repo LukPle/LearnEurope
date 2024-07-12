@@ -16,73 +16,75 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(AppPaddings.padding_16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PageHeadline(title: AppStrings.homeTitle(getIt<UserStore>().username)),
-          const SizedBox(height: AppPaddings.padding_32),
-          Text('Today\'s Quiz', style: AppTextStyles.sectionTitleTextStyle),
-          const SizedBox(height: AppPaddings.padding_8),
-          FutureBuilder(
-            future: fetchRandomQuizWithNoHistory(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
-                return const SizedBox.shrink();
-              } else {
-                final quiz = snapshot.data!;
-                return QuizCard(
-                  title: quiz.quizModel.title,
-                  onTap: () => navigateToQuestions(
-                    context,
-                    quiz.category,
-                    quiz.quizModel.id,
-                    quiz.quizModel.pointsPerQuestion,
-                    quiz.quizModel.hintPointsMinus,
-                  ),
-                  quizDifficulty: quiz.quizModel.difficulty,
-                  numberOfTotalQuestions: quiz.quizModel.questions.length,
-                  pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
-                  lastPlaythrough: quiz.quizHistoryModel?.completionDate,
-                  performance: quiz.quizHistoryModel?.performance,
-                  earnedPoints: quiz.quizHistoryModel?.earnedPoints,
-                );
-              }
-            },
-          ),
-          const SizedBox(height: AppPaddings.padding_16),
-          Text('Try Again?', style: AppTextStyles.sectionTitleTextStyle),
-          const SizedBox(height: AppPaddings.padding_8),
-          FutureBuilder(
-            future: fetchQuizWithLowestPerformance(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
-                return const SizedBox.shrink();
-              } else {
-                final quiz = snapshot.data!;
-                return QuizCard(
-                  title: quiz.quizModel.title,
-                  onTap: () => navigateToQuestions(
-                    context,
-                    quiz.category,
-                    quiz.quizModel.id,
-                    quiz.quizModel.pointsPerQuestion,
-                    quiz.quizModel.hintPointsMinus,
-                  ),
-                  quizDifficulty: quiz.quizModel.difficulty,
-                  numberOfTotalQuestions: quiz.quizModel.questions.length,
-                  pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
-                  lastPlaythrough: quiz.quizHistoryModel?.completionDate,
-                  performance: quiz.quizHistoryModel?.performance,
-                  earnedPoints: quiz.quizHistoryModel?.earnedPoints,
-                );
-              }
-            },
-          ),
-          const SizedBox(height: AppPaddings.padding_16),
-          Text('Comming Soon', style: AppTextStyles.sectionTitleTextStyle),
-          const SizedBox(height: AppPaddings.padding_8),
-          CtaButton.primary(onPressed: () => {}, label: 'Gaped Text Questions'),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            PageHeadline(title: AppStrings.homeTitle(getIt<UserStore>().username)),
+            const SizedBox(height: AppPaddings.padding_32),
+            const Text(AppStrings.featuredNoHistoryQuizSection, style: AppTextStyles.sectionTitleTextStyle),
+            const SizedBox(height: AppPaddings.padding_8),
+            FutureBuilder(
+              future: fetchRandomQuizWithNoHistory(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
+                  return const SizedBox.shrink();
+                } else {
+                  final quiz = snapshot.data!;
+                  return QuizCard(
+                    title: quiz.quizModel.title,
+                    onTap: () => navigateToQuestions(
+                      context,
+                      quiz.category,
+                      quiz.quizModel.id,
+                      quiz.quizModel.pointsPerQuestion,
+                      quiz.quizModel.hintPointsMinus,
+                    ),
+                    quizDifficulty: quiz.quizModel.difficulty,
+                    numberOfTotalQuestions: quiz.quizModel.questions.length,
+                    pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
+                    lastPlaythrough: quiz.quizHistoryModel?.completionDate,
+                    performance: quiz.quizHistoryModel?.performance,
+                    earnedPoints: quiz.quizHistoryModel?.earnedPoints,
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: AppPaddings.padding_16),
+            const Text(AppStrings.featuredLowPerformanceQuizSection, style: AppTextStyles.sectionTitleTextStyle),
+            const SizedBox(height: AppPaddings.padding_8),
+            FutureBuilder(
+              future: fetchQuizWithLowestPerformance(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
+                  return const SizedBox.shrink();
+                } else {
+                  final quiz = snapshot.data!;
+                  return QuizCard(
+                    title: quiz.quizModel.title,
+                    onTap: () => navigateToQuestions(
+                      context,
+                      quiz.category,
+                      quiz.quizModel.id,
+                      quiz.quizModel.pointsPerQuestion,
+                      quiz.quizModel.hintPointsMinus,
+                    ),
+                    quizDifficulty: quiz.quizModel.difficulty,
+                    numberOfTotalQuestions: quiz.quizModel.questions.length,
+                    pointsPerQuestion: quiz.quizModel.pointsPerQuestion,
+                    lastPlaythrough: quiz.quizHistoryModel?.completionDate,
+                    performance: quiz.quizHistoryModel?.performance,
+                    earnedPoints: quiz.quizHistoryModel?.earnedPoints,
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: AppPaddings.padding_16),
+            const Text('Comming Soon', style: AppTextStyles.sectionTitleTextStyle),
+            const SizedBox(height: AppPaddings.padding_8),
+            CtaButton.primary(onPressed: () => {}, label: 'Gaped Text Questions'),
+          ],
+        ),
       ),
     );
   }

@@ -27,12 +27,13 @@ class DatabaseServices {
           data: {
             'name': name,
             'email': email,
+            'avatar': 'avatar_blue',
             'totalPoints': 0,
             'registrationDate': FieldValue.serverTimestamp(),
           },
         );
 
-        getIt<UserStore>().saveUserProfile(userId, name);
+        getIt<UserStore>().saveUserProfile(userId, name, 'avatar_blue');
       }
     } catch (e) {
       rethrow;
@@ -52,8 +53,9 @@ class DatabaseServices {
 
         DocumentSnapshot userDoc = await getDocument(collection: FirebaseConstants.usersCollection, docId: userId);
         String userName = userDoc['name'];
+        String avatar = userDoc['avatar'];
 
-        getIt<UserStore>().saveUserProfile(userId, userName);
+        getIt<UserStore>().saveUserProfile(userId, userName, avatar);
       }
     } catch (e) {
       rethrow;
@@ -79,8 +81,9 @@ class DatabaseServices {
 
       DocumentSnapshot userDoc = await getDocument(collection: FirebaseConstants.usersCollection, docId: userId);
       String userName = userDoc['name'];
+      String avatar = userDoc['avatar'];
 
-      getIt<UserStore>().saveUserProfile(userId, userName);
+      getIt<UserStore>().saveUserProfile(userId, userName, avatar);
 
       return true;
     } else {
