@@ -8,6 +8,7 @@ import 'package:learn_europe/stores/user_store.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/page_headline.dart';
 import 'package:learn_europe/ui/components/quiz_card.dart';
+import 'package:learn_europe/ui/components/shimmer_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,7 +28,9 @@ class HomeScreen extends StatelessWidget {
             FutureBuilder(
               future: fetchRandomQuizWithNoHistory(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CustomShimmer();
+                } else if (snapshot.hasError || !snapshot.hasData) {
                   return const SizedBox.shrink();
                 } else {
                   final quiz = snapshot.data!;
@@ -57,7 +60,9 @@ class HomeScreen extends StatelessWidget {
             FutureBuilder(
               future: fetchQuizWithLowestPerformance(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError || !snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CustomShimmer();
+                } else if (snapshot.hasError || !snapshot.hasData) {
                   return const SizedBox.shrink();
                 } else {
                   final quiz = snapshot.data!;
