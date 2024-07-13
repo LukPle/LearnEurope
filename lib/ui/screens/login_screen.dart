@@ -48,52 +48,65 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: const AppAppBar(),
-      body: Observer(
-        builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(AppStrings.loginTitle, style: AppTextStyles.standardTitleTextStyle),
-              const SizedBox(height: AppPaddings.padding_24),
-              InputField(
-                controller: emailController,
-                title: AppStrings.emailTitle,
-                hint: AppStrings.emailHint,
-                prefixIcon: Icons.alternate_email,
-                textInputType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: AppPaddings.padding_16),
-              InputField(
-                controller: passwordController,
-                title: AppStrings.passwordTitle,
-                hint: AppStrings.passwordHint,
-                prefixIcon: Icons.lock,
-                suffixIcon: passwordFieldStore.isVisible ? Icons.visibility : Icons.visibility_off,
-                suffixAction: () => passwordFieldStore.toggleVisibility(),
-                hideInput: passwordFieldStore.isVisible ? false : true,
-              ),
-              const SizedBox(height: AppPaddings.padding_8),
-              Center(
-                child: TextButton(
-                  onPressed: () => {},
-                  child: Text(
-                    AppStrings.forgotPassword,
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: MediaQuery.of(context).platformBrightness == Brightness.light
-                            ? AppColors.primaryColorLight
-                            : AppColors.primaryColorDark,
-                        decorationThickness: 0.75),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Observer(
+            builder: (context) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(AppStrings.loginTitle, style: AppTextStyles.standardTitleTextStyle),
+                        const SizedBox(height: AppPaddings.padding_24),
+                        InputField(
+                          controller: emailController,
+                          title: AppStrings.emailTitle,
+                          hint: AppStrings.emailHint,
+                          prefixIcon: Icons.alternate_email,
+                          textInputType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: AppPaddings.padding_16),
+                        InputField(
+                          controller: passwordController,
+                          title: AppStrings.passwordTitle,
+                          hint: AppStrings.passwordHint,
+                          prefixIcon: Icons.lock,
+                          suffixIcon: passwordFieldStore.isVisible ? Icons.visibility : Icons.visibility_off,
+                          suffixAction: () => passwordFieldStore.toggleVisibility(),
+                          hideInput: passwordFieldStore.isVisible ? false : true,
+                        ),
+                        const SizedBox(height: AppPaddings.padding_8),
+                        Center(
+                          child: TextButton(
+                            onPressed: () => {},
+                            child: Text(
+                              AppStrings.forgotPassword,
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: MediaQuery.of(context).platformBrightness == Brightness.light
+                                      ? AppColors.primaryColorLight
+                                      : AppColors.primaryColorDark,
+                                  decorationThickness: 0.75),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        CtaButton.primary(
+                          onPressed: () async => _login(),
+                          label: AppStrings.loginButton,
+                          loading: _ctaButtonLoadingStore.isLoading,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              CtaButton.primary(
-                onPressed: () async => _login(),
-                label: AppStrings.loginButton,
-                loading: _ctaButtonLoadingStore.isLoading,
-              ),
-            ],
+              );
+            },
           );
         },
       ),

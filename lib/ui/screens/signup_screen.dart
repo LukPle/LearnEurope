@@ -50,46 +50,59 @@ class SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: const AppAppBar(),
-      body: Observer(
-        builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(AppStrings.signupTitle, style: AppTextStyles.standardTitleTextStyle),
-              const SizedBox(height: AppPaddings.padding_24),
-              InputField(
-                controller: emailController,
-                title: AppStrings.emailTitle,
-                hint: AppStrings.emailHint,
-                prefixIcon: Icons.alternate_email,
-                textInputType: TextInputType.emailAddress,
-              ),
-              const SizedBox(height: AppPaddings.padding_16),
-              InputField(
-                controller: passwordController,
-                title: AppStrings.passwordTitle,
-                hint: AppStrings.passwordHint,
-                prefixIcon: Icons.lock,
-                suffixIcon: passwordFieldStore.isVisible ? Icons.visibility : Icons.visibility_off,
-                suffixAction: () => passwordFieldStore.toggleVisibility(),
-                hideInput: passwordFieldStore.isVisible ? false : true,
-              ),
-              const SizedBox(height: AppPaddings.padding_16),
-              InputField(
-                controller: nameController,
-                title: AppStrings.nameTitle,
-                hint: AppStrings.nameHint,
-                prefixIcon: Icons.person,
-                textInputType: TextInputType.name,
-                maxLength: 12,
-              ),
-              const Spacer(),
-              CtaButton.primary(
-                onPressed: () => _signup(),
-                label: AppStrings.signupButton,
-                loading: _ctaButtonLoadingStore.isLoading,
-              ),
-            ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Observer(
+            builder: (context) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(AppStrings.signupTitle, style: AppTextStyles.standardTitleTextStyle),
+                        const SizedBox(height: AppPaddings.padding_24),
+                        InputField(
+                          controller: emailController,
+                          title: AppStrings.emailTitle,
+                          hint: AppStrings.emailHint,
+                          prefixIcon: Icons.alternate_email,
+                          textInputType: TextInputType.emailAddress,
+                        ),
+                        const SizedBox(height: AppPaddings.padding_16),
+                        InputField(
+                          controller: passwordController,
+                          title: AppStrings.passwordTitle,
+                          hint: AppStrings.passwordHint,
+                          prefixIcon: Icons.lock,
+                          suffixIcon: passwordFieldStore.isVisible ? Icons.visibility : Icons.visibility_off,
+                          suffixAction: () => passwordFieldStore.toggleVisibility(),
+                          hideInput: passwordFieldStore.isVisible ? false : true,
+                        ),
+                        const SizedBox(height: AppPaddings.padding_16),
+                        InputField(
+                          controller: nameController,
+                          title: AppStrings.nameTitle,
+                          hint: AppStrings.nameHint,
+                          prefixIcon: Icons.person,
+                          textInputType: TextInputType.name,
+                          maxLength: 12,
+                        ),
+                        const Spacer(),
+                        CtaButton.primary(
+                          onPressed: () => _signup(),
+                          label: AppStrings.signupButton,
+                          loading: _ctaButtonLoadingStore.isLoading,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         },
       ),
