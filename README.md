@@ -13,9 +13,10 @@
 **Learn Europe - Explore Europe in various categories**<br>
 A mobile app for Android and iOS developed with Flutter
 <br>
+<br>
 
-**Screens**<br>
-![home_screen](https://github.com/user-attachments/assets/1f00399d-9e8c-42ce-b1ad-e713aaa9d03a)
+**Main Screens**<br>
+![home_screen](https://github.com/user-attachments/assets/c3e24c4e-7f5b-4076-a71f-b4988a3dab90)
 ![categories_screen](https://github.com/user-attachments/assets/41f04206-5177-4158-b4d2-3b5320bc0511)
 ![leaderboard_screen](https://github.com/user-attachments/assets/7d51240b-ebb4-4270-9d8e-1f8f9d13c041)
 ![profile_screen](https://github.com/user-attachments/assets/729a744d-9171-436a-b4fd-f47c1d6ee10f)
@@ -30,6 +31,8 @@ A mobile app for Android and iOS developed with Flutter
 ![country_borders_quiz](https://github.com/user-attachments/assets/80b55802-2871-48ab-a84e-e1581cf9d5a9)
 ![geo_position_quiz](https://github.com/user-attachments/assets/d7b3b74f-efda-46bd-ad26-9f8673707f67)
 ![gapped_text_quiz](https://github.com/user-attachments/assets/cdbf997e-296f-4cb8-9544-d285b43c786a)
+
+<br>
 
 **Item Types**
 - Drag and Drop (Europe101)
