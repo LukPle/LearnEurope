@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:learn_europe/models/drag_and_drop_content_model.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/gapped_text_content_model.dart';
 import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/multiple_choice_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
@@ -86,9 +87,11 @@ Route<dynamic> generateRoute(RouteSettings destination) {
         builder: (context) => MapScreen(mapContentModel: mapContentModel),
       );
     case gappedText:
+      final gappedTextContentModel = destination.arguments as List<GappedTextContentModel>;
+      gappedTextContentModel.shuffle(Random());
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => const GappedTextScreen(),
+        builder: (context) => GappedTextScreen(gappedTextContentModel: gappedTextContentModel),
       );
     case result:
       final resultContent = destination.arguments as ResultContentModel;

@@ -4,6 +4,7 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/gapped_text_content_model.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
 import 'package:learn_europe/ui/components/app_appbar.dart';
@@ -15,7 +16,9 @@ import 'package:learn_europe/ui/components/quiz_progress_bar.dart';
 import 'package:learn_europe/constants/routes.dart' as routes;
 
 class GappedTextScreen extends StatefulWidget {
-  const GappedTextScreen({super.key});
+  const GappedTextScreen({super.key, required this.gappedTextContentModel});
+
+  final List<GappedTextContentModel> gappedTextContentModel;
 
   @override
   GappedTextScreenState createState() => GappedTextScreenState();
@@ -24,20 +27,25 @@ class GappedTextScreen extends StatefulWidget {
 class GappedTextScreenState extends State<GappedTextScreen> {
   QuestionStore questionStore = QuestionStore();
   HintDialogStore hintDialogStore = HintDialogStore();
-  List<TextEditingController> _controllers = [];
+  List<TextEditingController> controllers = [];
+  List<bool> areAnswersCorrect = [];
 
-  final List<String> correctAnswers = ['vienna', '1920', 'bim'];
-  List<bool> areAnswersCorrect = [false, false, false];
+  void _generateAttributes() {
+    controllers = List.generate(widget.gappedTextContentModel[questionStore.numbQuestion].correctAnswers.length,
+        (index) => TextEditingController());
+    areAnswersCorrect = List.generate(
+        widget.gappedTextContentModel[questionStore.numbQuestion].correctAnswers.length, (index) => false);
+  }
 
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(correctAnswers.length, (index) => TextEditingController());
+    _generateAttributes();
   }
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
+    for (var controller in controllers) {
       controller.dispose();
     }
     super.dispose();
@@ -60,8 +68,8 @@ class GappedTextScreenState extends State<GappedTextScreen> {
                 builder: (BuildContext context) {
                   return HintDialog(
                     hintDialogStore: hintDialogStore,
-                    scoreReduction: -10,
-                    hint: 'THE HINT',
+                    scoreReduction: widget.gappedTextContentModel[questionStore.numbQuestion].hintMinus,
+                    hint: widget.gappedTextContentModel[questionStore.numbQuestion].hint,
                   );
                 },
               ),
@@ -76,8 +84,8 @@ class GappedTextScreenState extends State<GappedTextScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               QuizProgressBar(
-                numbQuestions: 1,
-                currentQuestion: 1,
+                numbQuestions: widget.gappedTextContentModel.length,
+                currentQuestion: questionStore.numbQuestion + 1,
               ),
               const SizedBox(height: AppPaddings.padding_32),
               Container(
@@ -99,9 +107,8 @@ class GappedTextScreenState extends State<GappedTextScreen> {
                     ),
                     const SizedBox(height: AppPaddings.padding_16),
                     GappedTextWidget(
-                      textWithGaps:
-                          'The capital of Austria is __ which is also its own state in federal republic since __.  Did you know that the tram driving through the city is called __ by the locals.',
-                      controllers: _controllers,
+                      textWithGaps: widget.gappedTextContentModel[questionStore.numbQuestion].gappedText,
+                      controllers: controllers,
                       areFieldCorrect: areAnswersCorrect,
                       isEnabled: !questionStore.isExplained,
                     ),
@@ -113,9 +120,8 @@ class GappedTextScreenState extends State<GappedTextScreen> {
                   ? Expanded(
                       child: ExplanationArea(
                         isCorrect: areAnswersCorrect.every((element) => element == true),
-                        explanationText:
-                            'The capital of Austria is Vienna and it became its own federal state in 1920. Locals call the city tram "Bim" because of the sound it makes when honking.',
-                        action: () => {},
+                        explanationText: widget.gappedTextContentModel[questionStore.numbQuestion].explanation,
+                        action: () => _proceedQuizOrShowResult(),
                       ),
                     )
                   : Expanded(
@@ -134,14 +140,26 @@ class GappedTextScreenState extends State<GappedTextScreen> {
   }
 
   void _checkAnswers() {
-    for (int i = 0; i < correctAnswers.length; i++) {
-      if (_controllers[i].text.trim().toLowerCase() != correctAnswers[i].trim().toLowerCase()) {
+    for (int i = 0; i < widget.gappedTextContentModel[questionStore.numbQuestion].correctAnswers.length; i++) {
+      if (controllers[i].text.trim().toLowerCase() !=
+          widget.gappedTextContentModel[questionStore.numbQuestion].correctAnswers[i].trim().toLowerCase()) {
         areAnswersCorrect[i] = false;
       } else {
         areAnswersCorrect[i] = true;
       }
     }
     questionStore.setExplained();
+  }
+
+  void _proceedQuizOrShowResult() {
+    if (widget.gappedTextContentModel.length > (questionStore.numbQuestion + 1)) {
+      questionStore.nextQuestion();
+      questionStore.setUnexplained();
+      hintDialogStore.resetHint();
+      _generateAttributes();
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(routes.tabSelector, (Route<dynamic> route) => false);
+    }
   }
 }
 
