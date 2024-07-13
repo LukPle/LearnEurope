@@ -88,7 +88,7 @@ Route<dynamic> generateRoute(RouteSettings destination) {
     case gappedText:
       return MaterialPageRoute(
         settings: destination,
-        builder: (context) => GappedTextScreen(),
+        builder: (context) => const GappedTextScreen(),
       );
     case result:
       final resultContent = destination.arguments as ResultContentModel;

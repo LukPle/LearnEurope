@@ -73,4 +73,6 @@ class AppTextStyles {
   static const TextStyle resultScreenPointsScore = TextStyle(fontSize: 52, fontWeight: FontWeight.w600);
 
   static const scoreAndActivityTextStyle = TextStyle(fontWeight: FontWeight.w500);
+
+  static const gappedTextFieldStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
 }
