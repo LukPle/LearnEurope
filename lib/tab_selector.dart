@@ -59,38 +59,39 @@ class TabSelectorState extends State<TabSelector> {
 
   BottomNavigationBar _buildBottomNavigationBar(context) {
     return BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.darkCard : AppColors.lightCard,
-        selectedItemColor: MediaQuery.of(context).platformBrightness == Brightness.dark
-            ? AppColors.primaryColorDark
-            : AppColors.primaryColorLight,
-        unselectedItemColor:
-            MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.lightCard : AppColors.darkCard,
-        selectedLabelStyle: AppTextStyles.bottomNavigationActive,
-        unselectedLabelStyle: AppTextStyles.bottomNavigationPassive,
-        iconSize: AppPaddings.padding_24,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: AppStrings.navHome,
-            icon: Icon(navigationStore.currentIndex == 0 ? Icons.home : Icons.home_outlined),
-          ),
-          BottomNavigationBarItem(
-            label: AppStrings.navCategories,
-            icon: Icon(navigationStore.currentIndex == 1 ? Icons.category : Icons.category_outlined),
-          ),
-          BottomNavigationBarItem(
-            label: AppStrings.navLeaderboard,
-            icon: Icon(navigationStore.currentIndex == 2 ? Icons.leaderboard : Icons.leaderboard_outlined),
-          ),
-          BottomNavigationBarItem(
-            label: AppStrings.navProfile,
-            icon: Icon(navigationStore.currentIndex == 3 ? Icons.account_circle : Icons.account_circle_outlined),
-          ),
-        ],
-        currentIndex: navigationStore.currentIndex,
-        onTap: (index) {
-          navigationStore.switchScreen(index);
-        });
+      type: BottomNavigationBarType.fixed,
+      backgroundColor:
+          MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.darkCard : AppColors.lightCard,
+      selectedItemColor: MediaQuery.of(context).platformBrightness == Brightness.dark
+          ? AppColors.primaryColorDark
+          : AppColors.primaryColorLight,
+      unselectedItemColor:
+          MediaQuery.of(context).platformBrightness == Brightness.dark ? AppColors.lightCard : AppColors.darkCard,
+      selectedLabelStyle: AppTextStyles.bottomNavigationActive,
+      unselectedLabelStyle: AppTextStyles.bottomNavigationPassive,
+      iconSize: AppPaddings.padding_24,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          label: AppStrings.navHome,
+          icon: Icon(navigationStore.currentIndex == 0 ? Icons.home : Icons.home_outlined),
+        ),
+        BottomNavigationBarItem(
+          label: AppStrings.navCategories,
+          icon: Icon(navigationStore.currentIndex == 1 ? Icons.category : Icons.category_outlined),
+        ),
+        BottomNavigationBarItem(
+          label: AppStrings.navLeaderboard,
+          icon: Icon(navigationStore.currentIndex == 2 ? Icons.leaderboard : Icons.leaderboard_outlined),
+        ),
+        BottomNavigationBarItem(
+          label: AppStrings.navProfile,
+          icon: Icon(navigationStore.currentIndex == 3 ? Icons.account_circle : Icons.account_circle_outlined),
+        ),
+      ],
+      currentIndex: navigationStore.currentIndex,
+      onTap: (index) {
+        navigationStore.switchScreen(index);
+      },
+    );
   }
 }

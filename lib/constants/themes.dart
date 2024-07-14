@@ -19,6 +19,7 @@ class AppThemes {
       primary: AppColors.primaryColorLight,
       secondary: AppColors.accentColorLight,
     ),
+    splashColor: Colors.transparent,
   );
 
   static final darkTheme = ThemeData(
@@ -34,6 +35,7 @@ class AppThemes {
       primary: AppColors.primaryColorDark,
       secondary: AppColors.accentColorDark,
     ),
+    splashColor: Colors.transparent,
   );
 
   static const pageTransitionsTheme = PageTransitionsTheme(

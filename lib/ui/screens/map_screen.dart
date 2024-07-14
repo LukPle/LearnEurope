@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -7,8 +8,10 @@ import 'package:learn_europe/constants/colors.dart';
 import 'package:learn_europe/constants/paddings.dart';
 import 'package:learn_europe/constants/strings.dart';
 import 'package:learn_europe/constants/textstyles.dart';
+import 'package:learn_europe/models/enums/category_enum.dart';
 import 'package:learn_europe/models/map_content_model.dart';
 import 'package:learn_europe/models/result_content_model.dart';
+import 'package:learn_europe/stores/cta_button_loading_store.dart';
 import 'package:learn_europe/stores/hint_dialog_store.dart';
 import 'package:learn_europe/stores/map_store.dart';
 import 'package:learn_europe/stores/question_store.dart';
@@ -16,8 +19,8 @@ import 'package:learn_europe/ui/components/app_appbar.dart';
 import 'package:learn_europe/ui/components/app_scaffold.dart';
 import 'package:learn_europe/ui/components/cta_button.dart';
 import 'package:learn_europe/ui/components/hint_dialog.dart';
-import 'package:learn_europe/constants/routes.dart' as routes;
 import 'package:learn_europe/ui/components/quiz_explanation.dart';
+import 'package:learn_europe/constants/routes.dart' as routes;
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key, required this.mapContentModel});
@@ -32,6 +35,7 @@ class MapScreenState extends State<MapScreen> {
   final QuestionStore questionStore = QuestionStore();
   final MapStore mapStore = MapStore();
   final HintDialogStore hintDialogStore = HintDialogStore();
+  CtaButtonLoadingStore ctaButtonLoadingStore = CtaButtonLoadingStore();
   late final MapController mapController;
 
   LatLng centerOfGermany = const LatLng(51.255, 10.528);
@@ -120,9 +124,9 @@ class MapScreenState extends State<MapScreen> {
                         : 'https://{s}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                   ),
-                  if (mapStore.selectedLocation != null)
-                    MarkerLayer(
-                      markers: [
+                  MarkerLayer(
+                    markers: [
+                      if (mapStore.selectedLocation != null)
                         Marker(
                           point: mapStore.selectedLocation!,
                           child: Icon(
@@ -133,8 +137,18 @@ class MapScreenState extends State<MapScreen> {
                             size: 40,
                           ),
                         ),
-                      ],
-                    ),
+                      if (questionStore.isAnswered)
+                        Marker(
+                          point: widget.mapContentModel[questionStore.numbQuestion].latLng,
+                          child: Icon(
+                            Icons.location_on,
+                            color: AppColors.categoryColor(
+                                Category.geoPosition, MediaQuery.of(context).platformBrightness),
+                            size: 40,
+                          ),
+                        ),
+                    ],
+                  ),
                   Positioned.fill(
                     child: Column(
                       children: [
@@ -242,6 +256,7 @@ class MapScreenState extends State<MapScreen> {
                     child: CtaButton.primary(
                       onPressed: mapStore.selectedLocation != null ? () => _validateAnswerAndProceedQuiz() : null,
                       label: AppStrings.geoPositionCheckButton,
+                      loading: ctaButtonLoadingStore.isLoading,
                     ),
                   ),
                 ],
@@ -260,25 +275,36 @@ class MapScreenState extends State<MapScreen> {
       _calculateScore();
     }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return PopScope(
-          canPop: false,
-          child: Dialog(
-            elevation: 1,
-            insetPadding: const EdgeInsets.symmetric(horizontal: AppPaddings.padding_16),
-            child: Padding(
-              padding: const EdgeInsets.all(AppPaddings.padding_16),
-              child: ExplanationArea(
-                isCorrect: isCorrectlyAnswered,
-                explanationText: AppStrings.geoPositionResult(distanceFromTarget),
-                action: () => _proceedQuiz(),
-                isMinHeight: true,
+    ctaButtonLoadingStore.setLoading();
+    questionStore.setAnswered();
+    mapController.move(widget.mapContentModel[questionStore.numbQuestion].latLng, 5);
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        ctaButtonLoadingStore.resetLoading();
+
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return PopScope(
+              canPop: false,
+              child: Dialog(
+                elevation: 1,
+                insetPadding: const EdgeInsets.symmetric(horizontal: AppPaddings.padding_16),
+                child: Padding(
+                  padding: const EdgeInsets.all(AppPaddings.padding_16),
+                  child: ExplanationArea(
+                    isCorrect: isCorrectlyAnswered,
+                    explanationText: AppStrings.geoPositionResult(distanceFromTarget),
+                    action: () => _proceedQuiz(),
+                    isMinHeight: true,
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -310,6 +336,7 @@ class MapScreenState extends State<MapScreen> {
       mapStore.selectedLocation = null;
       isCorrectlyAnswered = false;
       hintDialogStore.resetHint();
+      questionStore.setUnanswered();
       questionStore.nextQuestion();
       Navigator.of(context).pop();
     } else {
