@@ -31,7 +31,7 @@ A mobile app for Android and iOS developed with Flutter
 ![country_borders_quiz](https://github.com/user-attachments/assets/80b55802-2871-48ab-a84e-e1581cf9d5a9)
 ![geo_position_quiz](https://github.com/user-attachments/assets/d7b3b74f-efda-46bd-ad26-9f8673707f67)
 ![gapped_text_quiz](https://github.com/user-attachments/assets/cdbf997e-296f-4cb8-9544-d285b43c786a)
-![hint](https://github.com/user-attachments/assets/fe14e2eb-3a45-43ee-b58b-9cf888b2a402)
+![hint_dialog](https://github.com/user-attachments/assets/8a7df8a4-4775-4b73-a08a-165410f0e4f2)
 
 
 <br>
