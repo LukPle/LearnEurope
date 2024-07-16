@@ -13,7 +13,7 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppPaddings.padding_8),
+      padding: const EdgeInsets.all(AppPaddings.padding_4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -69,14 +69,12 @@ class ScoreAndActivityAnalyticsItem extends StatelessWidget {
       width: double.infinity,
       height: MediaQuery.of(context).size.height * 0.125,
       decoration: BoxDecoration(
-        color: MediaQuery.of(context).platformBrightness == Brightness.light
-            ? AppColors.lightBackground
-            : AppColors.darkBackground,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
+          width: 1,
           color: MediaQuery.of(context).platformBrightness == Brightness.light
-              ? AppColors.primaryColorLight
-              : AppColors.primaryColorDark,
+              ? Colors.grey.shade400
+              : Colors.grey.shade600,
         ),
       ),
       padding: const EdgeInsets.all(AppPaddings.padding_4),
