@@ -209,7 +209,7 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
                                   itemCount: dragAndDropStore.availableItems.length,
                                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
-                                    childAspectRatio: 1.55,
+                                    childAspectRatio: 1.65,
                                     crossAxisSpacing: AppPaddings.padding_8,
                                     mainAxisSpacing: AppPaddings.padding_8,
                                   ),
