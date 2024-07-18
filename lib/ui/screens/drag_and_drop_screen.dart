@@ -75,7 +75,9 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
             centerTitle: false,
             leadingIcon: Icons.close,
             leadingIconAction: () => {
-              Navigator.of(context).pop(routes.tabSelector),
+              Navigator.canPop(context)
+                  ? Navigator.of(context).pop(routes.tabSelector)
+                  : Navigator.of(context).pushNamed(routes.tabSelector),
             },
             actions: [
               Padding(
@@ -317,10 +319,12 @@ class DragAndDropScreenState extends State<DragAndDropScreen> {
         arguments: ResultContentModel(
           quizCategory: widget.dragAndDropContentModel.first.quizCategory,
           quizId: widget.dragAndDropContentModel.first.quizId,
+          quizDifficulty: widget.dragAndDropContentModel.first.quizDifficulty,
           numbQuestions: widget.dragAndDropContentModel.length,
           earnedScore: score,
           availableScore:
               (widget.dragAndDropContentModel.length * widget.dragAndDropContentModel.first.pointsPerQuestion),
+          hintMinus: widget.dragAndDropContentModel.first.hintMinus,
         ),
       );
     }

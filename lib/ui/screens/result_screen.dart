@@ -75,7 +75,17 @@ class ResultScreenState extends State<ResultScreen> {
             label: AppStrings.returnToHomeButton,
           ),
           const SizedBox(height: AppPaddings.padding_12),
-          CtaButton.secondary(onPressed: () => {}, label: AppStrings.playAgainButton),
+          CtaButton.secondary(
+              onPressed: () => navigateToQuestions(
+                    context,
+                    widget.resultContentModel.quizCategory,
+                    widget.resultContentModel.quizId,
+                    widget.resultContentModel.quizDifficulty,
+                    widget.resultContentModel.availableScore ~/ widget.resultContentModel.numbQuestions,
+                    widget.resultContentModel.hintMinus,
+                    shouldReplaceNavigationStack: true,
+                  ),
+              label: AppStrings.playAgainButton),
         ],
       ),
     );

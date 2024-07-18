@@ -58,7 +58,9 @@ class GappedTextScreenState extends State<GappedTextScreen> {
         title: AppStrings.exitQuiz,
         centerTitle: false,
         leadingIcon: Icons.close,
-        leadingIconAction: () => Navigator.of(context).pop(routes.tabSelector),
+        leadingIconAction: () => Navigator.canPop(context)
+            ? Navigator.of(context).pop(routes.tabSelector)
+            : Navigator.of(context).pushNamed(routes.tabSelector),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: AppPaddings.padding_16),

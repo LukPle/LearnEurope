@@ -76,7 +76,9 @@ class MapScreenState extends State<MapScreen> {
             centerTitle: false,
             leadingIcon: Icons.close,
             leadingIconAction: () => {
-              Navigator.of(context).pop(routes.tabSelector),
+              Navigator.canPop(context)
+                  ? Navigator.of(context).pop(routes.tabSelector)
+                  : Navigator.of(context).pushNamed(routes.tabSelector),
             },
             actions: [
               Padding(
@@ -346,9 +348,11 @@ class MapScreenState extends State<MapScreen> {
         arguments: ResultContentModel(
           quizCategory: widget.mapContentModel.first.quizCategory,
           quizId: widget.mapContentModel.first.quizId,
+          quizDifficulty: widget.mapContentModel.first.quizDifficulty,
           numbQuestions: widget.mapContentModel.length,
           earnedScore: score,
           availableScore: (widget.mapContentModel.length * widget.mapContentModel.first.pointsPerQuestion),
+          hintMinus: widget.mapContentModel.first.hintMinus,
         ),
       );
     }

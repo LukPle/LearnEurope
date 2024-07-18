@@ -41,7 +41,9 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
             centerTitle: false,
             leadingIcon: Icons.close,
             leadingIconAction: () => {
-              Navigator.of(context).pop(routes.tabSelector),
+              Navigator.canPop(context)
+                  ? Navigator.of(context).pop(routes.tabSelector)
+                  : Navigator.of(context).pushNamed(routes.tabSelector),
             },
             actions: [
               Padding(
@@ -195,10 +197,12 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
         arguments: ResultContentModel(
           quizCategory: widget.multipleChoiceContentModel.first.quizCategory,
           quizId: widget.multipleChoiceContentModel.first.quizId,
+          quizDifficulty: widget.multipleChoiceContentModel.first.quizDifficulty,
           numbQuestions: widget.multipleChoiceContentModel.length,
           earnedScore: score,
           availableScore:
               (widget.multipleChoiceContentModel.length * widget.multipleChoiceContentModel.first.pointsPerQuestion),
+          hintMinus: widget.multipleChoiceContentModel.first.hintMinus,
         ),
       );
     }

@@ -1,9 +1,11 @@
 import 'package:latlong2/latlong.dart';
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 
 class MapContentModel {
   Category quizCategory;
   String quizId;
+  QuizDifficulty quizDifficulty;
   String question;
   double latitude;
   double longitude;
@@ -16,6 +18,7 @@ class MapContentModel {
   MapContentModel({
     required this.quizCategory,
     required this.quizId,
+    required this.quizDifficulty,
     required this.question,
     required this.latitude,
     required this.longitude,

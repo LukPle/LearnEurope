@@ -33,7 +33,7 @@ Future<QuizSelectionContentModel?> fetchRandomQuizWithNoHistory() async {
   }
 
   List<QuizSelectionContentModel> quizzesWithNoHistory =
-  allQuizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
+      allQuizzesWithHistory.where((quiz) => quiz.quizHistoryModel == null).toList();
 
   if (quizzesWithNoHistory.isNotEmpty) {
     return quizzesWithNoHistory[Random().nextInt(quizzesWithNoHistory.length)];
@@ -60,7 +60,7 @@ Future<QuizSelectionContentModel?> fetchQuizWithLowestPerformance() async {
   ];
 
   final historyQueries =
-  await Future.wait(historyCollections.map((collection) => dbServices.getAllDocuments(collection: collection)));
+      await Future.wait(historyCollections.map((collection) => dbServices.getAllDocuments(collection: collection)));
 
   final allHistory = historyQueries
       .expand((query) => query.map((doc) => QuizHistoryModel.fromMap(doc.data() as Map<String, dynamic>)))
@@ -224,11 +224,12 @@ Future<List<dynamic>> _fetchQuestions(Category category, String quizId) async {
 }
 
 Future<void> navigateToQuestions(BuildContext context, Category category, String quizId, QuizDifficulty difficulty,
-    int pointsPerQuestion, int hintMinus) async {
+    int pointsPerQuestion, int hintMinus,
+    {bool shouldReplaceNavigationStack = false}) async {
   switch (category) {
     case Category.europe101:
       List<Europe101QuestionModel> europe101Questions =
-      await _fetchQuestions(category, quizId) as List<Europe101QuestionModel>;
+          await _fetchQuestions(category, quizId) as List<Europe101QuestionModel>;
 
       List<DragAndDropContentModel> dragAndDropContentModel = [];
 
@@ -237,6 +238,7 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
           DragAndDropContentModel(
             quizCategory: category,
             quizId: quizId,
+            quizDifficulty: difficulty,
             question: question.question,
             answerOptions: question.answers,
             numbCorrectAnswers: question.numbCorrectAnswers,
@@ -248,12 +250,21 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
         );
       }
       if (context.mounted) {
-        Navigator.of(context).pushNamed(routes.dragAndDrop, arguments: dragAndDropContentModel);
+        shouldReplaceNavigationStack
+            ? Navigator.of(context).pushNamedAndRemoveUntil(
+                routes.dragAndDrop,
+                (Route<dynamic> route) => false,
+                arguments: dragAndDropContentModel,
+              )
+            : Navigator.of(context).pushNamed(
+                routes.dragAndDrop,
+                arguments: dragAndDropContentModel,
+              );
       }
       break;
     case Category.languages:
       List<LanguagesQuestionModel> languagesQuestions =
-      await _fetchQuestions(category, quizId) as List<LanguagesQuestionModel>;
+          await _fetchQuestions(category, quizId) as List<LanguagesQuestionModel>;
 
       List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -262,6 +273,7 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
           MultipleChoiceContentModel(
             quizCategory: category,
             quizId: quizId,
+            quizDifficulty: difficulty,
             questionCardContent: LanguagesQuestionCard(
               question: question.question,
               quote: question.quote,
@@ -276,12 +288,21 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
         );
       }
       if (context.mounted) {
-        Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
+        shouldReplaceNavigationStack
+            ? Navigator.of(context).pushNamedAndRemoveUntil(
+                routes.multipleChoice,
+                (Route<dynamic> route) => false,
+                arguments: multipleChoiceContentModels,
+              )
+            : Navigator.of(context).pushNamed(
+                routes.multipleChoice,
+                arguments: multipleChoiceContentModels,
+              );
       }
       break;
     case Category.countryBorders:
       List<CountryBordersQuestionModel> countryBordersQuestions =
-      await _fetchQuestions(category, quizId) as List<CountryBordersQuestionModel>;
+          await _fetchQuestions(category, quizId) as List<CountryBordersQuestionModel>;
 
       List<MultipleChoiceContentModel> multipleChoiceContentModels = [];
 
@@ -290,6 +311,7 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
           MultipleChoiceContentModel(
             quizCategory: category,
             quizId: quizId,
+            quizDifficulty: difficulty,
             questionCardContent: CountryBorderQuestionCard(
               question: question.question,
               imageUrl: question.image_url,
@@ -304,12 +326,21 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
         );
       }
       if (context.mounted) {
-        Navigator.of(context).pushNamed(routes.multipleChoice, arguments: multipleChoiceContentModels);
+        shouldReplaceNavigationStack
+            ? Navigator.of(context).pushNamedAndRemoveUntil(
+                routes.multipleChoice,
+                (Route<dynamic> route) => false,
+                arguments: multipleChoiceContentModels,
+              )
+            : Navigator.of(context).pushNamed(
+                routes.multipleChoice,
+                arguments: multipleChoiceContentModels,
+              );
       }
       break;
     case Category.geoPosition:
       List<GeoPositionQuestionModel> geoPositionsQuestions =
-      await _fetchQuestions(category, quizId) as List<GeoPositionQuestionModel>;
+          await _fetchQuestions(category, quizId) as List<GeoPositionQuestionModel>;
 
       List<MapContentModel> mapContentModels = [];
 
@@ -318,6 +349,7 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
           MapContentModel(
             quizCategory: category,
             quizId: quizId,
+            quizDifficulty: difficulty,
             question: question.question,
             latitude: question.latitude,
             longitude: question.longitude,
@@ -329,7 +361,16 @@ Future<void> navigateToQuestions(BuildContext context, Category category, String
         );
       }
       if (context.mounted) {
-        Navigator.of(context).pushNamed(routes.map, arguments: mapContentModels);
+        shouldReplaceNavigationStack
+            ? Navigator.of(context).pushNamedAndRemoveUntil(
+                routes.map,
+                (Route<dynamic> route) => false,
+                arguments: mapContentModels,
+              )
+            : Navigator.of(context).pushNamed(
+                routes.map,
+                arguments: mapContentModels,
+              );
       }
       break;
   }
@@ -395,13 +436,13 @@ Future<List<LeaderboardEntryModel>> fetchLeaderboardEntries() async {
   final docs = await dbServices.getAllDocuments(collection: FirebaseConstants.usersCollection);
   List<LeaderboardEntryModel> leaderboardEntries = docs
       .map((doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    if (data.containsKey('name') && data.containsKey('totalPoints')) {
-      return LeaderboardEntryModel.fromMap(doc.id, data);
-    } else {
-      return null;
-    }
-  })
+        final data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey('name') && data.containsKey('totalPoints')) {
+          return LeaderboardEntryModel.fromMap(doc.id, data);
+        } else {
+          return null;
+        }
+      })
       .where((entry) => entry != null)
       .cast<LeaderboardEntryModel>()
       .toList();

@@ -1,8 +1,10 @@
 import 'package:learn_europe/models/enums/category_enum.dart';
+import 'package:learn_europe/models/enums/difficulties_enum.dart';
 
 class DragAndDropContentModel {
   Category quizCategory;
   String quizId;
+  QuizDifficulty quizDifficulty;
   String question;
   List<String> answerOptions;
   int numbCorrectAnswers;
@@ -16,6 +18,7 @@ class DragAndDropContentModel {
   DragAndDropContentModel({
     required this.quizCategory,
     required this.quizId,
+    required this.quizDifficulty,
     required this.question,
     required this.answerOptions,
     required this.numbCorrectAnswers,
