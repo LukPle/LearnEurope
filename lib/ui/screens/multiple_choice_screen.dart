@@ -85,30 +85,33 @@ class MultipleChoiceScreenState extends State<MultipleChoiceScreen> {
                         action: () => _navigateToNextQuestionOrResult(),
                       ),
                     )
-                  : GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.55),
-                      mainAxisSpacing: AppPaddings.padding_16,
-                      crossAxisSpacing: AppPaddings.padding_16,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      children: List.generate(4, (index) {
-                        return _buildMultipleChoiceAnswerCard(
-                          child: Text(
-                            widget.multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index],
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: questionStore.isAnswered
-                                  ? Colors.white
-                                  : MediaQuery.of(context).platformBrightness == Brightness.light
-                                      ? Colors.black
-                                      : Colors.white,
+                  : Expanded(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: isSmallScreen ? (2 / 1.25) : (2 / 1.55),
+                        mainAxisSpacing: AppPaddings.padding_16,
+                        crossAxisSpacing: AppPaddings.padding_16,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        children: List.generate(4, (index) {
+                          return _buildMultipleChoiceAnswerCard(
+                            child: Text(
+                              widget
+                                  .multipleChoiceContentModel[questionStore.numbQuestion].shuffledAnswerOptions[index],
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: questionStore.isAnswered
+                                    ? Colors.white
+                                    : MediaQuery.of(context).platformBrightness == Brightness.light
+                                        ? Colors.black
+                                        : Colors.white,
+                              ),
                             ),
-                          ),
-                          correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
-                          index: index,
-                        );
-                      }),
+                            correctAnswer: widget.multipleChoiceContentModel[questionStore.numbQuestion].correctAnswer,
+                            index: index,
+                          );
+                        }),
+                      ),
                     ),
             ],
           ),
