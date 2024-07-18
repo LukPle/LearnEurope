@@ -68,6 +68,10 @@ class QuizSelectionScreen extends StatelessWidget {
                           break;
                       }
 
+                      filteredQuizzes.sort((a, b) {
+                        return a.quizModel.difficulty.index.compareTo(b.quizModel.difficulty.index);
+                      });
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
