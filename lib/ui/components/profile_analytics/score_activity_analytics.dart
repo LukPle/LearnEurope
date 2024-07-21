@@ -42,7 +42,7 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
               upperComponent: Icon(
                 Icons.local_fire_department_rounded,
                 size: MediaQuery.of(context).size.width * 0.085,
-                color: AppColors.activityFlameColors[1],
+                color: _getActivityFlameColor(),
               ),
               lowerComponent: Text(
                 AppStrings.activityAnalytics(activeDays != null ? activeDays! : 1),
@@ -54,6 +54,18 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _getActivityFlameColor() {
+    if (activeDays == null || activeDays! < 2) {
+      return AppColors.activityFlameColors[0];
+    } else if (activeDays! < 4) {
+      return AppColors.activityFlameColors[1];
+    } else if (activeDays! < 7) {
+      return AppColors.activityFlameColors[2];
+    } else {
+      return AppColors.activityFlameColors[3];
+    }
   }
 }
 
