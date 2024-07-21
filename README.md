@@ -1,14 +1,15 @@
 # Learn Europe
+<br>
 
 ## Table of Contents
-- [Information about the app](#information-about-the-app)
-- [Developers](#developers)
+- [About](#about)
+- [Contributors](#contributors)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Running the App](#running-the-app)
 <br>
 
-## Information about the App
+## About
 
 **Learn Europe - Explore Europe in various categories**<br>
 A mobile app for Android and iOS developed with Flutter
@@ -16,23 +17,22 @@ A mobile app for Android and iOS developed with Flutter
 <br>
 
 **Main Screens**<br>
-![home_screen](https://github.com/user-attachments/assets/c3e24c4e-7f5b-4076-a71f-b4988a3dab90)
-![categories_screen](https://github.com/user-attachments/assets/41f04206-5177-4158-b4d2-3b5320bc0511)
-![leaderboard_screen](https://github.com/user-attachments/assets/7d51240b-ebb4-4270-9d8e-1f8f9d13c041)
-![profile_screen](https://github.com/user-attachments/assets/729a744d-9171-436a-b4fd-f47c1d6ee10f)
+<img src="https://github.com/user-attachments/assets/c3e24c4e-7f5b-4076-a71f-b4988a3dab90" alt="home_screen" width="200">
+<img src="https://github.com/user-attachments/assets/41f04206-5177-4158-b4d2-3b5320bc0511" alt="categories_screen" width="200">
+<img src="https://github.com/user-attachments/assets/7d51240b-ebb4-4270-9d8e-1f8f9d13c041" alt="leaderboard_screen" width="200">
+<img src="https://github.com/user-attachments/assets/729a744d-9171-436a-b4fd-f47c1d6ee10f" alt="profile_screen" width="200">
 
 **Quiz and Avatar Selection**<br>
-![quiz_selection](https://github.com/user-attachments/assets/1104c1ec-b2b5-4c69-aa4d-82f96d5e5ea8)
-![avatar_selection](https://github.com/user-attachments/assets/dab890a1-2d0b-49ed-a4e9-0a63b198e28b)
+<img src="https://github.com/user-attachments/assets/1104c1ec-b2b5-4c69-aa4d-82f96d5e5ea8" alt="quiz_selection" width="200">
+<img src="https://github.com/user-attachments/assets/dab890a1-2d0b-49ed-a4e9-0a63b198e28b" alt="avatar_selection" width="200">
 
 **Quiz Screens**<br>
-![europe101_quiz](https://github.com/user-attachments/assets/630124f5-9ed0-4661-a6bf-20949d0e043f)
-![languages_quiz](https://github.com/user-attachments/assets/72cf7f61-87b3-4bdf-b35f-b68dd94fb27f)
-![country_borders_quiz](https://github.com/user-attachments/assets/80b55802-2871-48ab-a84e-e1581cf9d5a9)
-![geo_position_quiz](https://github.com/user-attachments/assets/d7b3b74f-efda-46bd-ad26-9f8673707f67)
-![gapped_text_quiz](https://github.com/user-attachments/assets/cdbf997e-296f-4cb8-9544-d285b43c786a)
-![hint_dialog](https://github.com/user-attachments/assets/8a7df8a4-4775-4b73-a08a-165410f0e4f2)
-
+<img src="https://github.com/user-attachments/assets/630124f5-9ed0-4661-a6bf-20949d0e043f" alt="europe101_quiz" width="200">
+<img src="https://github.com/user-attachments/assets/72cf7f61-87b3-4bdf-b35f-b68dd94fb27f" alt="languages_quiz" width="200">
+<img src="https://github.com/user-attachments/assets/80b55802-2871-48ab-a84e-e1581cf9d5a9" alt="country_borders_quiz" width="200">
+<img src="https://github.com/user-attachments/assets/d7b3b74f-efda-46bd-ad26-9f8673707f67" alt="geo_position_quiz" width="200">
+<img src="https://github.com/user-attachments/assets/cdbf997e-296f-4cb8-9544-d285b43c786a" alt="gapped_text_quiz" width="200">
+<img src="https://github.com/user-attachments/assets/8a7df8a4-4775-4b73-a08a-165410f0e4f2" alt="hint_dialog" width="200">
 
 <br>
 
@@ -43,11 +43,11 @@ A mobile app for Android and iOS developed with Flutter
 - Gapped Text (Coming Soon Category)
 <br>
 
-## Developers
+## Contributors
 
-- [Elena Herzog](https://github.com/Ele1234)
-- [Amiin Najjar](https://github.com/najjar77)
-- [Lukas Plenk](https://github.com/LukPle)
+- [Elena Herzog](https://github.com/Ele1234), Asset Design and Content Creation
+- [Amiin Najjar](https://github.com/najjar77), Firebase Integration and Management
+- [Lukas Plenk](https://github.com/LukPle), App Design and Development
 <br>
 
 ## Prerequisites
