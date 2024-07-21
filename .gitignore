@@ -44,4 +44,3 @@ app.*.map.json
 
 # Firebase key
 /lib/firebase_options.dart
-
