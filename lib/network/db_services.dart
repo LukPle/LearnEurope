@@ -30,6 +30,8 @@ class DatabaseServices {
             'avatar': 'avatar_blue',
             'totalPoints': 0,
             'registrationDate': FieldValue.serverTimestamp(),
+            'lastLogin': FieldValue.serverTimestamp(),
+            'activityStreak': 1,
           },
         );
 

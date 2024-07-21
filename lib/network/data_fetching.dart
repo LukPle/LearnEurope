@@ -474,13 +474,65 @@ Future<DateTime> fetchUserRegistrationDate() async {
   return (doc['registrationDate'] as Timestamp).toDate();
 }
 
-Future<int> fetchTotalPoints() async {
+Future<int> _fetchTotalPoints() async {
   final DatabaseServices dbServices = DatabaseServices();
   final doc = await dbServices.getDocument(
     collection: FirebaseConstants.usersCollection,
     docId: getIt<UserStore>().userId.toString(),
   );
   return (doc['totalPoints'] as int);
+}
+
+Future<int> _fetchAndUpdateConsecutiveActiveDays() async {
+  final DatabaseServices dbServices = DatabaseServices();
+  final String userId = getIt<UserStore>().userId.toString();
+
+  final doc = await dbServices.getDocument(
+    collection: FirebaseConstants.usersCollection,
+    docId: userId,
+  );
+
+  int activityStreak = doc['activityStreak'] as int;
+  DateTime lastLogin = (doc['lastLogin'] as Timestamp).toDate();
+  DateTime today = DateTime.now();
+
+  DateTime lastLoginDate = DateTime(lastLogin.year, lastLogin.month, lastLogin.day);
+  DateTime todayDate = DateTime(today.year, today.month, today.day);
+
+  int differenceInDays = todayDate.difference(lastLoginDate).inDays;
+
+  if (differenceInDays == 1) {
+    await dbServices.updateDocument(
+      collection: FirebaseConstants.usersCollection,
+      docId: userId,
+      data: {
+        'activityStreak': FieldValue.increment(1),
+        'lastLogin': FieldValue.serverTimestamp(),
+      },
+    );
+    activityStreak += 1;
+  } else if (differenceInDays > 1) {
+    await dbServices.updateDocument(
+      collection: FirebaseConstants.usersCollection,
+      docId: userId,
+      data: {
+        'activityStreak': 1,
+        'lastLogin': FieldValue.serverTimestamp(),
+      },
+    );
+    activityStreak = 1;
+  }
+
+  return activityStreak;
+}
+
+Future<Map<String, int>> fetchTotalPointsAndActivityStreak() async {
+  final totalPoints = await _fetchTotalPoints();
+  final activityStreak = await _fetchAndUpdateConsecutiveActiveDays();
+  return {
+    'totalPoints': totalPoints,
+    'activityStreak': activityStreak,
+  };
 }
 
 Future<List<double>> fetchCategoryProgress() async {

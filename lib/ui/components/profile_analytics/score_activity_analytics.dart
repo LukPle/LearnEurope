@@ -8,7 +8,7 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
   const ScoreAndActivityAnalytics({super.key, required this.totalPoints, required this.activeDays});
 
   final int? totalPoints;
-  final int activeDays;
+  final int? activeDays;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class ScoreAndActivityAnalytics extends StatelessWidget {
                 color: AppColors.activityFlameColors[1],
               ),
               lowerComponent: Text(
-                AppStrings.activityAnalytics(activeDays),
+                AppStrings.activityAnalytics(activeDays != null ? activeDays! : 1),
                 style: AppTextStyles.scoreAndActivityTextStyle,
                 textAlign: TextAlign.center,
               ),

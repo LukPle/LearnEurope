@@ -101,15 +101,20 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: AppPaddings.padding_8),
                                 FutureBuilder(
-                                  future: fetchTotalPoints(),
+                                  future: fetchTotalPointsAndActivityStreak(),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting || snapshot.hasError) {
                                       return const Center(
                                         child: SizedBox.shrink(),
                                       );
                                     } else {
-                                      final totalPoints = snapshot.data;
-                                      return ScoreAndActivityAnalytics(totalPoints: totalPoints, activeDays: 4);
+                                      final data = snapshot.data as Map<String, int>;
+                                      final totalPoints = data['totalPoints'] as int;
+                                      final activityStreak = data['activityStreak'] as int;
+                                      return ScoreAndActivityAnalytics(
+                                        totalPoints: totalPoints,
+                                        activeDays: activityStreak,
+                                      );
                                     }
                                   },
                                 ),
