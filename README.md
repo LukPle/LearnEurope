@@ -40,7 +40,7 @@ A mobile app for Android and iOS developed with Flutter
 - Drag and Drop (Europe101)
 - Multiple Choice (Languages, Country Borders)
 - Geo-Spatial (Geo Position)
-- Gapped Text (Coming Soon Category)
+- Gapped Text
 <br>
 
 ## Contributors
