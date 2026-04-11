@@ -1,20 +1,9 @@
 # Learn Europe
-<br>
+**Learn Europe - Explore Countries, Languages, and Landmarks across Europe**<br>
+An educational mobile app for Android and iOS developed with Flutter and Firebase
+<br><br>
 
-## Table of Contents
-- [About](#about)
-- [Contributors](#contributors)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Running the App](#running-the-app)
-<br>
-
-## About
-
-**Learn Europe - Explore Europe in various categories**<br>
-A mobile app for Android and iOS developed with Flutter
-<br>
-<br>
+## Features & Screenshots
 
 **Main Screens**<br>
 <img src="https://github.com/user-attachments/assets/c3e24c4e-7f5b-4076-a71f-b4988a3dab90" alt="home_screen" width="200">
@@ -41,6 +30,23 @@ A mobile app for Android and iOS developed with Flutter
 - Multiple Choice (Languages, Country Borders)
 - Geo-Spatial (Geo Position)
 - Gapped Text
+<br>
+
+**Challenges & Solutions**
+1. Driving User Engagement
+- **Challenge:** Designing an app that keeps a younger audience motivated to learn about Europe  
+- **Solution:** Introduced gamification through avatars, progress tracking, and a leaderboard system  
+- **Result:** Delivered a learning experience that encourages continued user interaction  
+
+2. Making Learning Interactive
+- **Challenge:** Avoiding passive content consumption and encouraging active learning  
+- **Solution:** Implemented a variety of item and quiz types as well as different feedback systems
+- **Result:** Increased content diversity and improved knowledge retention
+
+3. Ensuring High Usability
+- **Challenge:** Creating an intuitive experience with easy access to relevant content  
+- **Solution:** Designed a simple navigation with category-based browsing, recommendations, and filters  
+- **Result:** Enabled fast content discovery and a smooth user experience  
 <br>
 
 ## Contributors
